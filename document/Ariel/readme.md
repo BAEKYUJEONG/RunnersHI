@@ -53,3 +53,14 @@
 - navigation bar 필수 기능 정리
 - 앱 방향성 회의 및 화면 기능 정의
 - 화면 세부 항목 UX/UI 정의
+
+
+
+###### 2021-04-20
+
+> ERD & 목업
+
+- TABLE 및 column 항목 정리 및 기능 정의
+- Adobe XD로 목업
+- client내에서 업적 정보 관리
+- alarm 추후 논의 필요
