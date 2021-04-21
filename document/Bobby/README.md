@@ -91,6 +91,32 @@
 
 ### ERD 구성
 
-![unknown](README.assets/unknown.png)
+![unknown](README.assets/unknown1.png)
 
 다같이 DB 관련 회의 이후 백엔드 담당하시는 분들이 ERD 구성을 마쳤습니다.
+
+---
+
+## 2021.04.21. ERD 수정, API 구성, 목업 작업
+
+### ERD 수정
+
+![img](README.assets/unknown.png)
+
+ERD에 아주 작은 변경사항이 있어서 백엔드 분들이 수정했습니다.
+
+해당 DB로 고정됐습니다.
+
+### API 구성
+
+백엔드에서 API를 구성하고 모두 회의를 거쳐 완성했습니다.
+
+[노션](https://www.notion.so/9766f3bb91be400d83cc6d53ca8162d3?v=493b7759e30d427a81ab55daa7a4cec4)
+
+### 목업 작업
+
+- 혼자 달리기/같이 달리기 각자 구성 후 방향 찾기
+
+---
+
+- 대략적인 방향 및 하단, 상단 메뉴 바 확정
