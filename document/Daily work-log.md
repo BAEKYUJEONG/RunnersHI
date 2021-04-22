@@ -121,3 +121,17 @@
 
 
 
+#### 2021-04-22 | DAY09
+
+[#아침스크럼](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#) [#데일리스크럼](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#)
+
+- `에리얼` : 목업 마무리, 안드로이드 개발환경 세팅, 발표 준비
+- `바비` : 목업 마무리, 안드로이드 개발환경 세팅, 발표 준비
+- `클로이` : 목업 마무리, 안드로이드 개발환경 세팅, 발표 준비
+- `티캔` : DB 생성 마무리, 발표 준비
+- `디니` : DB 생성 마무리, 발표 준비
+
+[#팀장미팅](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#)
+
+- 반 내에서는 겹치는 주제 X / BUT 다른 반과는 겹치는 주제가 종종 있습니다!
+- 열심히 해서 장관상을 노려봅시다! 제2의 김명석이되자!
