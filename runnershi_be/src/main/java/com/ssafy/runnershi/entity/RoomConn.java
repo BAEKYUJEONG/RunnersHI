@@ -3,6 +3,8 @@ package com.ssafy.runnershi.entity;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +16,12 @@ import lombok.NoArgsConstructor;
 @Entity
 public class RoomConn {
   @Id
-  private String roomId;
+  @ManyToOne
+  @JoinColumn(name = "room_id")
+  private Room room;
+
   @Id
-  private String authUserId;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private UserInfo authUser;
 }

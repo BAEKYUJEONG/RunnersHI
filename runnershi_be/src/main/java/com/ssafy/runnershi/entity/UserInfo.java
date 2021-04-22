@@ -1,7 +1,10 @@
 package com.ssafy.runnershi.entity;
 
+import java.io.Serializable;
 import javax.persistence.Entity;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -10,9 +13,12 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-public class UserInfo {
+public class UserInfo implements Serializable {
   @Id
-  private String userId;
+  @OneToOne
+  @JoinColumn(name = "user_id")
+  private User user;
+
   private Double totalDistance;
   private Integer totalTime;
   private Integer totalDay;

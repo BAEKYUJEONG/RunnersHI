@@ -7,7 +7,7 @@ import lombok.Data;
 @Data
 public class RoomConnPK implements Serializable {
   @Column
-  private String roomId;
+  private String room;
   @Column
-  private String authUserId;
+  private String authUser;
 }

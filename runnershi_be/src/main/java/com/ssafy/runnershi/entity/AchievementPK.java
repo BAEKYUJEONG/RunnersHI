@@ -8,8 +8,8 @@ import lombok.Data;
 public class AchievementPK implements Serializable {
 
   @Column
-  private String userId;
+  private String user;
   @Column
-  private String achievementInfoName;
+  private String achievementInfo;
 
 }

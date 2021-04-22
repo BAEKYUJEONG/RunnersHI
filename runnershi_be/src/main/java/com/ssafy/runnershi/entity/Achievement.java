@@ -3,6 +3,8 @@ package com.ssafy.runnershi.entity;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.IdClass;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -14,7 +16,12 @@ import lombok.NoArgsConstructor;
 @Entity
 public class Achievement {
   @Id
-  private String userId;
+  @ManyToOne
+  @JoinColumn(name = "user_id")
+  private UserInfo user;
+
   @Id
-  private String achievementInfoName;
+  @ManyToOne
+  @JoinColumn(name = "achievement_info_name")
+  private AchievementInfo achievementInfo;
 }

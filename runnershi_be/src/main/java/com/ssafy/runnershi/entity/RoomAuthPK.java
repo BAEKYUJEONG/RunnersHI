@@ -5,7 +5,7 @@ import javax.persistence.Column;
 
 public class RoomAuthPK implements Serializable {
   @Column
-  private String roomId;
+  private String room;
   @Column
-  private String authUserId;
+  private String authUser;
 }
