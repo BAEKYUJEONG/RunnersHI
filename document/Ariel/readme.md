@@ -102,3 +102,13 @@
   - Kotlin, Jetpack 공부 후 프로젝트 시작 예정
 - 발표 내용 다같이 토의 후 발표
 
+
+
+###### 2021-04-26
+
+> 안드로이드 환경 설정 & Bottom navigation Activity  생성
+
+- 안드로이드 코틀린 프로젝트 재생성
+- navigation bar 공동 생성
+- Jetpack navigation graph 생성
+
