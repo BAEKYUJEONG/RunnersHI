@@ -46,10 +46,6 @@
 - 오후 중 기능명세서 완성 / Jira 관리까지 완료하기 
 - 다음 주 월-화요일까지 개발 환경 세팅 마치고 수요일부터는 개발 착수할 수 있도록!
 
-
-
-#### 2021-04-16 DAY05
-
 [#팀장미팅](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#)
 
 - 화면설계의 중요성! 강조! 매우 강조!컴포넌트 단위로 설계하고 생각하자!
@@ -88,10 +84,6 @@
 - `백` : DB 구성 
 - 14:00 컨설턴트님 미팅 있는거 잊지 말것!
 
-
-
-#### 2021-04-20 DAY07
-
 [#팀장미팅](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#)
 
 - Jira 관리 잘해주세요저희는 잘 하고 있으므로 해당사항 없읍니다
@@ -118,6 +110,67 @@
   - 발표 순서는 당일 아침 네이버 사다리로 진행됩니다!
   - 반 사람들을 설득하는 자리.
   - 반 사람들을 설득하는 것이 생각보다 어려울 수 있읍니다... 같은 조건에서 선의의 경쟁을 하는 사람들을 설득할 수 있을 법한 기획!
+
+
+
+#### 2021-04-22 | DAY09
+
+[#아침스크럼](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#) [#데일리스크럼](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#)
+
+- `에리얼` : 목업 마무리, 안드로이드 개발환경 세팅, 발표 준비
+- `바비` : 목업 마무리, 안드로이드 개발환경 세팅, 발표 준비
+- `클로이` : 목업 마무리, 안드로이드 개발환경 세팅, 발표 준비
+- `티캔` : DB 생성 마무리, 발표 준비
+- `디니` : DB 생성 마무리, 발표 준비
+
+[#팀장미팅](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#)
+
+- 반 내에서는 겹치는 주제 X / BUT 다른 반과는 겹치는 주제가 종종 있습니다!
+- 열심히 해서 장관상을 노려봅시다! 제2의 김명석이되자!
+
+
+
+#### 2021-04-23 DAY10 | 오늘의 할 일
+
+[#아침스크럼](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#) [#데일리스크럼](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#)
+
+- `디니` : DB에 관해서 티캔과 논의할 것 - 테이블 분리된 것 관련하여 JPA가 어떻게 지원하는가 확인해보고 정리할 것
+- `티캔` : DB 설계 수정
+- `에리얼` : 안드로이드 프로젝트 만들고 최초 커밋 진행
+- `바비` : 안드로이드 프로젝트 만들고 이하동문
+- `클로이` : 안드로이드 이하동문
+
+
+
+#### 2021-04-23 DAY11 | 다음주의 목표
+
+[#오후스크럼](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#) 
+
+- `프론트엔드` : 
+  - 안드로이드 스튜디오 익숙해지기
+  - 레이아웃 명확하게 잡기 / 액티비티 미리 만들어놓기
+  - 회원가입 구현하기
+  - 실시간통신 기초잡기
+- `백엔드` :
+  - 회원가입 1차 구현 완료
+  - webRTC + Firebase 기초잡기
+- 4주차 중간 정도에는 어느정도 앱 뼈대 구현 + 기초적인 내용 배포까지 마치는 것을 목표로 하겠습니다! 
+
+
+
+#### 2021-04-26 DAY11 | 오늘의 할 일
+
+[#아침스크럼](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#) [#데일리스크럼](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#)
+
+- `에리얼` : Bottom Navigaton Bar 만들기, 그 외 기능 틀 잡기 (Activity 만들어두기), 각자 맡은 화면 구성에 따라 공부 후, 개발 시작해보기!
+- `바비` : Bottom Navigaton Bar 만들기, 그 외 기능 틀 잡기 (Activity 만들어두기), 각자 맡은 화면 구성에 따라 공부 후, 개발 시작
+- `클로이` : Bottom Navigaton Bar 만들기, 그 외 기능 틀 잡기 (Activity 만들어두기), 각자 맡은 화면 구성에 따라 공부 후, 개발 시작
+- `디니` : Firebase, WebRTC 이야기, 인프런 강의 듣기
+- `티캔` : Firebase, WebRTC 이야기, 인프런 강의 듣기
+
+[#팀장미팅](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#)
+
+- 월요일이므로, Jira 이슈 등록하고 관리 잘 해주세요~!
 
 
 
