@@ -112,3 +112,13 @@
 - navigation bar 공동 생성
 - Jetpack navigation graph 생성
 
+
+
+###### 2021-04-27
+
+> Profile Fragment 작업
+
+- fragment_profile 파일 xml 작업
+- Jetpack sample code -  jetsnack 프로필에 대입할 코드 공부
+- http 통신 / json 객체 공부 더 필요
+
