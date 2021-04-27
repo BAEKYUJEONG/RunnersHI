@@ -174,3 +174,11 @@
 
 
 
+#### 2021-04-27 DAY12 | 오늘의 할 일
+
+[#아침스크럼](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#) [#데일리스크럼](https://meeting.ssafy.com/s04p31a03/channels/a306-dailyworklog#)
+
+- `에리얼` : 프로필 자기 시점 구현
+- `바비` : 로그인, 회원가입 화면구성, 서버 연결 구성
+- `디니` : 일반, 네이버 회원가입 및 로그인 구현 + 친구 관리
+- `티캔` : webRTC 관련 사전작업
