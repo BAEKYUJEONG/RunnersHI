@@ -16,6 +16,7 @@
             android:id="@+id/nickname"
             android:layout_width="match_parent"
             android:layout_height="50dp"
+            android:padding="8dp"
             android:text="에리얼"
             android:textAlignment="viewStart"
             android:textSize="24sp" />
@@ -157,34 +158,11 @@
 
         </LinearLayout>
 
-        <LinearLayout
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/profile_history"
             android:layout_width="match_parent"
-            android:layout_height="80dp"
-            android:orientation="horizontal">
+            android:layout_height="match_parent" />
 
-            <ImageView
-                android:id="@+id/imageView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:src="@android:drawable/ic_dialog_map" />
-
-            <TextView
-                android:id="@+id/textView"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="광진구"
-                android:textSize="24sp" />
-
-            <EditText
-                android:id="@+id/editTextNumber3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:ems="10"
-                android:inputType="number" />
-        </LinearLayout>
 
     </LinearLayout>
 

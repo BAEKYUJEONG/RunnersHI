@@ -5,7 +5,10 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.appcompat.view.menu.ActionMenuItemView
+import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.R
+import kotlinx.android.synthetic.main.history.view.*
 
 // TODO: Rename parameter arguments, choose names that match
 // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
@@ -21,6 +24,14 @@ class ProfileFragment : Fragment() {
     // TODO: Rename and change types of parameters
     private var param1: String? = null
     private var param2: String? = null
+
+    var imgRes = intArrayOf()
+    var place = arrayOf(
+            "노원구" , "군포", "대야동", "송파구", "강남구"
+    )
+    var running_time = intArrayOf(
+            55, 48, 23, 12, 37
+    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -56,5 +67,15 @@ class ProfileFragment : Fragment() {
                     putString(ARG_PARAM2, param2)
                 }
             }
+    }
+
+    // RecyclerView의 Adapter 클래스
+    inner class RecyclerAdapter{
+
+        //ViewHolder 클래스
+        inner class ViewHolderClass(itemView: View) : RecyclerView.ViewHolder(itemView){
+            //항목 View 내부의 View 객체의 주소값을 담는다.
+            val place = itemView.place
+        }
     }
 }
