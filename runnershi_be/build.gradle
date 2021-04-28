@@ -46,6 +46,13 @@ dependencies {
     //jwt
     // https://mvnrepository.com/artifact/com.auth0/java-jwt
     compile group: 'com.auth0', name: 'java-jwt', version: '3.12.0'
+    
+    // 메일 인증
+    // https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+	compile("org.springframework.boot:spring-boot-starter-mail")
+
+
+    
 	
 }
 

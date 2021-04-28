@@ -8,6 +8,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class UserResult {
+  private String result;
   private String token;
   private String userId;
   private String userName;

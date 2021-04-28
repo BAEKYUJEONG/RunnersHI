@@ -53,8 +53,8 @@ public class JwtService {
   private Date expiresAt() {
     Calendar cal = Calendar.getInstance();
     cal.setTime(new Date());
-    // 한달 24 * 31
-    cal.add(Calendar.HOUR, 744);
+    // 1년 24 * 365
+    cal.add(Calendar.HOUR, 8760);
     return cal.getTime();
   }
 
