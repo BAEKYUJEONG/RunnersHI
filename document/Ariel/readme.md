@@ -122,3 +122,12 @@
 - Jetpack sample code -  jetsnack 프로필에 대입할 코드 공부
 - http 통신 / json 객체 공부 더 필요
 
+
+
+###### 2021-04-28
+
+> Profile Fragment_ create Recycler View
+
+- profile history list - recycler view로 구성
+- Kotlin 강의 Part1 - TextView, ImageView, CardView, RecyclerView
+- Kotlin 강의 Part2 - Activity 실행하기, OnActiviyResult 
