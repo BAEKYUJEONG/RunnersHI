@@ -15,7 +15,9 @@ class LoginActivity : AppCompatActivity() {
 
         loginButton.setOnClickListener(View.OnClickListener {
             Log.e("테스트", "제발 나와라")
-            Log.e("테스트", HttpConnect().get())
+            var params = mapOf("postId" to 3)
+            var httpConnect = HttpConnect("/posts", params)
+            Log.e("테스트", httpConnect.post())
         })
     }
 }

@@ -3,17 +3,13 @@ package com.A306.runnershi.Helper
 import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
-import kotlinx.coroutines.launch
 import kotlinx.coroutines.runBlocking
 import java.io.BufferedReader
-import java.io.InputStream
 import java.io.InputStreamReader
-import java.io.OutputStream
 import java.net.HttpURLConnection
 import java.net.URL
-import java.net.URLConnection
+import java.nio.charset.StandardCharsets
 import java.util.*
-import kotlin.concurrent.thread
 
 class HttpConnect {
     var urlAddress:String = ""
@@ -22,72 +18,132 @@ class HttpConnect {
 
     constructor(){}
 
-    constructor(urlAddress:String){
+    constructor(urlAddress: String){
         this.urlAddress = urlAddress
     }
 
-    constructor(urlAddress:String, headers:Map<String, Any>){
+    constructor(urlAddress: String, params: Map<String, Any>){
         this.urlAddress = urlAddress
-        this.headers = headers
-    }
-
-    constructor(urlAddress:String, headers:Map<String, Any>, params:Map<String, Any>){
-        this.urlAddress = urlAddress
-        this.headers = headers
         this.params = params
     }
 
-    // 접속 할 주소
-    val url = setServerAddress(urlAddress)
-    // 연결 생성
-    val conn = url.openConnection() as HttpURLConnection
-
-    fun post(params:Objects){
+    fun post():String{
+        // 접속 할 주소
+        val url = setServerAddress(urlAddress)
+        // 연결 생성
+        val conn = url.openConnection() as HttpURLConnection
         conn.requestMethod = "POST"
-    }
-
-    fun get():String?{
-        conn.requestMethod = "GET"
         // 읽어오기
-        var result:String? = ""
+        var result:String = ""
         runBlocking {
-            result = async (Dispatchers.IO){
+            result = async(Dispatchers.IO){
                 readStream(conn)
             }.await()
         }
+        conn.disconnect()
         return result
     }
 
-    fun delete(){
-        conn.requestMethod = "DELETE"
-    }
-
-    fun put(){
-        conn.requestMethod = "PUT"
-    }
-
-    suspend fun readStream(stream:HttpURLConnection):String{
+    fun get():String{
         if (this.params != null){
-            val outStream = stream.outputStream
-            var receivedParams:Map<String, Any>? = this.params
+            var paramsString:String = "?"
+            this.params!!.keys.forEach{
+                paramsString = if (paramsString == "?"){
+                    "$paramsString$it="+ this.params!![it]
+                }else{
+                    "$paramsString&$it="+ this.params!![it]
+                }
+            }
+            this.urlAddress = this.urlAddress + paramsString
+        }
+        // 접속 할 주소
+        val url = setServerAddress(this.urlAddress)
+        // 연결 생성
+        val conn = url.openConnection() as HttpURLConnection
+        conn.requestMethod = "GET"
+        // 읽어오기
+        var result:String = ""
+        runBlocking {
+            result = async(Dispatchers.IO){
+                readStream(conn)
+            }.await()
+        }
+        conn.disconnect()
+        return result
+    }
 
+    fun delete():String{
+        // 접속 할 주소
+        val url = setServerAddress(urlAddress)
+        // 연결 생성
+        val conn = url.openConnection() as HttpURLConnection
+        conn.requestMethod = "DELETE"
+        // 읽어오기
+        var result:String = ""
+        runBlocking {
+            result = async(Dispatchers.IO){
+                readStream(conn)
+            }.await()
+        }
+        conn.disconnect()
+        return result
+    }
+
+    fun put():String{
+        // 접속 할 주소
+        val url = setServerAddress(urlAddress)
+        // 연결 생성
+        val conn = url.openConnection() as HttpURLConnection
+        conn.requestMethod = "PUT"
+        // 읽어오기
+        var result:String = ""
+        runBlocking {
+            result = async(Dispatchers.IO){
+                readStream(conn)
+            }.await()
+        }
+        conn.disconnect()
+        return result
+    }
+
+    suspend fun readStream(stream: HttpURLConnection):String{
+        try {
+            if (this.params != null && stream.requestMethod != "GET"){
+                val outStream = stream.outputStream
+                var paramsString = ""
+                this.params!!.keys.forEach{
+                    paramsString = if (paramsString == ""){
+                        "$paramsString$it="+ this.params!![it]
+                    }else{
+                        "$paramsString&$it="+ this.params!![it]
+                    }
+                }
+                outStream.write(paramsString.toByteArray(StandardCharsets.UTF_8))
+                outStream.flush()
+                outStream.close()
+                Log.e("PARAMSSTRING", paramsString)
+            }
+
+            val inputStream = InputStreamReader(stream.inputStream, "UTF-8")
+            val bufferedRead = BufferedReader(inputStream)
+            var stringResult:String? = null
+            val buf = StringBuffer()
+            do{
+                stringResult = bufferedRead.readLine()
+                if (stringResult != null){
+                    buf.append("$stringResult\n")
+                }
+            }while(stringResult != null)
+
+            return buf.toString()
+        }catch (e:Exception){
+            return e.localizedMessage
         }
 
-        val inputStream = InputStreamReader(stream.inputStream, "UTF-8")
-        val bufferedRead = BufferedReader(inputStream)
-        var stringResult:String? = null
-        val buf = StringBuffer()
-        do{
-            stringResult = bufferedRead.readLine()
-            if (stringResult != null){
-                buf.append("$stringResult\n")
-            }
-        }while(stringResult != null)
-
-        return buf.toString()
     }
 }
 
- private fun setServerAddress(urlAddress:String?):URL{
-     return URL("https://jsonplaceholder.typicode.com/todos/1")
+ private fun setServerAddress(urlAddress: String):URL{
+     // 서버 주소가 필요합니다.
+     return URL("https://jsonplaceholder.typicode.com" + urlAddress)
  }
