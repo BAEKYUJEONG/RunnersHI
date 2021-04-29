@@ -1,6 +1,7 @@
 package com.ssafy.runnershi.entity;
 
 import javax.persistence.Entity;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,11 +18,15 @@ import lombok.NoArgsConstructor;
 public class Alarm {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Integer alarmId;
+  private Long alarmId;
 
-  @ManyToOne
-  @JoinColumn(name = "user_id")
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private UserInfo user;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "from_user_id", referencedColumnName = "user_id", nullable = true)
+  private UserInfo fromUser;
 
   private String content;
   private Integer type;

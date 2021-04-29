@@ -17,6 +17,7 @@ import lombok.NoArgsConstructor;
 @Entity
 public class User implements Serializable {
   @Id
+  @Column(name = "user_id")
   private String userId;
 
   private String userName;
