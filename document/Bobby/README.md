@@ -200,3 +200,13 @@ ActionBar를 없애고 비슷한 디자인으로 아직 기능이 없는 알림�
 로그인 화면 구현을 완료했습니다.
 
 로그인 관련하여 유저 정보를 안드로이드의 SQLite에 담으려고 했지만 백엔드의 작업 전까지는 보류하겠습니다.
+
+---
+
+## 2021.04.30 카카오 로그인 세팅
+
+[카카오 모듈 설정](https://developers.kakao.com/docs/latest/ko/getting-started/sdk-android#select-module)
+
+해당 링크에 나와있는대로 설정을 모두 마쳤습니다.
+
+구현은 빠른 시일내 끝내겠습니다.

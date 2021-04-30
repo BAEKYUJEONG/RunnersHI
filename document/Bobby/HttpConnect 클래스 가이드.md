@@ -38,13 +38,13 @@ var hconn = HttpConnect("/postId", paramMap)
 
 > HttpConnect 클래스는 4개의 함수를 활용합니다.
 
-#### .get() : return String
+#### .get() : GET 방식
 
-#### .post() : return String
+#### .post() : POST 방식
 
-#### .delete() : return String
+#### .delete() : DELETE 방식
 
-#### .put() : return String
+#### .put() : PUT 방식
 
 모든 함수는 String을 반환합니다. 추후 필요에 따라 Json array 나 Json object로 변환하여 사용하면 됩니다.
 
@@ -58,9 +58,9 @@ var hdelete = HttpConnect("/delete/1")
 var hput = HttpConnect("/put", paramMap)
 
 var getResult:String = hget.get()
-var postResult:String = hget.post()
-var deleteResult:String = hget.delete()
-var putResult:String = hget.put()
+var postResult:String = hpost.post()
+var deleteResult:String = hdelete.delete()
+var putResult:String = hput.put()
 
 //----------------------------------------------------------------//
 
