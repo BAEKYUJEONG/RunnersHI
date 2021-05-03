@@ -73,3 +73,61 @@
 
 - API 정의
 - Adobe XD로 목업
+
+
+
+###### 2021-04-22
+
+> 목업 & 발표 자료 준비
+
+- Adobe XD로 목업
+- 목업 완료 : 브랜드 컬러 설정 및 LOGO
+- PPT 발표 준비 
+  - 기획배경
+  - 기존 앱 분석
+  - 핵심 경험
+  - 브랜딩
+  - 서비스 플로우
+  - 서비스 목표
+
+
+
+###### 2021-04-23
+
+> 안드로이드 프로젝트 생성 & 중간 발표
+
+- 안드로이드 코틀린 프로젝트 생성
+  - Botton navigation Activity 기본 프로젝트
+  - API 21 Andriod 5.0 (Lollipop)
+  - Kotlin, Jetpack 공부 후 프로젝트 시작 예정
+- 발표 내용 다같이 토의 후 발표
+
+
+
+###### 2021-04-26
+
+> 안드로이드 환경 설정 & Bottom navigation Activity  생성
+
+- 안드로이드 코틀린 프로젝트 재생성
+- navigation bar 공동 생성
+- Jetpack navigation graph 생성
+
+
+
+###### 2021-04-27
+
+> Profile Fragment 작업
+
+- fragment_profile 파일 xml 작업
+- Jetpack sample code -  jetsnack 프로필에 대입할 코드 공부
+- http 통신 / json 객체 공부 더 필요
+
+
+
+###### 2021-04-28
+
+> Profile Fragment_ create Recycler View
+
+- profile history list - recycler view로 구성
+- Kotlin 강의 Part1 - TextView, ImageView, CardView, RecyclerView
+- Kotlin 강의 Part2 - Activity 실행하기, OnActiviyResult 
