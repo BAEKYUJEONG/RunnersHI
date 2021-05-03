@@ -9,6 +9,7 @@ import com.A306.runnershi.Helper.HttpConnect
 import com.A306.runnershi.R
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -43,6 +44,9 @@ class LoginActivity : AppCompatActivity() {
         // 카카오 로그인 콜백함수
         val kakaoCallBack: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
+                var keyHash = Utility.getKeyHash(this)
+                Log.e("KAKAOHASH", keyHash)
+                Log.e("KAKAOLOGIN", "ERROR"+ error.localizedMessage)
                 Toast.makeText(this, "카카오 로그인 실패", Toast.LENGTH_LONG).show()
             }
             else if (token != null) {

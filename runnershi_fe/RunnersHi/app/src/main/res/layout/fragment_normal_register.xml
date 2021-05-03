@@ -57,7 +57,7 @@
         app:layout_constraintTop_toBottomOf="@+id/nicknameInput" />
 
     <Button
-        android:id="@+id/socialRegisterButton"
+        android:id="@+id/normalRegisterButton"
         style="?attr/materialButtonOutlinedStyle"
         android:layout_width="0dp"
         android:layout_height="70dp"
