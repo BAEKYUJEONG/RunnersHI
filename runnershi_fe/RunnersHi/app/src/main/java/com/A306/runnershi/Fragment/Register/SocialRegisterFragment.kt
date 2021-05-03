@@ -1,4 +1,4 @@
-package com.A306.runnershi.Fragment
+package com.A306.runnershi.Fragment.Register
 
 import android.content.Intent
 import android.os.Bundle
