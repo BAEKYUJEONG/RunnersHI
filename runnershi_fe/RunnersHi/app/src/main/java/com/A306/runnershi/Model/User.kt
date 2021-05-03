@@ -1,15 +1,14 @@
 package com.A306.runnershi.Model
 
 class User {
-    var token:String = ""
-    var id:String = ""
-    var email:String = ""
-    var expiryDate:String = ""
-    var flag:Int = 0
-    var hasCustom = 0
-    var pwd = ""
-    var signUpPath:String = ""
-    var userName:String = ""
-
-//    constructor(userId:String, pwd:String, userName:String, email:String)
+//    var accessToken:String = ""
+//    var refreshToken:String = ""
+//    var nickname:String = ""
+//
+//
+//    constructor(accessToken:String, refreshToken:String, nickname:String){
+//        this.accessToken = accessToken
+//        this.refreshToken = refreshToken
+//        this.nickname = nickname
+//    }
 }

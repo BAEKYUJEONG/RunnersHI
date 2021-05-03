@@ -26,6 +26,5 @@ class NormalRegisterFragment : Fragment() {
             startActivity(Intent(activity, LoginActivity::class.java))
             activity?.overridePendingTransition(0,0)
         }
-
     }
 }

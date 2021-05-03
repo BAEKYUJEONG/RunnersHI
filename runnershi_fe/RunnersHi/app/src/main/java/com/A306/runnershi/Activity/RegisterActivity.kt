@@ -18,8 +18,6 @@ class RegisterActivity : AppCompatActivity() {
         val normalRegisterFragment = NormalRegisterFragment()
         val socialRegisterFragment = SocialRegisterFragment()
 
-        Log.e("Intent Extra", intent.extras.toString())
-
         // 로그인 페이지에서 넘어온 경로 확인
         when (intent.getStringExtra("loginType")) {
             "Normal" -> {
