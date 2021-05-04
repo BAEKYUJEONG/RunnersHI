@@ -2,9 +2,13 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.A306.runnershi">
     <!-- 인터넷 권한 -->
+<<<<<<< HEAD
     <uses-permission android:name="android.permission.INTERNET" /> <!-- 위치 확인 권한 임시로 달아보겠습니다 -->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+=======
+    <uses-permission android:name="android.permission.INTERNET" />
+>>>>>>> ff98b1e0d962c5087d7f2838f3ba7fa8e1e50c1d
 
     <application
         android:allowBackup="true"
@@ -14,9 +18,13 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RunnersHi"
         android:usesCleartextTraffic="true">
+<<<<<<< HEAD
         <activity
             android:name=".Activity.SettingsActivity"
             android:label="@string/title_activity_settings"></activity>
+=======
+        <activity android:name=".Activity.RegisterActivity"></activity>
+>>>>>>> ff98b1e0d962c5087d7f2838f3ba7fa8e1e50c1d
         <activity android:name=".Activity.LoginActivity">
 
             <!-- <intent-filter> -->
@@ -29,10 +37,24 @@
         <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+<<<<<<< HEAD
+=======
+        <activity android:name=".Activity.MainActivity"></activity>
+        <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <!-- Redirect URI: "kakao{NATIVE_APP_KEY}://oauth" -->
+                <data android:host="oauth"
+                    android:scheme="kakao8bedaa715b7d7d885ebb5ebd5a3b5f84" />
+            </intent-filter>
+        </activity>
+>>>>>>> ff98b1e0d962c5087d7f2838f3ba7fa8e1e50c1d
     </application>
 
 </manifest>
