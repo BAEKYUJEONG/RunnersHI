@@ -1,5 +1,6 @@
 package com.ssafy.runnershi.service;
 
+import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.ssafy.runnershi.entity.Alarm;
@@ -25,6 +26,9 @@ public class FriendServiceImpl implements FriendService {
   @Autowired
   private AlarmRepository alarmRepo;
 
+  @Autowired
+  private AndroidPushNotificationService androidPushNotificationService;
+
   @Override
   public String addFriend(String userId, String friendName) {
 
@@ -33,9 +37,11 @@ public class FriendServiceImpl implements FriendService {
     if (fromUser == null || toUser == null || userId.equals(toUser.getUserId()))
       return "FAIL";
 
+    String content = "'" + fromUser.getUserName().getUserName() + "'님의 친구신청입니다.";
+
     // 알람 DB에 추가
     Alarm alarm = new Alarm();
-    alarm.setContent("'" + fromUser.getUserName().getUserName() + "'님의 친구신청입니다.");
+    alarm.setContent(content);
     alarm.setType(1);
     alarm.setUser(toUser);
     alarm.setFromUser(fromUser);
@@ -43,9 +49,17 @@ public class FriendServiceImpl implements FriendService {
 
 
     // 알람 보내기
+    CompletableFuture<String> pushNotification =
+        androidPushNotificationService.send("토큰", "친구 신청", content);
+    CompletableFuture.allOf(pushNotification).join();
+    try {
+      String firebaseResponse = pushNotification.get();
+      return "SUCCESS";
+    } catch (Exception e) {
+      e.printStackTrace();
+      return "FAIL";
+    }
 
-
-    return "SUCCESS";
   }
 
 
