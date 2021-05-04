@@ -1,0 +1,82 @@
+<PreferenceScreen xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <PreferenceCategory app:title="달리기">
+
+        <EditTextPreference
+            app:key="signature"
+            app:title="달리기 목표 설정"
+            app:useSimpleSummaryProvider="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="알림 설정">
+
+        <SwitchPreferenceCompat
+            app:key="sync"
+            app:title="푸시알림 받기" />
+
+        <ListPreference
+            app:defaultValue="reply"
+            app:entries="@array/reply_entries"
+            app:entryValues="@array/reply_values"
+            app:key="reply"
+            app:title="친구 알림 설정"
+            app:useSimpleSummaryProvider="false" />
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="앱 정보">
+
+        <Preference
+            app:key="version"
+            app:title="버전 정보"
+            app:summary="ver 1.0.3"
+            app:useSimpleSummaryProvider="true" />
+
+        <Preference
+            app:title="개인정보 취급방침"/>
+
+        <Preference
+            app:title="이용약관"/>
+
+    </PreferenceCategory>
+
+    <PreferenceCategory app:title="HELP">
+        <Preference
+            app:title="문의하기"/>
+
+    </PreferenceCategory>
+
+
+    <!--    <PreferenceCategory app:title="@string/messages_header">-->
+
+<!--        <EditTextPreference-->
+<!--            app:key="signature"-->
+<!--            app:title="@string/signature_title"-->
+<!--            app:useSimpleSummaryProvider="true" />-->
+
+<!--        <ListPreference-->
+<!--            app:defaultValue="reply"-->
+<!--            app:entries="@array/reply_entries"-->
+<!--            app:entryValues="@array/reply_values"-->
+<!--            app:key="reply"-->
+<!--            app:title="@string/reply_title"-->
+<!--            app:useSimpleSummaryProvider="true" />-->
+
+<!--    </PreferenceCategory>-->
+<!--    <PreferenceCategory app:title="@string/sync_header">-->
+
+<!--        <SwitchPreferenceCompat-->
+<!--            app:key="sync"-->
+<!--            app:title="@string/sync_title" />-->
+
+<!--        <SwitchPreferenceCompat-->
+<!--            app:dependency="sync"-->
+<!--            app:key="attachment"-->
+<!--            app:summaryOff="@string/attachment_summary_off"-->
+<!--            app:summaryOn="@string/attachment_summary_on"-->
+<!--            app:title="@string/attachment_title" />-->
+
+<!--    </PreferenceCategory>-->
+
+</PreferenceScreen>

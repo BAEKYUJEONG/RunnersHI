@@ -9,7 +9,6 @@ import java.io.InputStreamReader
 import java.net.HttpURLConnection
 import java.net.URL
 import java.nio.charset.StandardCharsets
-import java.util.*
 
 class HttpConnect {
     var urlAddress:String = ""
@@ -121,7 +120,6 @@ class HttpConnect {
                 outStream.write(paramsString.toByteArray(StandardCharsets.UTF_8))
                 outStream.flush()
                 outStream.close()
-                Log.e("PARAMSSTRING", paramsString)
             }
 
             val inputStream = InputStreamReader(stream.inputStream, "UTF-8")
@@ -139,7 +137,6 @@ class HttpConnect {
         }catch (e:Exception){
             return e.localizedMessage
         }
-
     }
 }
 
