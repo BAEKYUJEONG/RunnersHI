@@ -22,19 +22,5 @@ class SingleRunFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         val sensorManager = activity?.applicationContext?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
         val sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
-        Log.e("SENSOR", sensor.toString())
-        val sensorPlz = SensorPlz()
-        Log.e("SENSOREVENT", sensorPlz.onSensorChanged(sensor))
-    }
-
-    class SensorPlz() : SensorEventListener {
-        override fun onSensorChanged(event: SensorEvent) {
-            Log.e("EVENT", event.toString())
-        }
-
-        override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
-
-        }
-
     }
 }
