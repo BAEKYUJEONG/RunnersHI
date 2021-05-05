@@ -17,22 +17,25 @@ api 명세서 작성 및 프로젝트 생성
 JPA study
 
 2021-04-26
-WebRCT study
+WebRTC study
 
 2021-04-27
-WebRCT study
+WebRTC study
 
 2022-04-28
-WebRCT study
+WebRTC study
 
 2022-04-29
-WebRCT study
+WebRTC study
 
 2022-04-30
-WebRCT study
+WebRTC study
 
 2022-05-03
-WebRCT study
+WebRTC study
 
 2022-05-04
-WebRCT study
+WebRTC study
+
+2022-05-04
+WebRTC study
