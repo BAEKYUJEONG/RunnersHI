@@ -4,18 +4,28 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import androidx.fragment.app.Fragment
+import com.A306.runnershi.Dao.RunDAO
 import com.A306.runnershi.Fragment.HomeFragment
 import com.A306.runnershi.Fragment.ProfileFragment
 import com.A306.runnershi.Fragment.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearchFragment
 import com.A306.runnershi.R
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+
+    // 데이터 끌어오기
+    @Inject
+    lateinit var runDao: RunDAO
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        Log.e("HILT", "RUNDAO ${runDao.hashCode()}")
         // Fragment 할당
         // 하단 메뉴 Fragments
         val homeFragment = HomeFragment()

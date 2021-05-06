@@ -10,17 +10,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.A306.runnershi.Dao.RunDAO
 import com.A306.runnershi.R
+import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
+
 
 class SingleRunFragment : Fragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?,
                               savedInstanceState: Bundle?): View? {
-
+//        Log.e("HILT", "RUNDAO: ${runDao.hashCode()}")
         return inflater.inflate(R.layout.fragment_single_run, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        val sensorManager = activity?.applicationContext?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-        val sensor: Sensor? = sensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER)
+//        Log.e("HILT", "RUNDAO: ${runDao.hashCode()}")
     }
 }
