@@ -5,7 +5,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
     <!-- 달리기 관련 권한-->
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
-<!--    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>-->
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION"/>
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION"/>
     <uses-permission android:name="android.permission.FOREGROUND_SERVICE"/>
 
@@ -20,14 +20,14 @@
         android:usesCleartextTraffic="true">
         <activity android:name=".Activity.RegisterActivity"></activity>
         <activity android:name=".Activity.LoginActivity">
+
+        </activity>
+<!--        <activity android:name=".Activity.MainActivity" android:launchMode="singleTask">-->
+        <activity android:name=".Activity.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-        </activity>
-<!--        <activity android:name=".Activity.MainActivity" android:launchMode="singleTask">-->
-        <activity android:name=".Activity.MainActivity">
-
         </activity>
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>
