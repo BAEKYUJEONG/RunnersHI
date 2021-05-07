@@ -42,3 +42,6 @@ WebRTC study
 
 2022-05-05
 Sever setting
+
+2022-05-06
+AWS EC2 Server Deploy test
