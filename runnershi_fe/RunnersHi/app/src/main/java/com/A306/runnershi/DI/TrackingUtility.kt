@@ -3,8 +3,10 @@ package com.A306.runnershi.DI
 import android.Manifest
 import android.content.Context
 import android.os.Build
+import kotlinx.coroutines.delay
 import pub.devrel.easypermissions.EasyPermissions
 import java.util.concurrent.TimeUnit
+import kotlin.math.roundToLong
 
 object TrackingUtility {
     fun hasLocationPermissions(context: Context) =
@@ -42,5 +44,14 @@ object TrackingUtility {
                 "${if(minutes < 10) "0" else ""}$minutes:" +
                 "${if(seconds < 10) "0" else ""}$seconds:" +
                 "${if(milliseconds < 10) "0" else ""}$milliseconds"
+    }
+
+    fun getPaceWithMilliAndDistance(ms:Long): String{
+        var paceInMilli = ms
+        var paceMin = TimeUnit.MILLISECONDS.toMinutes(paceInMilli)
+        paceInMilli -= TimeUnit.MINUTES.toMillis(paceMin)
+        var paceSec = TimeUnit.MILLISECONDS.toSeconds(paceInMilli)
+        return "${if(paceMin < 10) "0" else ""}$paceMin' " +
+                "${if(paceSec < 10) "0" else ""}$paceSec''"
     }
 }
