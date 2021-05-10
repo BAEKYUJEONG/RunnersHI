@@ -20,7 +20,10 @@
     <string name="title_setting">Settings</string>
     <!--가운데 버튼 Description-->
     <string name="fab_content_desc">RunningButton</string>
-
+    <!-- 카카오 KEY-->
+    <string name="kakao_api_key">8bedaa715b7d7d885ebb5ebd5a3b5f84</string>
+    <!-- 구글 KEY -->
+    <string name="google_api_key">AIzaSyCK1_vzYxWaqElwc9HhAMCJPIwzkI0fVrA</string>
     <string name="title_notifications">Notifications</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
