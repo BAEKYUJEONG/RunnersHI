@@ -4,8 +4,6 @@ package com.A306.runnershi.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
-import androidx.core.content.ContentProviderCompat.requireContext
 import androidx.fragment.app.Fragment
 import com.A306.runnershi.Dao.RunDAO
 import com.A306.runnershi.Fragment.HomeFragment
@@ -14,29 +12,13 @@ import com.A306.runnershi.Fragment.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.MapFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearchFragment
-import android.Manifest
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
-import android.os.Bundle
-import android.view.View
-import androidx.fragment.app.Fragment
-import com.A306.runnershi.Fragment.*
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_single_run.*
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
-class MainActivity : AppCompatActivity() {
-
-    // 데이터 끌어오기
-    @Inject
-    lateinit var runDao: RunDAO
-import kotlinx.android.synthetic.main.settings_activity.*
-
 open class MainActivity : AppCompatActivity() {
 
     // 권한 관련 리스트 설정 : 나중에 허가 요청 받아서 연결하기!
@@ -45,6 +27,10 @@ open class MainActivity : AppCompatActivity() {
 //        Manifest.permission.ACCESS_FINE_LOCATION,
 //        Manifest.permission.ACCESS_COARSE_LOCATION,
 //    )
+
+    // 데이터 끌어오기
+    @Inject
+    lateinit var runDao: RunDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -83,6 +69,22 @@ open class MainActivity : AppCompatActivity() {
             makeCurrentFragment(singleRunFragment)
             sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
         }
+
+        val settingsActivity = Intent(this, SettingsActivity::class.java)
+
+        topAppBar.setOnMenuItemClickListener { menuItem ->
+            when(menuItem.itemId) {
+                R.id.navigation_alert -> {
+                    true
+                }
+//               R.id.navigation_setting -> {
+//                   val intent = Intent(this, SettingsActivity::class.java)
+//                   startActivity(intent)
+//               }
+                R.id.navigation_setting -> startActivity(settingsActivity)
+            }
+            true
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -107,21 +109,7 @@ open class MainActivity : AppCompatActivity() {
 //            tran.add(R.id.main_fragment, settingsFragment)
 //            tran.commit()
 //        }
-        val settingsActivity = Intent(this, SettingsActivity::class.java)
 
-        topAppBar.setOnMenuItemClickListener { menuItem ->
-           when(menuItem.itemId) {
-               R.id.navigation_alert -> {
-                   true
-               }
-//               R.id.navigation_setting -> {
-//                   val intent = Intent(this, SettingsActivity::class.java)
-//                   startActivity(intent)
-//               }
-               R.id.navigation_setting -> startActivity(settingsActivity)
-           }
-            true
-        }
     }
 
     // Fragment 변경을 위한 함수

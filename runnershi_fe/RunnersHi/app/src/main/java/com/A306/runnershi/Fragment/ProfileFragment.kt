@@ -45,11 +45,11 @@ class ProfileFragment : Fragment() {
             param2 = it.getString(ARG_PARAM2)
         }
 
-        val adapter1 = RecyclerAdapter()
-        profile_history.adapter = adapter1
-
-        //profile_history.layoutManager = LinearLayoutManager(this)
-        profile_history.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
+//        val adapter1 = RecyclerAdapter()
+//        profile_history.adapter = adapter1
+//
+//        //profile_history.layoutManager = LinearLayoutManager(this)
+//        profile_history.layoutManager = StaggeredGridLayoutManager(2, StaggeredGridLayoutManager.VERTICAL)
     }
 
     override fun onCreateView(
