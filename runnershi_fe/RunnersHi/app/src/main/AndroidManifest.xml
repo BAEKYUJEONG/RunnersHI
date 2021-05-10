@@ -40,6 +40,8 @@
                     android:scheme="kakao@string/kakao_api_key" />
             </intent-filter>
         </activity>
+        <service android:name=".Services.TrackingService"
+            android:foregroundServiceType="location"/>
         <meta-data
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
