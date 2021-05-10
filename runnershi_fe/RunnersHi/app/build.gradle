@@ -73,5 +73,11 @@ dependencies {
 
     // 카카오 로그인
     implementation "com.kakao.sdk:v2-user:2.4.2"
-    
+
+    // 리사이클러뷰
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.cardview:cardview:1.0.0"
+
+    // 동그란 이미지 뷰 만들어주는 외부 라이브러리
+    implementation "de.hdodenhof:circleimageview:3.0.0"
 }
