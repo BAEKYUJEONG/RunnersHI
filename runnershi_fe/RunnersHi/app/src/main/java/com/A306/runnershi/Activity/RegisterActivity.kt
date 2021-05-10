@@ -3,11 +3,10 @@ package com.A306.runnershi.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.A306.runnershi.Fragment.NormalRegisterFragment
-import com.A306.runnershi.Fragment.SocialRegisterFragment
+import com.A306.runnershi.Fragment.Register.NormalRegisterFragment
+import com.A306.runnershi.Fragment.Register.SocialRegisterFragment
 import com.A306.runnershi.R
 
 class RegisterActivity : AppCompatActivity() {

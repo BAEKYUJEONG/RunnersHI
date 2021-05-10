@@ -142,5 +142,5 @@ class HttpConnect {
 
  private fun setServerAddress(urlAddress: String):URL{
      // 서버 주소가 필요합니다.
-     return URL("https://jsonplaceholder.typicode.com" + urlAddress)
+     return URL("http://k4a306.p.ssafy.io:8081" + urlAddress)
  }

@@ -5,10 +5,12 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.compose.ui.res.stringResource
 import com.A306.runnershi.Helper.HttpConnect
 import com.A306.runnershi.R
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
+import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -18,7 +20,7 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         // 카카오 초기화
-        KakaoSdk.init(this, "8bedaa715b7d7d885ebb5ebd5a3b5f84")
+        KakaoSdk.init(this, resources.getString(R.string.kakao_api_key))
 
         // 회원가입 버튼 클릭
         // 회원가입 페이지로 이동
@@ -43,6 +45,9 @@ class LoginActivity : AppCompatActivity() {
         // 카카오 로그인 콜백함수
         val kakaoCallBack: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
+                var keyHash = Utility.getKeyHash(this)
+                Log.e("KAKAOHASH", keyHash)
+                Log.e("KAKAOLOGIN", "ERROR"+ error.localizedMessage)
                 Toast.makeText(this, "카카오 로그인 실패", Toast.LENGTH_LONG).show()
             }
             else if (token != null) {
