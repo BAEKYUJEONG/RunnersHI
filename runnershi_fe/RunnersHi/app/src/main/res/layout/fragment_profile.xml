@@ -13,10 +13,11 @@
         android:orientation="vertical">
 
         <TextView
-            android:id="@+id/nickname"
+            android:id="@+id/profileTab"
             android:layout_width="match_parent"
             android:layout_height="50dp"
-            android:padding="8dp"
+            android:gravity="center_horizontal"
+            android:padding="10dp"
             android:text="에리얼"
             android:textAlignment="viewStart"
             android:textSize="24sp" />
@@ -59,6 +60,7 @@
             </LinearLayout>
 
             <LinearLayout
+                android:id="@+id/friendButton"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"

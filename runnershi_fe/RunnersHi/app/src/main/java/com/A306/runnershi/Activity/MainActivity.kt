@@ -1,5 +1,6 @@
 package com.A306.runnershi.Activity
 
+
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -13,6 +14,13 @@ import com.A306.runnershi.Fragment.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.MapFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearchFragment
+import android.Manifest
+import android.content.Intent
+import androidx.appcompat.app.AppCompatActivity
+import android.os.Bundle
+import android.view.View
+import androidx.fragment.app.Fragment
+import com.A306.runnershi.Fragment.*
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,13 +35,23 @@ class MainActivity : AppCompatActivity() {
     // 데이터 끌어오기
     @Inject
     lateinit var runDao: RunDAO
+import kotlinx.android.synthetic.main.settings_activity.*
+
+open class MainActivity : AppCompatActivity() {
+
+    // 권한 관련 리스트 설정 : 나중에 허가 요청 받아서 연결하기!
+//    val permission_list = arrayOf(
+//        Manifest.permission.INTERNET,
+//        Manifest.permission.ACCESS_FINE_LOCATION,
+//        Manifest.permission.ACCESS_COARSE_LOCATION,
+//    )
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
 
-
+        // 하단 Navigation Bar 설정
         // Fragment 할당
         // 하단 메뉴 Fragments
         val homeFragment = HomeFragment()
@@ -76,6 +94,33 @@ class MainActivity : AppCompatActivity() {
         Intent(this, TrackingService::class.java).also{
             it.action = action
             this.startService(it)
+        }
+
+//        // 상단 Top App Bar 설정
+//        // Fragment 할당
+//        val settingsFragment = SettingsFragment()
+//
+//        // 상단 메뉴 클릭할 경우
+//        topAppBar.setOnClickListener{
+//            val tran = supportFragmentManager.beginTransaction()
+//
+//            tran.add(R.id.main_fragment, settingsFragment)
+//            tran.commit()
+//        }
+        val settingsActivity = Intent(this, SettingsActivity::class.java)
+
+        topAppBar.setOnMenuItemClickListener { menuItem ->
+           when(menuItem.itemId) {
+               R.id.navigation_alert -> {
+                   true
+               }
+//               R.id.navigation_setting -> {
+//                   val intent = Intent(this, SettingsActivity::class.java)
+//                   startActivity(intent)
+//               }
+               R.id.navigation_setting -> startActivity(settingsActivity)
+           }
+            true
         }
     }
 
