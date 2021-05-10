@@ -33,12 +33,12 @@ object ServiceModule {
         PendingIntent.FLAG_UPDATE_CURRENT
     )
 
-    fun provideBaseNotificationBuilder(@ApplicationContext app: Context) = NotificationCompat.Builder(this, "runnershi_channel")
+    fun provideBaseNotificationBuilder(@ApplicationContext app: Context, pendingIntent: PendingIntent) = NotificationCompat.Builder(app, "runnershi_channel")
         .setAutoCancel(false)
         .setOngoing(true)
         .setSmallIcon(R.drawable.ic_baseline_directions_run_24)
         .setContentTitle("Runners' Hi")
         .setContentText("00:00:00")
-        .setContentIntent(getMainActivityPendingIntent())
+        .setContentIntent(pendingIntent)
 
 }
