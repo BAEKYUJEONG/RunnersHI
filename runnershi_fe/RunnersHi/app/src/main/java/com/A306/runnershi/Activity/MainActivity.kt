@@ -8,7 +8,7 @@ import androidx.fragment.app.Fragment
 import com.A306.runnershi.Dao.RunDAO
 import com.A306.runnershi.Fragment.GroupRun.GroupRunFragment
 import com.A306.runnershi.Fragment.HomeFragment
-import com.A306.runnershi.Fragment.ProfileFragment
+import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Fragment.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.MapFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
@@ -44,7 +44,8 @@ open class MainActivity : AppCompatActivity() {
         val homeFragment = HomeFragment()
         val userSearchFragment = UserSearchFragment()
         val rankingFragment = RankingFragment()
-        val profileFragment = ProfileFragment()
+        val profileFragment =
+            ProfileFragment()
         // 혼자 달리기 Fragments
         val singleRunFragment = SingleRunFragment()
         val mapFragment = MapFragment()
