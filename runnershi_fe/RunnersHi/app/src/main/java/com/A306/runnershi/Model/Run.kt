@@ -15,7 +15,9 @@ data class Run(
     // 거리
     var distance: Int = 0,
     // 시간
-    var time: Long = 0L
+    var time: String? = null,
+    // 페이스
+    var pace: String? = null
     // 칼로리 필요없음
 ){
     @PrimaryKey(autoGenerate = true)

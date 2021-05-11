@@ -4,31 +4,38 @@ import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
+import com.A306.runnershi.Fragment.HomeFragment
+import com.A306.runnershi.Model.Run
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.Polyline
 import com.A306.runnershi.Services.TrackingService
 import com.A306.runnershi.ViewModel.SingleRunViewModel
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.fragment_map.paceText
 import kotlinx.android.synthetic.main.fragment_map.timeText
 import kotlinx.android.synthetic.main.fragment_single_run.*
+import timber.log.Timber
+import java.lang.Math.round
+import java.util.*
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 class MapFragment : Fragment(R.layout.fragment_map) {
     private val viewModel : SingleRunViewModel by viewModels()
 
     private var curTimeMillis = 0L
-
-    private var isTracking = false
     private var pathPoints = mutableListOf<Polyline>()
 
     private var map: GoogleMap? = null
@@ -38,6 +45,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         mapView.onCreate(savedInstanceState)
         val mainActivity = activity as MainActivity
         val singleRunFragment = SingleRunFragment()
+        val homeFragment = HomeFragment()
 
         // 나중에 버튼 관련 넣기 (toggle)
 
@@ -46,14 +54,14 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             addAllPolylines()
         }
 
-        subscribeToObservers()
+        subscribeToObservers(mainActivity, homeFragment)
 
         toMeterButton.setOnClickListener {
             mainActivity.makeCurrentFragment(singleRunFragment, "hide")
         }
     }
 
-    private fun subscribeToObservers(){
+    private fun subscribeToObservers(activity: MainActivity, homeFragment: HomeFragment){
 
         TrackingService.pathPoints.observe(viewLifecycleOwner, Observer{
             pathPoints = it
@@ -75,6 +83,54 @@ class MapFragment : Fragment(R.layout.fragment_map) {
                 paceText.text = "0' 00''"
             }
         })
+
+        TrackingService.totallyFinished.observe(viewLifecycleOwner, Observer{
+            if (it > 0){
+                if (map != null){
+                    Timber.e("서비스를 종료합니다.")
+                    zoomToSeeWholeTrack()
+                    endRunAndSaveToDb(activity, homeFragment)
+                }else{
+                    TrackingService.totallyFinished.postValue(it+1)
+                }
+
+            }
+        })
+    }
+
+    private fun endRunAndSaveToDb(activity: MainActivity, homeFragment:HomeFragment) {
+        map?.snapshot { bmp ->
+            Timber.e("사진 저장")
+            Timber.e(map?.toString())
+            val distanceInMeters = TrackingService.totalDistance.value!!.toInt()
+            val finalPace = TrackingUtility.getPaceWithMilliAndDistance(TrackingService.totalPace.value!!)
+            val avgSpeed = ((distanceInMeters / 1000f) / (curTimeMillis / 1000f / 60 / 60) * 10).roundToInt() / 10f
+            val dateTimestamp = Calendar.getInstance().timeInMillis
+            val dateTimeSpent = TrackingUtility.getFormattedStopWatchTime(TrackingService.timeRunInMillis.value!!)
+            val run = Run(bmp, dateTimestamp, avgSpeed, distanceInMeters, dateTimeSpent, finalPace)
+            viewModel.insertRun(run)
+            Toast.makeText(activity.applicationContext, "달리기가 저장됐습니다.", Toast.LENGTH_LONG).show()
+            activity.sendCommandToService("ACTION_STOP_SERVICE")
+            activity.makeCurrentFragment(homeFragment)
+        }
+    }
+
+    private fun zoomToSeeWholeTrack(){
+        val bounds = LatLngBounds.Builder()
+        for(polyline in pathPoints){
+            for(pos in polyline){
+                bounds.include(pos)
+            }
+        }
+
+        map?.moveCamera(
+                CameraUpdateFactory.newLatLngBounds(
+                        bounds.build(),
+                        mapView.width,
+                        mapView.height,
+                        (mapView.height * 0.05f).toInt()
+                )
+        )
     }
 
     private fun moveCameraToUser(){

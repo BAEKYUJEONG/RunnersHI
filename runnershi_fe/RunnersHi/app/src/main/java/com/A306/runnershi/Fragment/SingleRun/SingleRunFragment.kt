@@ -33,16 +33,16 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requestPermissions()
-        var mainActivity = activity as MainActivity
-        var homeFragment = HomeFragment()
-        var mapFragment = MapFragment()
+        val mainActivity = activity as MainActivity
+        val homeFragment = HomeFragment()
+        val mapFragment = MapFragment()
 
         subscribeToObservers(mainActivity)
         
         // 정지 버튼
         stopRunButton.setOnClickListener {
             // Dialog 띄우기
-            showCancelRunningDialog(mainActivity, homeFragment)
+            showCancelRunningDialog(mainActivity, homeFragment, mapFragment)
         }
 
         // 지도로 보기 버튼
@@ -51,16 +51,18 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
         }
     }
 
-    private fun showCancelRunningDialog(activity: MainActivity, fragment: HomeFragment){
+    private fun showCancelRunningDialog(activity: MainActivity, fragment: HomeFragment, mapFragment: MapFragment){
+        activity.sendCommandToService("ACTION_PAUSE_SERVICE")
         val dialog = MaterialAlertDialogBuilder(requireContext())
                 .setTitle("종료하십니까?")
                 .setMessage("정말 달리기를 종료하시겠습니까?")
                 .setIcon(R.drawable.ic_baseline_person_24)
                 .setPositiveButton("종료"){ _, _ ->
-                    activity.sendCommandToService("ACTION_STOP_SERVICE")
-                    activity.makeCurrentFragment(fragment)
+                    TrackingService.totallyFinished.postValue(1)
+                    activity.makeCurrentFragment(mapFragment, "hide")
                 }
                 .setNegativeButton("다시 뛰기"){ dialogInteface, _ ->
+                    activity.sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
                     dialogInteface.cancel()
                 }
                 .create()

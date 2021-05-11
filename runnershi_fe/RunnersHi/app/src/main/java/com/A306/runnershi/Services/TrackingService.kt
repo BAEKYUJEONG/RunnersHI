@@ -8,16 +8,13 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.location.Location
-import android.location.LocationManager
 import android.os.Build
 import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.content.getSystemService
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.R
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -61,12 +58,14 @@ class TrackingService:LifecycleService() {
         val totalPace = MutableLiveData<Long>()
         val isTracking = MutableLiveData<Boolean>()
         val pathPoints = MutableLiveData<Polylines>()
+        val totallyFinished = MutableLiveData<Int>()
     }
 
     private fun postInitialValues(){
         isTracking.postValue(false)
         totalDistance.postValue(0f)
         totalPace.postValue(0L)
+        totallyFinished.postValue(0)
         pathPoints.postValue(mutableListOf())
         timeRunInSeconds.postValue(0L)
         timeRunInMillis.postValue(0L)
@@ -160,11 +159,8 @@ class TrackingService:LifecycleService() {
     private fun startPace(){
         CoroutineScope(Dispatchers.Main).launch {
             while(isTracking.value!!){
-                if (totalDistance.value!! > 0f){
-                    lapTime = System.currentTimeMillis() - timeStarted
-                    if (lapTime > 0L){
-                        totalPace.postValue((lapTime/ totalDistance.value!!).toLong() * 1000L)
-                    }
+                if (totalDistance.value!! > 0f && timeRunInMillis.value!! > 0L){
+                    totalPace.postValue((timeRunInMillis.value!! / totalDistance.value!!).toLong() * 1000L)
                 }
                 delay(3000L)
             }
@@ -240,12 +236,10 @@ class TrackingService:LifecycleService() {
             val pos = LatLng(location.latitude, location.longitude)
             pathPoints.value?.apply{
                 if (last().size > 1) {
-                    val prevLocation = Location("")
-                    prevLocation.latitude = last().last().latitude
-                    prevLocation.longitude = last().last().longitude
-                    val movedDistance = location.distanceTo(prevLocation).absoluteValue
+                    val result = FloatArray(1)
+                    Location.distanceBetween(last().last().latitude, last().last().longitude, location.latitude, location.longitude, result)
                     totalDistance.postValue(
-                        totalDistance.value?.plus(movedDistance)
+                        totalDistance.value?.plus(result[0])
                     )
                 }
                 last().add(pos)
@@ -263,6 +257,7 @@ class TrackingService:LifecycleService() {
         startTimer()
         startPace()
         isTracking.postValue(true)
+        totallyFinished.postValue(0)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
