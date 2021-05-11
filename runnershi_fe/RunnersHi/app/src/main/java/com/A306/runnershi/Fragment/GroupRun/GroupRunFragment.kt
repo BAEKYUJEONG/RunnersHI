@@ -42,9 +42,9 @@ class GroupRunFragment : Fragment() {
         runningListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         runningListView.adapter = roomListAdapter
 
-        runningRoom.setOnClickListener {
-            makeCurrentFragment(rankingFragment)
-        }
+//        runningRoom.setOnClickListener {
+//            makeCurrentFragment(rankingFragment)
+//        }
     }
 
 }
