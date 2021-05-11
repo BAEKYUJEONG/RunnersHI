@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import com.A306.runnershi.Dao.RunDAO
+import com.A306.runnershi.Fragment.GroupRun.GroupRunFragment
 import com.A306.runnershi.Fragment.HomeFragment
 import com.A306.runnershi.Fragment.ProfileFragment
 import com.A306.runnershi.Fragment.RankingFragment
@@ -48,6 +49,10 @@ open class MainActivity : AppCompatActivity() {
         val singleRunFragment = SingleRunFragment()
         val mapFragment = MapFragment()
 
+        // 같이 달리기 Fragments
+        val groupRunFragment = GroupRunFragment()
+
+
         // 첫 시작 Fragment
         makeCurrentFragment(homeFragment)
 
@@ -70,6 +75,15 @@ open class MainActivity : AppCompatActivity() {
             sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
         }
 
+        // 임시로 달아놓는 그룹런 버튼
+
+        floatingActionButtonTEMP.setOnClickListener {
+            makeCurrentFragment(groupRunFragment)
+            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
+        }
+
+
+        // 상단 앱바 관련
         val settingsActivity = Intent(this, SettingsActivity::class.java)
 
         topAppBar.setOnMenuItemClickListener { menuItem ->
@@ -77,10 +91,6 @@ open class MainActivity : AppCompatActivity() {
                 R.id.navigation_alert -> {
                     true
                 }
-//               R.id.navigation_setting -> {
-//                   val intent = Intent(this, SettingsActivity::class.java)
-//                   startActivity(intent)
-//               }
                 R.id.navigation_setting -> startActivity(settingsActivity)
             }
             true
@@ -97,19 +107,6 @@ open class MainActivity : AppCompatActivity() {
             it.action = action
             this.startService(it)
         }
-
-//        // 상단 Top App Bar 설정
-//        // Fragment 할당
-//        val settingsFragment = SettingsFragment()
-//
-//        // 상단 메뉴 클릭할 경우
-//        topAppBar.setOnClickListener{
-//            val tran = supportFragmentManager.beginTransaction()
-//
-//            tran.add(R.id.main_fragment, settingsFragment)
-//            tran.commit()
-//        }
-
     }
 
     // Fragment 변경을 위한 함수
