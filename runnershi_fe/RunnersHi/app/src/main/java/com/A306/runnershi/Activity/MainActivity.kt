@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import com.A306.runnershi.Dao.RunDAO
 import com.A306.runnershi.Fragment.GroupRun.GroupRunFragment
 import com.A306.runnershi.Fragment.HomeFragment
+import com.A306.runnershi.Fragment.Profile.AchievementFragment
 import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Fragment.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.MapFragment
@@ -15,8 +16,10 @@ import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearchFragment
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
+import com.kakao.sdk.common.util.SharedPrefsWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -44,8 +47,8 @@ open class MainActivity : AppCompatActivity() {
         val homeFragment = HomeFragment()
         val userSearchFragment = UserSearchFragment()
         val rankingFragment = RankingFragment()
-        val profileFragment =
-            ProfileFragment()
+        val profileFragment = ProfileFragment()
+        val achievementFragment = AchievementFragment()
         // 혼자 달리기 Fragments
         val singleRunFragment = SingleRunFragment()
         val mapFragment = MapFragment()
@@ -96,6 +99,10 @@ open class MainActivity : AppCompatActivity() {
             }
             true
         }
+
+//        achievement_layout.setOnClickListener{
+//            ShowAchievemnt(achievementFragment)
+//        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -123,5 +130,12 @@ open class MainActivity : AppCompatActivity() {
         if(intent?.action == "ACTION_SHOW_TRACKING_FRAGMENT"){
             makeCurrentFragment(singleRunFragment)
         }
+    }
+
+    private fun ShowAchievemnt(fragment: Fragment){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.achievement_layout, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }
