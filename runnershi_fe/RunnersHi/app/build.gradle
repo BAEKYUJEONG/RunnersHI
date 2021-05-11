@@ -146,7 +146,7 @@ dependencies {
     implementation 'android.arch.lifecycle:extensions:1.1.1'
 //
     // 리사이클러뷰
-    implementation "androidx.recyclerview:recyclerview:1.1.0"
+    implementation "androidx.recyclerview:recyclerview:1.2.0"
     implementation "androidx.cardview:cardview:1.0.0"
 
     // 동그란 이미지 뷰 만들어주는 외부 라이브러리

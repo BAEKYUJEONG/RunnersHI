@@ -8,16 +8,13 @@ import android.app.PendingIntent.FLAG_UPDATE_CURRENT
 import android.content.Context
 import android.content.Intent
 import android.location.Location
-import android.location.LocationManager
 import android.os.Build
 import android.os.Looper
 import androidx.annotation.RequiresApi
 import androidx.core.app.NotificationCompat
-import androidx.core.content.getSystemService
 import androidx.lifecycle.LifecycleService
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
-import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.R
 import com.google.android.gms.location.FusedLocationProviderClient
@@ -160,11 +157,8 @@ class TrackingService:LifecycleService() {
     private fun startPace(){
         CoroutineScope(Dispatchers.Main).launch {
             while(isTracking.value!!){
-                if (totalDistance.value!! > 0f){
-                    lapTime = System.currentTimeMillis() - timeStarted
-                    if (lapTime > 0L){
-                        totalPace.postValue((lapTime/ totalDistance.value!!).toLong() * 1000L)
-                    }
+                if (totalDistance.value!! > 0f && timeRunInMillis.value!! > 0L){
+                    totalPace.postValue((timeRunInMillis.value!! / totalDistance.value!!).toLong() * 1000L)
                 }
                 delay(3000L)
             }
