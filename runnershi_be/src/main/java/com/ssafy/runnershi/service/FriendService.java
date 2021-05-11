@@ -6,8 +6,8 @@ public interface FriendService {
 
   public String deleteFriend(String userId, String friendUserId);
 
-  public String acceptFriend(String userId, String friendUserId, Integer alarmId);
+  public String acceptFriend(String userId, String friendUserId, long alarmId);
 
-  public String rejectFriend(String userId, Integer alarmId);
+  public String rejectFriend(String userId, long alarmId);
 
 }

@@ -7,6 +7,7 @@ import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 
@@ -45,6 +46,11 @@ public class RedisConfig {
   public ZSetOperations<String, String> zSetOperations(
       RedisTemplate<String, String> redisTemplate) {
     return redisTemplate.opsForZSet();
+  }
+
+  @Bean
+  public SetOperations<String, String> SetOperations(RedisTemplate<String, String> redisTemplate) {
+    return redisTemplate.opsForSet();
   }
 
 }
