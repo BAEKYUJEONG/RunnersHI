@@ -4,6 +4,8 @@ package com.A306.runnershi.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
+import android.view.View
 import androidx.fragment.app.Fragment
 import com.A306.runnershi.Dao.RunDAO
 import com.A306.runnershi.Fragment.GroupRun.GroupRunFragment
@@ -73,9 +75,11 @@ open class MainActivity : AppCompatActivity() {
             true
         }
 
+
+
         // 달리기 버튼
         floatingActionButton.setOnClickListener {
-            makeCurrentFragment(singleRunFragment)
+            makeCurrentFragment(singleRunFragment, "hide")
             sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
         }
 
@@ -110,7 +114,7 @@ open class MainActivity : AppCompatActivity() {
         navigateToRunningFragment(intent)
     }
 
-    public fun sendCommandToService(action:String){
+    fun sendCommandToService(action:String){
         Intent(this, TrackingService::class.java).also{
             it.action = action
             this.startService(it)
@@ -118,10 +122,15 @@ open class MainActivity : AppCompatActivity() {
     }
 
     // Fragment 변경을 위한 함수
-    private fun makeCurrentFragment(fragment: Fragment){
+    fun makeCurrentFragment(fragment: Fragment, tag:String = "show"){
         supportFragmentManager.beginTransaction().apply{
-            replace(R.id.main_fragment, fragment)
+            replace(R.id.main_fragment, fragment, tag)
             commit()
+        }
+        if (tag == "hide"){
+            floatingActionButton.visibility = View.GONE
+        }else{
+            floatingActionButton.visibility = View.VISIBLE
         }
     }
 

@@ -8,6 +8,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.A306.runnershi.Activity.MainActivity
+import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.Polyline
 import com.A306.runnershi.Services.TrackingService
@@ -17,10 +18,15 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.PolylineOptions
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_map.*
+import kotlinx.android.synthetic.main.fragment_map.paceText
+import kotlinx.android.synthetic.main.fragment_map.timeText
+import kotlinx.android.synthetic.main.fragment_single_run.*
 
 @AndroidEntryPoint
 class MapFragment : Fragment(R.layout.fragment_map) {
     private val viewModel : SingleRunViewModel by viewModels()
+
+    private var curTimeMillis = 0L
 
     private var isTracking = false
     private var pathPoints = mutableListOf<Polyline>()
@@ -30,6 +36,8 @@ class MapFragment : Fragment(R.layout.fragment_map) {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView.onCreate(savedInstanceState)
+        val mainActivity = activity as MainActivity
+        val singleRunFragment = SingleRunFragment()
 
         // 나중에 버튼 관련 넣기 (toggle)
 
@@ -39,37 +47,34 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         }
 
         subscribeToObservers()
+
+        toMeterButton.setOnClickListener {
+            mainActivity.makeCurrentFragment(singleRunFragment, "hide")
+        }
     }
 
     private fun subscribeToObservers(){
-        TrackingService.isTracking.observe(viewLifecycleOwner, Observer{
-            updateTracking(it)
-        })
 
         TrackingService.pathPoints.observe(viewLifecycleOwner, Observer{
             pathPoints = it
             addLatestPolyline()
             moveCameraToUser()
         })
-    }
 
-    private fun toggleRun() {
-        var mainActivity = activity as MainActivity
-        if(isTracking){
-            mainActivity.sendCommandToService("ACTION_PAUSE_SERVICE")
-        }else{
-            mainActivity.sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
-        }
-    }
-    
-    private fun updateTracking(isTracking: Boolean){
-        this.isTracking = isTracking
-        // 달리지 않음
-        if(!isTracking){
-            
-        }else{  // 달리는 중
-            
-        }
+        TrackingService.timeRunInMillis.observe(viewLifecycleOwner, Observer{
+            curTimeMillis = it
+            val formattedTime = TrackingUtility.getFormattedStopWatchTime(curTimeMillis, false)
+            timeText.text = formattedTime
+        })
+
+        TrackingService.totalPace.observe(viewLifecycleOwner, Observer {
+            if (it > 0){
+                val formattedPace = TrackingUtility.getPaceWithMilliAndDistance(it)
+                paceText.text = formattedPace
+            }else{
+                paceText.text = "0' 00''"
+            }
+        })
     }
 
     private fun moveCameraToUser(){

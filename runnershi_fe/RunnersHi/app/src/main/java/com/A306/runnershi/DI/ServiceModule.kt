@@ -33,6 +33,8 @@ object ServiceModule {
         PendingIntent.FLAG_UPDATE_CURRENT
     )
 
+    @ServiceScoped
+    @Provides
     fun provideBaseNotificationBuilder(@ApplicationContext app: Context, pendingIntent: PendingIntent) = NotificationCompat.Builder(app, "runnershi_channel")
         .setAutoCancel(false)
         .setOngoing(true)
