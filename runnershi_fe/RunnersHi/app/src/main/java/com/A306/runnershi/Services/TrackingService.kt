@@ -58,12 +58,14 @@ class TrackingService:LifecycleService() {
         val totalPace = MutableLiveData<Long>()
         val isTracking = MutableLiveData<Boolean>()
         val pathPoints = MutableLiveData<Polylines>()
+        val totallyFinished = MutableLiveData<Int>()
     }
 
     private fun postInitialValues(){
         isTracking.postValue(false)
         totalDistance.postValue(0f)
         totalPace.postValue(0L)
+        totallyFinished.postValue(0)
         pathPoints.postValue(mutableListOf())
         timeRunInSeconds.postValue(0L)
         timeRunInMillis.postValue(0L)
@@ -234,12 +236,10 @@ class TrackingService:LifecycleService() {
             val pos = LatLng(location.latitude, location.longitude)
             pathPoints.value?.apply{
                 if (last().size > 1) {
-                    val prevLocation = Location("")
-                    prevLocation.latitude = last().last().latitude
-                    prevLocation.longitude = last().last().longitude
-                    val movedDistance = location.distanceTo(prevLocation).absoluteValue
+                    val result = FloatArray(1)
+                    Location.distanceBetween(last().last().latitude, last().last().longitude, location.latitude, location.longitude, result)
                     totalDistance.postValue(
-                        totalDistance.value?.plus(movedDistance)
+                        totalDistance.value?.plus(result[0])
                     )
                 }
                 last().add(pos)
@@ -257,6 +257,7 @@ class TrackingService:LifecycleService() {
         startTimer()
         startPace()
         isTracking.postValue(true)
+        totallyFinished.postValue(0)
 
         val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
 
