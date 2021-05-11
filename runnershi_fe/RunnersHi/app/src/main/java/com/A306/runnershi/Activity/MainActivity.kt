@@ -8,16 +8,20 @@ import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.A306.runnershi.Dao.RunDAO
+import com.A306.runnershi.Fragment.GroupRun.GroupRunFragment
 import com.A306.runnershi.Fragment.HomeFragment
-import com.A306.runnershi.Fragment.ProfileFragment
+import com.A306.runnershi.Fragment.Profile.AchievementFragment
+import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Fragment.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.MapFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearchFragment
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
+import com.kakao.sdk.common.util.SharedPrefsWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -46,9 +50,14 @@ open class MainActivity : AppCompatActivity() {
         val userSearchFragment = UserSearchFragment()
         val rankingFragment = RankingFragment()
         val profileFragment = ProfileFragment()
+        val achievementFragment = AchievementFragment()
         // 혼자 달리기 Fragments
         val singleRunFragment = SingleRunFragment()
         val mapFragment = MapFragment()
+
+        // 같이 달리기 Fragments
+        val groupRunFragment = GroupRunFragment()
+
 
         // 첫 시작 Fragment
         makeCurrentFragment(homeFragment)
@@ -74,6 +83,15 @@ open class MainActivity : AppCompatActivity() {
             sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
         }
 
+        // 임시로 달아놓는 그룹런 버튼
+
+        floatingActionButtonTEMP.setOnClickListener {
+            makeCurrentFragment(groupRunFragment)
+            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
+        }
+
+
+        // 상단 앱바 관련
         val settingsActivity = Intent(this, SettingsActivity::class.java)
 
         topAppBar.setOnMenuItemClickListener { menuItem ->
@@ -81,14 +99,14 @@ open class MainActivity : AppCompatActivity() {
                 R.id.navigation_alert -> {
                     true
                 }
-//               R.id.navigation_setting -> {
-//                   val intent = Intent(this, SettingsActivity::class.java)
-//                   startActivity(intent)
-//               }
                 R.id.navigation_setting -> startActivity(settingsActivity)
             }
             true
         }
+
+//        achievement_layout.setOnClickListener{
+//            ShowAchievemnt(achievementFragment)
+//        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -101,19 +119,6 @@ open class MainActivity : AppCompatActivity() {
             it.action = action
             this.startService(it)
         }
-
-//        // 상단 Top App Bar 설정
-//        // Fragment 할당
-//        val settingsFragment = SettingsFragment()
-//
-//        // 상단 메뉴 클릭할 경우
-//        topAppBar.setOnClickListener{
-//            val tran = supportFragmentManager.beginTransaction()
-//
-//            tran.add(R.id.main_fragment, settingsFragment)
-//            tran.commit()
-//        }
-
     }
 
     // Fragment 변경을 위한 함수
@@ -134,5 +139,12 @@ open class MainActivity : AppCompatActivity() {
         if(intent?.action == "ACTION_SHOW_TRACKING_FRAGMENT"){
             makeCurrentFragment(singleRunFragment)
         }
+    }
+
+    private fun ShowAchievemnt(fragment: Fragment){
+        val transaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.achievement_layout, fragment)
+        transaction.addToBackStack(null)
+        transaction.commit()
     }
 }

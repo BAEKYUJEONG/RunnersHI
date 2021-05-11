@@ -5,7 +5,7 @@
     android:id="@+id/frameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Fragment.ProfileFragment">
+    tools:context=".Fragment.Profile.ProfileFragment">
 
     <LinearLayout
         android:layout_width="match_parent"
@@ -15,11 +15,11 @@
         <TextView
             android:id="@+id/profileTab"
             android:layout_width="match_parent"
-            android:layout_height="50dp"
-            android:gravity="center_horizontal"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
             android:padding="10dp"
+            android:paddingStart="15dp"
             android:text="에리얼"
-            android:textAlignment="viewStart"
             android:textSize="24sp" />
 
         <LinearLayout
@@ -30,12 +30,14 @@
 
             <ImageView
                 android:id="@+id/profileImg"
-                android:layout_width="wrap_content"
+                android:layout_width="50dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                tools:src="@tools:sample/avatars" />
+                android:padding="10dp"
+                android:src="@drawable/runner_profile" />
 
             <LinearLayout
+                android:id="@+id/achievement_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -43,7 +45,7 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/textView6"
+                    android:id="@+id/achievement_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
@@ -51,16 +53,17 @@
                     android:textAlignment="center" />
 
                 <EditText
-                    android:id="@+id/editTextNumber"
+                    android:id="@+id/achievement_num"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:ems="10"
                     android:inputType="number" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/friendButton"
+                android:id="@+id/friend_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -79,6 +82,7 @@
                     android:id="@+id/editTextNumber2"
                     android:layout_width="100dp"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="center"
                     android:ems="10"
                     android:inputType="number" />
 
