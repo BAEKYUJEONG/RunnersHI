@@ -18,6 +18,7 @@ import com.A306.runnershi.Model.Token
 import com.A306.runnershi.Model.User
 import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.UserViewModel
+import com.google.android.material.snackbar.Snackbar
 import com.google.gson.Gson
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
@@ -62,9 +63,29 @@ class LoginActivity : AppCompatActivity() {
         toLoginButton.setOnClickListener {
             val userEmail = emailInput.text.toString()
             val userPwd = pwdInput.text.toString()
-            val loginParams = mapOf("email" to userEmail, "pwd" to userPwd)
-            // 서버 통신
-            val loginConnect = HttpConnect("/login", loginParams)
+
+            RetrofitClient.getInstance().normalLogin(userEmail, userPwd).enqueue(object:Callback<ResponseBody>{
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    val result = Gson().fromJson(response.body()?.string(), Map::class.java)
+                    // 로그인 성공
+                    if(result["result"] == "SUCCESS"){
+                        viewModel.deleteAllUser()
+                        val user = User(result["token"].toString(), result["userId"].toString(), result["userName"].toString(), result["runningType"].toString())
+                        viewModel.insertUser(user)
+                        val mainIntent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(mainIntent)
+                        overridePendingTransition(0, 0)
+                    }else{
+                        Toast.makeText(applicationContext, "이메일 혹은 비밀번호를 확인해주세요", Toast.LENGTH_LONG).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(applicationContext, "관리자에게 문의바랍니다.", Toast.LENGTH_LONG).show()
+                }
+            })
+
+
         }
 
         // 카카오 로그인 콜백함수
@@ -75,45 +96,42 @@ class LoginActivity : AppCompatActivity() {
             else if (token != null) {
                 Timber.e("카카오 토큰? ${token.accessToken}")
 
-//                var httpConnect = HttpConnect("/user/signin/kakao", mapOf("accessToken" to token.accessToken))
-//                var result = httpConnect.post()
-//                Timber.e(result)
-
+                // 카카오 토큰을 받은 후 서버 통신
                 RetrofitClient.getInstance().kakaoLogin(Token(token.accessToken)).enqueue(object:Callback<ResponseBody>{
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                         val result = Gson().fromJson(response.body()?.string(), Map::class.java)
-                        if (result["token"] == null){
-                            val kakaoIntent:Intent = Intent(applicationContext, RegisterActivity::class.java).apply {
-                                putExtra("loginType", "Social")
-                                putExtra("userId", result["userId"].toString())
+                        // 통신은 잘됨
+                        if (result != null){
+                            // 로그인 = 이미 회원으로 돼있음
+                            if (result["token"] != null && result["userName"] != null && result["userId"] != null){
+                                // 있는 유저 삭제
+                                viewModel.deleteAllUser()
+//                                 새로운 유저
+                                val user = User(result["token"].toString(), result["userId"].toString(), result["userName"].toString(), result["runningType"].toString())
+                                viewModel.insertUser(user)
+                                val mainIntent = Intent(this@LoginActivity, MainActivity::class.java)
+                                startActivity(mainIntent)
+                                overridePendingTransition(0, 0)
+                            } else{ // 신규 회원가입
+                                Timber.e("신입왔는가")
+                                val userId = result["userId"].toString()
+                                val registerIntent = Intent(this@LoginActivity, RegisterActivity::class.java).apply {
+                                    putExtra("loginType", "Social")
+                                    putExtra("userId", userId)
+                                }
+                                startActivity(registerIntent)
+                                overridePendingTransition(0, 0)
                             }
-                            startActivity(kakaoIntent)
-                            overridePendingTransition(0, 0)
-                        }else{
-                            val kakaoIntent:Intent = Intent(applicationContext, RegisterActivity::class.java).apply {
-                                putExtra("loginType", "Social")
-                                putExtra("userId", result["userId"].toString())
-                                putExtra("userName", result["userName"].toString())
-                                putExtra("token", result["token"].toString())
-                                putExtra("runningType", result["runningType"].toString())
-                            }
-                            startActivity(kakaoIntent)
-                            overridePendingTransition(0, 0)
+
+                        } else{ // 결과 값이 없음...
+                            Toast.makeText(this@LoginActivity.applicationContext, "관리자에게 문의해주세요.", Toast.LENGTH_LONG).show()
                         }
                     }
 
                     override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
-                        Timber.e("RETROFIT... : ${call.toString()}")
+                        Toast.makeText(this@LoginActivity.applicationContext, "관리자에게 문의해주세요.", Toast.LENGTH_LONG).show()
                     }
                 })
-
-
-
-//                val registerIntent:Intent = Intent(this,RegisterActivity::class.java).apply {
-//                    putExtra("loginType", "Social")
-//                }
-//                startActivity(registerIntent)
-//                overridePendingTransition(0,0)
             }
         }
 

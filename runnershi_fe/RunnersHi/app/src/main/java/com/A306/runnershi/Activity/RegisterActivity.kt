@@ -14,9 +14,6 @@ import dagger.hilt.android.AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
 
     var userId = ""
-    var token = ""
-    var userName = ""
-    var runningType = ""
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -32,9 +29,6 @@ class RegisterActivity : AppCompatActivity() {
             }
             "Social" -> {
                 userId = intent.getStringExtra("userId").toString()
-                userName = intent.getStringExtra("userName").toString()
-                token = intent.getStringExtra("token").toString()
-                runningType = intent.getStringExtra("runningType").toString()
                 makeCurrentFragment(socialRegisterFragment)
             }
             else -> {

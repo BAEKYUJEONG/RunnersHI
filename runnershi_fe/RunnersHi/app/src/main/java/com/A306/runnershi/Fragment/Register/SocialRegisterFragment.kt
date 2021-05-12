@@ -42,22 +42,11 @@ class SocialRegisterFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         var registerActivity = activity as RegisterActivity
         var userId = registerActivity.userId
-        var userName = registerActivity.userName
-        var token = registerActivity.token
-        var runningType = registerActivity.runningType
 
         // 로그인 버튼 클릭
         toLoginButton.setOnClickListener {
             startActivity(Intent(activity, LoginActivity::class.java))
             activity?.overridePendingTransition(0,0)
-        }
-
-        if (userId !== "" && userName !== "" && token !== ""){
-            var user = User(token, userId, userName, runningType)
-            viewModel.insertUser(user)
-            val intent = Intent(activity, MainActivity::class.java)
-            startActivity(intent)
-            activity?.overridePendingTransition(0, 0)
         }
 
         // 가입 완료 버튼 클릭
@@ -78,6 +67,8 @@ class SocialRegisterFragment : Fragment() {
                                 if (result["result"] == "invalid name"){
                                     Toast.makeText(context, "다른 닉네임을 사용해주세요", Toast.LENGTH_LONG).show()
                                 }else{
+                                    viewModel.deleteAllUser()
+                                    Timber.e("해치웠나")
                                     var user = User(result["token"].toString(), result["userId"].toString(), result["userName"].toString(), result["runningType"].toString())
                                     viewModel.insertUser(user)
                                     val intent = Intent(activity, MainActivity::class.java)
