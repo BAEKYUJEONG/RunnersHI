@@ -72,7 +72,7 @@ public class RankingController {
     String type = (String) map.get("type");
     int offset = (Integer) map.get("offset");
 
-    Object result = rankingService.weeklyAll(userId, type, offset);
+    Object result = rankingService.weeklyFriend(userId, type, offset);
     if (result == null)
       return new ResponseEntity<Object>(result, HttpStatus.BAD_REQUEST);
     return new ResponseEntity<Object>(result, HttpStatus.OK);

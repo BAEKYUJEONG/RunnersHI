@@ -16,6 +16,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -51,6 +52,9 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private PasswordEncodingService pwdEncoding;
+
+  @Autowired
+  private SetOperations<String, String> set;
 
   @Override
   public UserResult signInKakao(String accessToken) {
@@ -201,6 +205,9 @@ public class UserServiceImpl implements UserService {
     userInfo.setUserName(user);
     userInfoRepo.save(userInfo);
 
+    set.add(idName.getUserId() + ";" + idName.getUserName(),
+        idName.getUserId() + ";" + idName.getUserName());
+
     userResult.setResult("SUCCESS");
     userResult.setToken(jwtService.create(user.getUserId()));
     userResult.setUserId(user.getUserId());
@@ -330,6 +337,9 @@ public class UserServiceImpl implements UserService {
     userInfo.setUserId(user);
     userInfo.setUserName(user);
     userInfoRepo.save(userInfo);
+
+    set.add(user.getUserId() + ";" + user.getUserName(),
+        user.getUserId() + ";" + user.getUserName());
 
     userResult.setResult("SUCCESS");
     userResult.setToken(jwtService.create(user.getUserId()));

@@ -9,6 +9,6 @@ public interface RankingService {
 
   public Object totalFriend(String userId, String type, int offset);
 
-  public Object weeklyAll(String userId, String type, int offset);
+  public Object weeklyFriend(String userId, String type, int offset);
 
 }

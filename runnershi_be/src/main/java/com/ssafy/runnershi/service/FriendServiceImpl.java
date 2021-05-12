@@ -89,7 +89,8 @@ public class FriendServiceImpl implements FriendService {
       friend1.setUser(fromUser);
       friendRepo.save(friend1);
 
-      set.add(fromUser.getUserName().getUserName(), toUser.getUserName().getUserName());
+      set.add(fromUser.getUserId().getUserId() + ";" + fromUser.getUserName().getUserName(),
+          toUser.getUserId().getUserId() + ";" + toUser.getUserName().getUserName());
 
     }
 
@@ -101,7 +102,8 @@ public class FriendServiceImpl implements FriendService {
       friend2.setUser(toUser);
       friendRepo.save(friend2);
 
-      set.add(toUser.getUserName().getUserName(), fromUser.getUserName().getUserName());
+      set.add(toUser.getUserId().getUserId() + ";" + toUser.getUserName().getUserName(),
+          fromUser.getUserId().getUserId() + ";" + fromUser.getUserName().getUserName());
 
     }
 
