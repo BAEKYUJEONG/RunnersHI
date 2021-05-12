@@ -7,12 +7,19 @@ import android.util.Log
 import android.widget.Toast
 import androidx.compose.ui.res.stringResource
 import com.A306.runnershi.Helper.HttpConnect
+import com.A306.runnershi.Helper.RetrofitClient
+import com.A306.runnershi.Model.Token
+import com.A306.runnershi.Model.User
 import com.A306.runnershi.R
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
 import kotlinx.android.synthetic.main.activity_login.*
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import timber.log.Timber
 
 class LoginActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -45,17 +52,39 @@ class LoginActivity : AppCompatActivity() {
         // 카카오 로그인 콜백함수
         val kakaoCallBack: (OAuthToken?, Throwable?) -> Unit = { token, error ->
             if (error != null) {
-                var keyHash = Utility.getKeyHash(this)
-                Log.e("KAKAOHASH", keyHash)
-                Log.e("KAKAOLOGIN", "ERROR"+ error.localizedMessage)
                 Toast.makeText(this, "카카오 로그인 실패", Toast.LENGTH_LONG).show()
             }
             else if (token != null) {
-                val registerIntent:Intent = Intent(this,RegisterActivity::class.java).apply {
-                    putExtra("loginType", "Social")
-                }
-                startActivity(registerIntent)
-                overridePendingTransition(0,0)
+                Timber.e("카카오 토큰? ${token.accessToken}")
+
+                var httpConnect = HttpConnect("/user/signin/kakao", mapOf("accessToken" to token.accessToken))
+                var result = httpConnect.post()
+                Timber.e(result)
+
+                var result2 = RetrofitClient.getInstance().kakaoLogin(Token(token.accessToken)).enqueue(object:Callback<User>{
+                    override fun onResponse(call: Call<User>, response: Response<User>) {
+                        Timber.e(token.accessToken)
+                        Timber.e("HMM : ${response.errorBody()}")
+                        Timber.e("HEADER : ${response.headers()}")
+                        Timber.e("${response.raw()}")
+                        Timber.e("${response.message()}")
+                        Timber.e("RETROFIT!! : ${response.toString()}")
+                        Timber.e("RETROFIT USER : ${response.body().toString()}")
+                    }
+
+                    override fun onFailure(call: Call<User>, t: Throwable) {
+                        Timber.e("RETROFIT... : ${call.toString()}")
+                    }
+                })
+                Timber.e(result2.toString())
+
+
+
+//                val registerIntent:Intent = Intent(this,RegisterActivity::class.java).apply {
+//                    putExtra("loginType", "Social")
+//                }
+//                startActivity(registerIntent)
+//                overridePendingTransition(0,0)
             }
         }
 
@@ -70,8 +99,8 @@ class LoginActivity : AppCompatActivity() {
         }
 
         // 네이버 로그인 클릭
-        naverLogin.setOnClickListener {
-
-        }
+//        naverLogin.setOnClickListener {
+//
+//        }
     }
 }
