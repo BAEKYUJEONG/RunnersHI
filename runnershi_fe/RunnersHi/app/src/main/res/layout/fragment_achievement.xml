@@ -5,10 +5,19 @@
     android:layout_height="match_parent"
     tools:context=".Fragment.Profile.AchievementFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
 
+        <TextView
+            android:id="@+id/achievement_tab"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:gravity="center_vertical"
+            android:padding="10dp"
+            android:paddingStart="15dp"
+            android:text="업적"
+            android:textSize="24sp" />
+    </LinearLayout>
 </FrameLayout>
