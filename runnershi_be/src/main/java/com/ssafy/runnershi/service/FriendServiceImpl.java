@@ -1,10 +1,14 @@
 package com.ssafy.runnershi.service;
 
+import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 import com.ssafy.runnershi.entity.Alarm;
 import com.ssafy.runnershi.entity.Friend;
+import com.ssafy.runnershi.entity.FriendIdName;
+import com.ssafy.runnershi.entity.FriendListResult;
+import com.ssafy.runnershi.entity.User;
 import com.ssafy.runnershi.entity.UserInfo;
 import com.ssafy.runnershi.repository.AlarmRepository;
 import com.ssafy.runnershi.repository.FriendRepository;
@@ -127,8 +131,6 @@ public class FriendServiceImpl implements FriendService {
 
   @Override
   public String deleteFriend(String userId, String friendUserId) {
-    System.out.println(userId);
-    System.out.println(friendUserId);
     Friend friend =
         friendRepo.findByUser_UserId_UserIdAndFriendUser_UserId_UserId(userId, friendUserId);
     if (friend == null) {
@@ -143,6 +145,27 @@ public class FriendServiceImpl implements FriendService {
     friendRepo.delete(friend);
 
     return "SUCCESS";
+  }
+
+
+  @Override
+  public FriendListResult friendList(String userId) {
+    User user = userRepo.findByUserId(userId);
+    if (user == null)
+      return null;
+
+    FriendListResult result = new FriendListResult();
+    ArrayList<Friend> list = friendRepo.findByUser_UserId_UserId(userId);
+    result.setFriendNum(list.size());
+    result.setFriendList(new ArrayList<FriendIdName>());
+    for (Friend friend : list) {
+      User friendUser = friend.getFriendUser().getUserId();
+      FriendIdName friendIdName =
+          new FriendIdName(friendUser.getUserId(), friendUser.getUserName());
+      result.getFriendList().add(friendIdName);
+    }
+
+    return result;
   }
 
 
