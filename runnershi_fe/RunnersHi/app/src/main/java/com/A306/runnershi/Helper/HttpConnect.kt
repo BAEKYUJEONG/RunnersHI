@@ -4,6 +4,7 @@ import android.util.Log
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.runBlocking
+import timber.log.Timber
 import java.io.BufferedReader
 import java.io.InputStreamReader
 import java.net.HttpURLConnection
@@ -117,6 +118,7 @@ class HttpConnect {
                         "$paramsString&$it="+ this.params!![it]
                     }
                 }
+                Timber.e("파라미터 ${paramsString}")
                 outStream.write(paramsString.toByteArray(StandardCharsets.UTF_8))
                 outStream.flush()
                 outStream.close()
@@ -128,13 +130,17 @@ class HttpConnect {
             val buf = StringBuffer()
             do{
                 stringResult = bufferedRead.readLine()
+                Timber.e("읽기 ${stringResult}")
                 if (stringResult != null){
                     buf.append("$stringResult\n")
                 }
             }while(stringResult != null)
 
+            Timber.e("젠장 ${buf.toString()}")
+
             return buf.toString()
         }catch (e:Exception){
+            Timber.e("설마 에러? ${e.toString()}")
             return e.localizedMessage
         }
     }
