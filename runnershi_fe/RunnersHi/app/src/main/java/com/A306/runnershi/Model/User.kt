@@ -8,7 +8,7 @@ data class User (
     var token:String? = null,
     var userId:String? = null,
     var userName:String? = null,
-    var runningType:Int = 0
+    var runningType:String? = null
 ){
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null

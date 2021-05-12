@@ -8,8 +8,16 @@ import androidx.fragment.app.Fragment
 import com.A306.runnershi.Fragment.Register.NormalRegisterFragment
 import com.A306.runnershi.Fragment.Register.SocialRegisterFragment
 import com.A306.runnershi.R
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class RegisterActivity : AppCompatActivity() {
+
+    var userId = ""
+    var token = ""
+    var userName = ""
+    var runningType = ""
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_register)
@@ -23,6 +31,10 @@ class RegisterActivity : AppCompatActivity() {
                 makeCurrentFragment(normalRegisterFragment)
             }
             "Social" -> {
+                userId = intent.getStringExtra("userId").toString()
+                userName = intent.getStringExtra("userName").toString()
+                token = intent.getStringExtra("token").toString()
+                runningType = intent.getStringExtra("runningType").toString()
                 makeCurrentFragment(socialRegisterFragment)
             }
             else -> {
@@ -30,11 +42,6 @@ class RegisterActivity : AppCompatActivity() {
                 startActivity(Intent(this, LoginActivity::class.java))
             }
         }
-
-        //
-
-
-
     }
 
     // Fragment 변경을 위한 함수

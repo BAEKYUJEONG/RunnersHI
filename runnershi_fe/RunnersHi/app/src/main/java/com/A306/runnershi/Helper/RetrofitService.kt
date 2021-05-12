@@ -10,8 +10,26 @@ import retrofit2.http.*
 interface RetrofitService {
     @Headers("Content-Type: application/json")
     @POST("/user/signin/kakao")
-    fun kakaoLogin(@Body body:Token) : Call<User>
+    fun kakaoLogin(@Body body:Token) : Call<ResponseBody>
 
-//    @GET("/friend/list")
-//    fun friendList(@Body body: Token) : Call<ResponseBody> // 모델이 따로 없을 경우
+    @Headers("Content-Type: application/json")
+    @POST("/user/signup/social")
+    fun socialRegister(
+        @Query("userId") userId:String,
+        @Query("userName") userName: String
+    ): Call<ResponseBody>
+
+    @GET("/user/emailchk/{email}")
+    fun userEmailCheck(@Path("email") email:String): Call<ResponseBody>
+
+    @GET("/user/namechk/{name}")
+    fun userNicknameCheck(@Path("name") name:String): Call<ResponseBody>
+
+    @Headers("Content-Type: application/json")
+    @POST("/user/signup/runhi")
+    fun normalRegister(
+        @Query("email") email:String,
+        @Query("pwd") pwd: String,
+        @Query("userName") userName: String
+    ): Call<ResponseBody>
 }

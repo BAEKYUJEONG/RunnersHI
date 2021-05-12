@@ -20,5 +20,5 @@ class UserViewModel @Inject constructor(
         userRepository.deleteUser(user)
     }
 
-    fun getUserInfo() = userRepository.getUserInfo()
+    val userInfo = userRepository.getUserInfo()
 }
