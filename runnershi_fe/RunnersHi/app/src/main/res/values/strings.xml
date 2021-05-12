@@ -25,8 +25,6 @@
     <!-- 구글 KEY -->
     <string name="google_api_key">AIzaSyCK1_vzYxWaqElwc9HhAMCJPIwzkI0fVrA</string>
     <string name="title_notifications">Notifications</string>
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
     <string name="sync_header">Sync</string>
