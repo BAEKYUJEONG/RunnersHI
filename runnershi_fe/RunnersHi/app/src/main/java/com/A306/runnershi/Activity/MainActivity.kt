@@ -100,10 +100,6 @@ open class MainActivity : AppCompatActivity() {
             }
             true
         }
-
-//        achievement_layout.setOnClickListener{
-//            ShowAchievemnt(achievementFragment)
-//        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -138,7 +134,8 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun ShowAchievemnt(fragment: Fragment){
+    //AchievementFragment로 이동하는 함수
+    fun showAchievemnt(fragment: Fragment){
         val transaction = supportFragmentManager.beginTransaction()
         transaction.replace(R.id.achievement_layout, fragment)
         transaction.addToBackStack(null)

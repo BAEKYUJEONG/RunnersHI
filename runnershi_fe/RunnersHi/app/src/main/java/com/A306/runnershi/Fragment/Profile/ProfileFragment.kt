@@ -6,11 +6,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
+import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.R
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.history.view.*
 
 class ProfileFragment : Fragment() { //, View.OnClickListener
+
 
     var imgRes = intArrayOf()
     var place = arrayOf(
@@ -28,6 +30,20 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
 
         //achievement_layout.setOnClickListener(this)
         return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+
+        val mainActivity = activity as MainActivity
+        val achievementFragment = AchievementFragment()
+
+        //업적을 없애면 랭킹을 넣으면 될 듯
+        achievement_layout.setOnClickListener{
+            mainActivity.makeCurrentFragment(achievementFragment)
+        }
+
+        freindClick()
     }
 
     // RecyclerView의 Adapter 클래스
@@ -70,4 +86,22 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
 //            }
 //        }
 //    }
+
+    private fun freindClick(){
+
+        val mainActivity = activity as MainActivity
+        val friendFragment = FriendFragment()
+
+        friend_layout.setOnClickListener{
+            mainActivity.makeCurrentFragment(friendFragment)
+        }
+
+        friend_text.setOnClickListener{
+            mainActivity.makeCurrentFragment(friendFragment)
+        }
+
+        friend_num.setOnClickListener{
+            mainActivity.makeCurrentFragment(friendFragment)
+        }
+    }
 }
