@@ -5,21 +5,27 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.R
+import com.A306.runnershi.ViewModel.SingleRunViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.history.view.*
 
+@AndroidEntryPoint
 class ProfileFragment : Fragment() { //, View.OnClickListener
 
-
-    var imgRes = intArrayOf()
+    private val viewModel : SingleRunViewModel by viewModels()
+    private lateinit var runAdapter: RunAdapter
     var place = arrayOf(
             "노원구" , "군포", "대야동", "송파구", "강남구"
     )
-    var time = intArrayOf(
-            55, 48, 23, 12, 37
+    var time = arrayOf(
+            "55", "48", "23", "12", "37"
     )
 
     override fun onCreateView(
@@ -42,8 +48,18 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
         achievement_layout.setOnClickListener{
             mainActivity.makeCurrentFragment(achievementFragment)
         }
-
         freindClick()
+        setupRecyclerView()
+
+        viewModel.runsSortedByDate.observe(viewLifecycleOwner, Observer {
+            runAdapter.submitList(it)
+        })
+    }
+
+    private fun setupRecyclerView() = historyListView.apply {
+        runAdapter = RunAdapter()
+        adapter = runAdapter
+        layoutManager = LinearLayoutManager(requireContext())
     }
 
     // RecyclerView의 Adapter 클래스
@@ -61,7 +77,7 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
         // ViewHolder를 통해 항목을 구성할 때 항목 내의 View 객체에 데이터를 셋팅한다.
         override fun onBindViewHolder(holder: ViewHolderClass, position: Int) {
             holder.placeTextView.text = place[position]
-            holder.timeNumber.setSelection(time[position])
+            holder.timeTextView.text = time[position]
         }
 
         // RecyclerView의 항목 개수를 반환한다.
@@ -73,7 +89,7 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
         inner class ViewHolderClass(itemView: View) : RecyclerView.ViewHolder(itemView){
             // 항목 View 내부의 View 객체의 주소값을 담는다.
             val placeTextView = itemView.placeTextView
-            val timeNumber = itemView.timeNumber
+            val timeTextView = itemView.timeTextView
         }
     }
 
