@@ -22,6 +22,7 @@ import com.kakao.sdk.common.util.SharedPrefsWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_profile.*
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -57,8 +58,6 @@ open class MainActivity : AppCompatActivity() {
 
         // 같이 달리기 Fragments
         val groupRunFragment = GroupRunFragment()
-
-
         // 첫 시작 Fragment
         makeCurrentFragment(homeFragment)
 
@@ -74,8 +73,6 @@ open class MainActivity : AppCompatActivity() {
             }
             true
         }
-
-
 
         // 달리기 버튼
         floatingActionButton.setOnClickListener {
