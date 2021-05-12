@@ -1,7 +1,7 @@
 package com.ssafy.runnershi.service;
 
-import java.util.concurrent.CompletableFuture;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.SetOperations;
 import org.springframework.stereotype.Service;
 import com.ssafy.runnershi.entity.Alarm;
 import com.ssafy.runnershi.entity.Friend;
@@ -29,12 +29,17 @@ public class FriendServiceImpl implements FriendService {
   @Autowired
   private AndroidPushNotificationService androidPushNotificationService;
 
+  @Autowired
+  private SetOperations<String, String> set;
+
   @Override
   public String addFriend(String userId, String friendName) {
 
     UserInfo fromUser = userInfoRepo.findByUserId_UserId(userId);
     UserInfo toUser = userInfoRepo.findByUserName_UserName(friendName);
-    if (fromUser == null || toUser == null || userId.equals(toUser.getUserId()))
+    System.out.println(fromUser);
+    System.out.println(toUser);
+    if (fromUser == null || toUser == null || userId.equals(toUser.getUserId().getUserId()))
       return "FAIL";
 
     String content = "'" + fromUser.getUserName().getUserName() + "'님의 친구신청입니다.";
@@ -49,22 +54,24 @@ public class FriendServiceImpl implements FriendService {
 
 
     // 알람 보내기
-    CompletableFuture<String> pushNotification =
-        androidPushNotificationService.send("토큰", "친구 신청", content);
-    CompletableFuture.allOf(pushNotification).join();
-    try {
-      String firebaseResponse = pushNotification.get();
-      return "SUCCESS";
-    } catch (Exception e) {
-      e.printStackTrace();
-      return "FAIL";
-    }
+    // CompletableFuture<String> pushNotification =
+    // androidPushNotificationService.send("토큰", "친구 신청", content);
+    // CompletableFuture.allOf(pushNotification).join();
+    // try {
+    // String firebaseResponse = pushNotification.get();
+    // return "SUCCESS";
+    // } catch (Exception e) {
+    // e.printStackTrace();
+    // return "FAIL";
+    // }
+
+    return "SUCCESS";
 
   }
 
 
   @Override
-  public String acceptFriend(String userId, String friendUserId, Integer alarmId) {
+  public String acceptFriend(String userId, String friendUserId, long alarmId) {
 
     UserInfo fromUser = userInfoRepo.findByUserId_UserId(userId);
     UserInfo toUser = userInfoRepo.findByUserId_UserId(friendUserId);
@@ -81,6 +88,10 @@ public class FriendServiceImpl implements FriendService {
       friend1.setFriendUser(toUser);
       friend1.setUser(fromUser);
       friendRepo.save(friend1);
+
+      set.add(fromUser.getUserId().getUserId() + ";" + fromUser.getUserName().getUserName(),
+          toUser.getUserId().getUserId() + ";" + toUser.getUserName().getUserName());
+
     }
 
     friend = friendRepo.findByUser_UserId_UserIdAndFriendUser_UserId_UserId(friendUserId, userId);
@@ -90,6 +101,10 @@ public class FriendServiceImpl implements FriendService {
       friend2.setFriendUser(fromUser);
       friend2.setUser(toUser);
       friendRepo.save(friend2);
+
+      set.add(toUser.getUserId().getUserId() + ";" + toUser.getUserName().getUserName(),
+          fromUser.getUserId().getUserId() + ";" + fromUser.getUserName().getUserName());
+
     }
 
     alarmRepo.delete(alarm);
@@ -99,7 +114,7 @@ public class FriendServiceImpl implements FriendService {
 
 
   @Override
-  public String rejectFriend(String userId, Integer alarmId) {
+  public String rejectFriend(String userId, long alarmId) {
 
     Alarm alarm = alarmRepo.findById(alarmId).orElse(null);
     if (alarm == null)

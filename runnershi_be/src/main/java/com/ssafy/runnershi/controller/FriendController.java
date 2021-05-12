@@ -45,7 +45,7 @@ public class FriendController {
       return new ResponseEntity<String>("invalid token", HttpStatus.OK);
     }
     String friendUserId = (String) map.get("friendUserId");
-    Integer alarmId = (Integer) map.get("alarmId");
+    Long alarmId = Long.parseLong(String.valueOf(map.get("alarmId")));
     String result = friendService.acceptFriend(userId, friendUserId, alarmId);
     return new ResponseEntity<String>(result, HttpStatus.OK);
   }
