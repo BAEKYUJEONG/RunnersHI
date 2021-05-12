@@ -7,7 +7,10 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.room.Room
+import com.A306.runnershi.DB.RunningDB
 import com.A306.runnershi.Dao.RunDAO
+import com.A306.runnershi.Dao.UserDAO
 import com.A306.runnershi.Fragment.GroupRun.GroupRunFragment
 import com.A306.runnershi.Fragment.HomeFragment
 import com.A306.runnershi.Fragment.Profile.AchievementFragment
@@ -38,6 +41,8 @@ open class MainActivity : AppCompatActivity() {
     // 데이터 끌어오기
     @Inject
     lateinit var runDao: RunDAO
+    @Inject
+    lateinit var userDao: UserDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
