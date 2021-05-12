@@ -1,6 +1,5 @@
 package com.A306.runnershi.Fragment.SingleRun
 
-import android.content.Intent
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
@@ -20,14 +19,11 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.PolylineOptions
-import com.google.android.material.snackbar.Snackbar
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_map.*
 import kotlinx.android.synthetic.main.fragment_map.paceText
 import kotlinx.android.synthetic.main.fragment_map.timeText
-import kotlinx.android.synthetic.main.fragment_single_run.*
 import timber.log.Timber
-import java.lang.Math.round
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -102,11 +98,14 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         map?.snapshot { bmp ->
             Timber.e("사진 저장")
             Timber.e(map?.toString())
-            val distanceInMeters = TrackingService.totalDistance.value!!.toInt()
-            val finalPace = TrackingUtility.getPaceWithMilliAndDistance(TrackingService.totalPace.value!!)
-            val avgSpeed = ((distanceInMeters / 1000f) / (curTimeMillis / 1000f / 60 / 60) * 10).roundToInt() / 10f
+            // 지금 시간 ( 저장 시에는 끝났을 때 시간 )
             val dateTimestamp = Calendar.getInstance().timeInMillis
+            val distanceInMeters = TrackingService.totalDistance.value!!.toInt()
+            val avgSpeed = ((distanceInMeters / 1000f) / (curTimeMillis / 1000f / 60 / 60) * 10).roundToInt() / 10f
+            //총 걸린 시간
             val dateTimeSpent = TrackingUtility.getFormattedStopWatchTime(TrackingService.timeRunInMillis.value!!)
+            val finalPace = TrackingUtility.getPaceWithMilliAndDistance(TrackingService.totalPace.value!!)
+            //val timestamp = Calendar.getInstance().timeInMillis
             val run = Run(bmp, dateTimestamp, avgSpeed, distanceInMeters, dateTimeSpent, finalPace)
             viewModel.insertRun(run)
             Toast.makeText(activity.applicationContext, "달리기가 저장됐습니다.", Toast.LENGTH_LONG).show()

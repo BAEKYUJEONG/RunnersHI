@@ -12,6 +12,9 @@ import javax.inject.Inject
 class SingleRunViewModel @Inject constructor(
     val singleRunRepository: SingleRunRepository
 ) : ViewModel(){
+
+    val runsSortedByDate = singleRunRepository.getAllRunsSortedByDate()
+
     fun insertRun(run: Run) = viewModelScope.launch {
         singleRunRepository.insertRun(run)
     }
