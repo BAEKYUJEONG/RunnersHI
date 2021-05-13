@@ -1,15 +1,22 @@
 package com.A306.runnershi.Fragment.GroupRun
 
+import android.app.Activity
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.R
-import kotlinx.android.synthetic.main.running_room.view.*
+import kotlinx.android.synthetic.main.group_run_room_preview.view.*
 
-class RoomListAdapter (private var list: MutableList<Room>): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
+//class RoomListAdapter (private var list: MutableList<Room>, private val listener:(Room) -> Unit): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
+//class RoomListAdapter (private var list: MutableList<Room>, private val callbackInterface:CallbackInterface): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
+
+class RoomListAdapter (private var list: MutableList<Room>, var test:GroupRunRoomListFragment.testClass): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
 
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
         var roomTitle: TextView = itemView!!.findViewById(R.id.roomTitle)
@@ -31,7 +38,7 @@ class RoomListAdapter (private var list: MutableList<Room>): RecyclerView.Adapte
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.running_room, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.group_run_room_preview, parent, false)
         return ListItemViewHolder(view)
     }
 
@@ -40,6 +47,23 @@ class RoomListAdapter (private var list: MutableList<Room>): RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: RoomListAdapter.ListItemViewHolder, position: Int) {
+
+//        val callbackInterface = CallbackInterface()
+
         holder.bind(list[position], position)
+        holder.itemView.setOnClickListener {
+            val please= list[position].room_id
+
+            test.testFun(please)
+
+            Log.i("이 아이템의", "$please")
+//            if (context is MainActivity) {
+//                val mainActivity = activity as MainActivity
+//                val roomFragment = RoomFragment()
+//
+//                mainActivity.makeCurrentFragment(roomFragment)
+//            }
+        }
     }
+
 }

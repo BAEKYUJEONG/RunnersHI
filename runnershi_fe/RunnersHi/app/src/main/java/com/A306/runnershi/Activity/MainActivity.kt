@@ -4,11 +4,10 @@ package com.A306.runnershi.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import androidx.fragment.app.Fragment
 import com.A306.runnershi.Dao.RunDAO
-import com.A306.runnershi.Fragment.GroupRun.GroupRunFragment
+import com.A306.runnershi.Fragment.GroupRun.GroupRunRoomListFragment
 import com.A306.runnershi.Fragment.HomeFragment
 import com.A306.runnershi.Fragment.Profile.AchievementFragment
 import com.A306.runnershi.Fragment.Profile.ProfileFragment
@@ -18,11 +17,8 @@ import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearchFragment
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
-import com.kakao.sdk.common.util.SharedPrefsWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_profile.*
-import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -57,7 +53,7 @@ open class MainActivity : AppCompatActivity() {
         val mapFragment = MapFragment()
 
         // 같이 달리기 Fragments
-        val groupRunFragment = GroupRunFragment()
+        val groupRunFragment = GroupRunRoomListFragment()
         // 첫 시작 Fragment
         makeCurrentFragment(homeFragment)
 
