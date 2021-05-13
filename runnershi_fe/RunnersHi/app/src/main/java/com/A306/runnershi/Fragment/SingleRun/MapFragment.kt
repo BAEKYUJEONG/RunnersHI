@@ -9,7 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
-import com.A306.runnershi.Fragment.HomeFragment
+import com.A306.runnershi.Fragment.Home.HomeFragment
 import com.A306.runnershi.Model.Run
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.Polyline
@@ -94,7 +94,7 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         })
     }
 
-    private fun endRunAndSaveToDb(activity: MainActivity, homeFragment:HomeFragment) {
+    private fun endRunAndSaveToDb(activity: MainActivity, homeFragment: HomeFragment) {
         map?.snapshot { bmp ->
             Timber.e("사진 저장")
             Timber.e(map?.toString())
