@@ -10,11 +10,13 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.A306.runnershi.Activity.MainActivity
+import com.A306.runnershi.DI.AppModule
 import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.Fragment.Home.HomeFragment
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import com.A306.runnershi.ViewModel.SingleRunViewModel
+import com.A306.runnershi.ViewModel.UserViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_single_run.*
@@ -23,7 +25,7 @@ import pub.devrel.easypermissions.EasyPermissions
 
 @AndroidEntryPoint
 class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermissions.PermissionCallbacks {
-    private val viewModel: SingleRunViewModel by viewModels()
+    private val viewModel: UserViewModel by viewModels()
 
     private var curTimeMillis = 0L
 
@@ -35,6 +37,8 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
         val mapFragment = MapFragment()
 
         subscribeToObservers(mainActivity)
+
+        view
         
         // 정지 버튼
         stopRunButton.setOnClickListener {
