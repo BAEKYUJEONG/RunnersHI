@@ -2,10 +2,12 @@ package com.A306.runnershi.Activity
 
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.A306.runnershi.DB.RunningDB
@@ -15,7 +17,7 @@ import com.A306.runnershi.Fragment.GroupRun.GroupRunFragment
 import com.A306.runnershi.Fragment.HomeFragment
 import com.A306.runnershi.Fragment.Profile.AchievementFragment
 import com.A306.runnershi.Fragment.Profile.ProfileFragment
-import com.A306.runnershi.Fragment.RankingFragment
+import com.A306.runnershi.Fragment.Ranking.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.MapFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearchFragment
@@ -25,6 +27,7 @@ import com.kakao.sdk.common.util.SharedPrefsWrapper
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_ranking.*
 import timber.log.Timber
 import javax.inject.Inject
 
@@ -145,5 +148,30 @@ open class MainActivity : AppCompatActivity() {
         transaction.replace(R.id.achievement_layout, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    // 라디오 클릭
+    fun radioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            // Is the button now checked?
+            val checked = view.isChecked
+
+            // Check which radio button was clicked
+            when (view.getId()) {
+                R.id.allRankingRadio ->
+                    if (checked) {
+                        Timber.e("전체 클릭")
+
+                        allRankingRadio.setTextColor(Color.parseColor("#ffffff"))
+                        weekRankingRadio.setTextColor(Color.parseColor("#000000"))
+                    }
+                R.id.weekRankingRadio ->
+                    if (checked) {
+                        Timber.e("주간 클릭")
+                        weekRankingRadio.setTextColor(Color.parseColor("#ffffff"))
+                        allRankingRadio.setTextColor(Color.parseColor("#000000"))
+                    }
+            }
+        }
     }
 }
