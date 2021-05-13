@@ -1,27 +1,46 @@
 package com.A306.runnershi.Activity
 
+import android.app.Activity
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 import android.widget.Toast
+import androidx.activity.viewModels
 import androidx.compose.ui.res.stringResource
+import androidx.lifecycle.viewModelScope
+import androidx.room.Room
+import com.A306.runnershi.DB.RunningDB
+import com.A306.runnershi.Dao.UserDAO
 import com.A306.runnershi.Helper.HttpConnect
 import com.A306.runnershi.Helper.RetrofitClient
 import com.A306.runnershi.Model.Token
 import com.A306.runnershi.Model.User
 import com.A306.runnershi.R
+import com.A306.runnershi.ViewModel.UserViewModel
+import com.google.android.material.snackbar.Snackbar
+import com.google.gson.Gson
 import com.kakao.sdk.auth.model.OAuthToken
 import com.kakao.sdk.common.KakaoSdk
 import com.kakao.sdk.common.util.Utility
 import com.kakao.sdk.user.UserApiClient
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_login.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
+import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import javax.inject.Inject
 
+@AndroidEntryPoint
 class LoginActivity : AppCompatActivity() {
+
+    private val viewModel:UserViewModel by viewModels<UserViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_login)
@@ -44,9 +63,29 @@ class LoginActivity : AppCompatActivity() {
         toLoginButton.setOnClickListener {
             val userEmail = emailInput.text.toString()
             val userPwd = pwdInput.text.toString()
-            val loginParams = mapOf("email" to userEmail, "pwd" to userPwd)
-            // 서버 통신
-            val loginConnect = HttpConnect("/login", loginParams)
+
+            RetrofitClient.getInstance().normalLogin(userEmail, userPwd).enqueue(object:Callback<ResponseBody>{
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    val result = Gson().fromJson(response.body()?.string(), Map::class.java)
+                    // 로그인 성공
+                    if(result["result"] == "SUCCESS"){
+                        viewModel.deleteAllUser()
+                        val user = User(result["token"].toString(), result["userId"].toString(), result["userName"].toString(), result["runningType"].toString())
+                        viewModel.insertUser(user)
+                        val mainIntent = Intent(this@LoginActivity, MainActivity::class.java)
+                        startActivity(mainIntent)
+                        overridePendingTransition(0, 0)
+                    }else{
+                        Toast.makeText(applicationContext, "이메일 혹은 비밀번호를 확인해주세요", Toast.LENGTH_LONG).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Toast.makeText(applicationContext, "관리자에게 문의바랍니다.", Toast.LENGTH_LONG).show()
+                }
+            })
+
+
         }
 
         // 카카오 로그인 콜백함수
@@ -57,34 +96,42 @@ class LoginActivity : AppCompatActivity() {
             else if (token != null) {
                 Timber.e("카카오 토큰? ${token.accessToken}")
 
-                var httpConnect = HttpConnect("/user/signin/kakao", mapOf("accessToken" to token.accessToken))
-                var result = httpConnect.post()
-                Timber.e(result)
+                // 카카오 토큰을 받은 후 서버 통신
+                RetrofitClient.getInstance().kakaoLogin(Token(token.accessToken)).enqueue(object:Callback<ResponseBody>{
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                        val result = Gson().fromJson(response.body()?.string(), Map::class.java)
+                        // 통신은 잘됨
+                        if (result != null){
+                            // 로그인 = 이미 회원으로 돼있음
+                            if (result["token"] != null && result["userName"] != null && result["userId"] != null){
+                                // 있는 유저 삭제
+                                viewModel.deleteAllUser()
+//                                 새로운 유저
+                                val user = User(result["token"].toString(), result["userId"].toString(), result["userName"].toString(), result["runningType"].toString())
+                                viewModel.insertUser(user)
+                                val mainIntent = Intent(this@LoginActivity, MainActivity::class.java)
+                                startActivity(mainIntent)
+                                overridePendingTransition(0, 0)
+                            } else{ // 신규 회원가입
+                                Timber.e("신입왔는가")
+                                val userId = result["userId"].toString()
+                                val registerIntent = Intent(this@LoginActivity, RegisterActivity::class.java).apply {
+                                    putExtra("loginType", "Social")
+                                    putExtra("userId", userId)
+                                }
+                                startActivity(registerIntent)
+                                overridePendingTransition(0, 0)
+                            }
 
-                var result2 = RetrofitClient.getInstance().kakaoLogin(Token(token.accessToken)).enqueue(object:Callback<User>{
-                    override fun onResponse(call: Call<User>, response: Response<User>) {
-                        Timber.e(token.accessToken)
-                        Timber.e("HMM : ${response.errorBody()}")
-                        Timber.e("HEADER : ${response.headers()}")
-                        Timber.e("${response.raw()}")
-                        Timber.e("${response.message()}")
-                        Timber.e("RETROFIT!! : ${response.toString()}")
-                        Timber.e("RETROFIT USER : ${response.body().toString()}")
+                        } else{ // 결과 값이 없음...
+                            Toast.makeText(this@LoginActivity.applicationContext, "관리자에게 문의해주세요.", Toast.LENGTH_LONG).show()
+                        }
                     }
 
-                    override fun onFailure(call: Call<User>, t: Throwable) {
-                        Timber.e("RETROFIT... : ${call.toString()}")
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        Toast.makeText(this@LoginActivity.applicationContext, "관리자에게 문의해주세요.", Toast.LENGTH_LONG).show()
                     }
                 })
-                Timber.e(result2.toString())
-
-
-
-//                val registerIntent:Intent = Intent(this,RegisterActivity::class.java).apply {
-//                    putExtra("loginType", "Social")
-//                }
-//                startActivity(registerIntent)
-//                overridePendingTransition(0,0)
             }
         }
 
