@@ -22,7 +22,7 @@ public class RoomMember {
   private Room room;
 
   @ManyToOne
-  @JoinColumn(name = "USER_NAME")
+  @JoinColumn(name = "USER_ID")
   private User user;
 
   public RoomMember(Room room, User user) {

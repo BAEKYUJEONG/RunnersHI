@@ -139,9 +139,7 @@ public class SessionController {
     }
 
     // 방에 권한이 있는지
-    RoomMember rm = roomMemberRepository.findByRoom_RoomIdAndUser_UserId(roomId, jwt);
-    System.out.println(rm);
-    if (rm == null) {
+    if (roomMemberRepository.findByRoom_RoomIdAndUser_UserId(roomId, jwt) == null) {
       return new ResponseEntity<>("Unauthorization", HttpStatus.BAD_REQUEST);
     }
 
@@ -235,7 +233,7 @@ public class SessionController {
     if (this.sessionIdUserIdToken.get(sessionId).isEmpty()) {
       this.roomIdSession.remove(roomId);
       this.sessionIdUserIdToken.remove(sessionId);
-      roomRepository.deleteById(roomId);
+      roomRepository.deleteByRoomId(roomId);
     }
 
     showMap();
