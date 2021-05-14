@@ -1,6 +1,9 @@
 package com.ssafy.runnershi.service;
 
+import java.util.List;
 import java.util.Map;
+import com.ssafy.runnershi.entity.Profile;
+import com.ssafy.runnershi.entity.SearchResult;
 import com.ssafy.runnershi.entity.User;
 import com.ssafy.runnershi.entity.UserResult;
 
@@ -25,5 +28,9 @@ public interface UserService {
   public String pwdChk(User user);
 
   public String leave(String userId);
+
+  public List<SearchResult> searchUser(String userId, String word);
+
+  public Profile getUserProfile(String userId);
 
 }
