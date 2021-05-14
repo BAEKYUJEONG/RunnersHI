@@ -22,16 +22,16 @@ class GroupRunRoomListFragment : Fragment() {
 
     // 데이터를 불러와서 넘겨줄 예정입니다. 지금은 임시로 생성한 데이터를 넘겨주자:
     var tempRoomList: ArrayList<Room> = arrayListOf(
-        Room(1, "페이스 조절하며 같이 뛰어요!", 1, 1),
-        Room(2, "도란도란 밤산책", 1, 3),
-        Room(3, "작심하루 다이어트", 2, 2)
+            Room(1, "페이스 조절하며 같이 뛰어요!", 1, 1),
+            Room(2, "도란도란 밤산책", 1, 3),
+            Room(3, "작심하루 다이어트", 2, 2)
     )
 
     private lateinit var roomListAdapter: RoomListAdapter
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_group_run_room_list, container, false)
@@ -74,5 +74,6 @@ class GroupRunRoomListFragment : Fragment() {
             openRoom(room)
         }
     }
+}
 
 }

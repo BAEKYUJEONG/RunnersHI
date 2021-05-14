@@ -87,7 +87,7 @@ open class MainActivity : AppCompatActivity() {
 
         floatingActionButtonTEMP.setOnClickListener {
             makeCurrentFragment(groupRunFragment)
-            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
+//            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
         }
 
 

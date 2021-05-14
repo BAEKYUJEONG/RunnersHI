@@ -7,8 +7,9 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Model.Ranking
 import com.A306.runnershi.R
+import timber.log.Timber
 
-class RankingAdapter(private val rankingList: Array<Ranking>): RecyclerView.Adapter<RankingAdapter.RankingViewHolder>() {
+class RankingAdapter(private val rankingList: Array<Ranking>, private val rankingFragment: RankingFragment): RecyclerView.Adapter<RankingAdapter.RankingViewHolder>() {
 
     class RankingViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val rankingNumber:TextView = itemView.findViewById(R.id.rankingNumber)
@@ -27,6 +28,10 @@ class RankingAdapter(private val rankingList: Array<Ranking>): RecyclerView.Adap
         holder.rankingNumber.text = (position+1).toString()
         holder.rankingName.text = rankingList[position].userName
         holder.rankingData.text = rankingList[position].userData.toString()
+        holder.rankingName.setOnClickListener {
+            Timber.e(rankingList[position].userId)
+            rankingFragment.itemClick(rankingList[position].userId.toString())
+        }
     }
 
     override fun getItemCount(): Int = rankingList.size
