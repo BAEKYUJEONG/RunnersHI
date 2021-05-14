@@ -16,7 +16,7 @@ import kotlinx.android.synthetic.main.group_run_room_preview.view.*
 //class RoomListAdapter (private var list: MutableList<Room>, private val listener:(Room) -> Unit): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
 //class RoomListAdapter (private var list: MutableList<Room>, private val callbackInterface:CallbackInterface): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
 
-class RoomListAdapter (private var list: MutableList<Room>, var test:GroupRunRoomListFragment.testClass): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
+class RoomListAdapter (private var list: MutableList<Room>, var link:GroupRunRoomListFragment.roomListAdapterToList): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
 
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
         var roomTitle: TextView = itemView!!.findViewById(R.id.roomTitle)
@@ -48,21 +48,18 @@ class RoomListAdapter (private var list: MutableList<Room>, var test:GroupRunRoo
 
     override fun onBindViewHolder(holder: RoomListAdapter.ListItemViewHolder, position: Int) {
 
-//        val callbackInterface = CallbackInterface()
-
         holder.bind(list[position], position)
+
+        // 원래는 roomId만 갖고와서 넘겨줄까?
+//        holder.itemView.setOnClickListener {
+//            val roomId = list[position].room_id
+//            link.getRoomId(roomId)
+//        }
+
+        // 지금은 우선 room 째로 넘겨줘보겠습니다.
         holder.itemView.setOnClickListener {
-            val please= list[position].room_id
-
-            test.testFun(please)
-
-            Log.i("이 아이템의", "$please")
-//            if (context is MainActivity) {
-//                val mainActivity = activity as MainActivity
-//                val roomFragment = RoomFragment()
-//
-//                mainActivity.makeCurrentFragment(roomFragment)
-//            }
+            val room = list[position]
+            link.getRoomId(room)
         }
     }
 

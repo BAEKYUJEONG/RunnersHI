@@ -20,10 +20,6 @@ import kotlinx.android.synthetic.main.group_run_room_preview.*
 class GroupRunRoomListFragment : Fragment() {
 
 
-//    val roomFragment = RoomFragment()
-
-
-
     // 데이터를 불러와서 넘겨줄 예정입니다. 지금은 임시로 생성한 데이터를 넘겨주자:
     var tempRoomList : ArrayList<Room> = arrayListOf(
         Room(1, "페이스 조절하며 같이 뛰어요!", 1, 1),
@@ -46,16 +42,36 @@ class GroupRunRoomListFragment : Fragment() {
         val mainActivity = activity as MainActivity
 
         var list : ArrayList<Room> = tempRoomList
-        var test = testClass()
+        var link = roomListAdapterToList()
 
-        roomListAdapter = RoomListAdapter(list, test)
+        roomListAdapter = RoomListAdapter(list, link)
         runningListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         runningListView.adapter = roomListAdapter
     }
 
-    class testClass{
-        fun testFun(message:Int?){
-            Log.d("TAG", "밖에서!! $message")
+    // 얘도 임시로 일단 Room으로 받아줄게요
+//     private fun openRoom(roomId: Int?) {
+//        val mainActivity = activity as MainActivity
+//        val roomFragment = RoomFragment(roomId)
+//
+//        mainActivity.makeCurrentFragment(roomFragment)
+//    }
+
+    private fun openRoom(room: Room) {
+        val mainActivity = activity as MainActivity
+        val roomFragment = RoomFragment(room)
+
+        mainActivity.makeCurrentFragment(roomFragment)
+    }
+
+    inner class roomListAdapterToList {
+//        fun getRoomId(id: Int?) {
+//            Log.i("roomId", "$id")
+//            openRoom(id)
+//        }
+
+        fun getRoomId(room: Room) {
+            openRoom(room)
         }
     }
-}
+
