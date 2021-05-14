@@ -10,16 +10,26 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Activity.MainActivity
+import com.A306.runnershi.Fragment.Ranking.RankingFragment
+import com.A306.runnershi.Helper.RetrofitClient
 import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.SingleRunViewModel
+import com.A306.runnershi.ViewModel.UserViewModel
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_running_detail.*
 import kotlinx.android.synthetic.main.history.view.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() { //, View.OnClickListener
 
-    private val viewModel : SingleRunViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
+    private val singleRunViewModel : SingleRunViewModel by viewModels()
     private lateinit var runAdapter: RunAdapter
     var place = arrayOf(
             "노원구" , "군포", "대야동", "송파구", "강남구"
@@ -41,23 +51,42 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mainActivity = activity as MainActivity
-        val achievementFragment = AchievementFragment()
-
-        //업적을 없애면 랭킹을 넣으면 될 듯
-        achievement_layout.setOnClickListener{
-            mainActivity.makeCurrentFragment(achievementFragment)
-        }
+        rankingClick()
         freindClick()
+        setupProfile()
         setupRecyclerView()
 
-        viewModel.runsSortedByDate.observe(viewLifecycleOwner, Observer {
+        singleRunViewModel.runsSortedByDate.observe(viewLifecycleOwner, Observer {
             runAdapter.submitList(it)
         })
     }
 
+    private fun setupProfile(){
+        userViewModel.userInfo.observe(viewLifecycleOwner, Observer {
+            val token = it.token
+
+            if (token != null) {
+                RetrofitClient.getInstance().userProfile(token).enqueue(object:Callback<ResponseBody>{
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                        val user = Gson().fromJson(response.body()?.string(), Map::class.java)
+                        //val userId = user["userId"].toString()
+                        profileTab.text = user["userName"].toString()
+                        distance.text = user["total_distance"].toString()
+                        pace.text = user["best_pace"].toString()
+                    }
+                })
+            }
+        })
+    }
+
     private fun setupRecyclerView() = historyListView.apply {
-        runAdapter = RunAdapter()
+        var link = runAdapterToList()
+
+        runAdapter = RunAdapter(link)
         adapter = runAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }
@@ -104,7 +133,6 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
 //    }
 
     private fun freindClick(){
-
         val mainActivity = activity as MainActivity
         val friendFragment = FriendFragment()
 
@@ -119,5 +147,36 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
         friend_num.setOnClickListener{
             mainActivity.makeCurrentFragment(friendFragment)
         }
+    }
+
+    private fun rankingClick(){
+        val mainActivity = activity as MainActivity
+        val rankingFragment = RankingFragment()
+
+        ranking_layout.setOnClickListener{
+            mainActivity.makeCurrentFragment(rankingFragment)
+        }
+
+        ranking_text.setOnClickListener{
+            mainActivity.makeCurrentFragment(rankingFragment)
+        }
+
+        ranking_num.setOnClickListener{
+            mainActivity.makeCurrentFragment(rankingFragment)
+        }
+    }
+
+    inner class runAdapterToList {
+
+        fun getRunningDetailId() {
+            openRunningDetail()
+        }
+    }
+
+    private fun openRunningDetail() {
+        val mainActivity = activity as MainActivity
+        val runningDetailFragment = RunningDetailFragment()
+
+        mainActivity.makeCurrentFragment(runningDetailFragment)
     }
 }

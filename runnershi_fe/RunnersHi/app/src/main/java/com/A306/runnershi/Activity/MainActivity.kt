@@ -12,8 +12,6 @@ import android.widget.RadioButton
 import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
-import androidx.room.Room
-import com.A306.runnershi.DB.RunningDB
 import com.A306.runnershi.Dao.RunDAO
 import com.A306.runnershi.Dao.UserDAO
 import com.A306.runnershi.Fragment.GroupRun.GroupRunRoomListFragment
@@ -31,7 +29,6 @@ import com.leinardi.android.speeddial.SpeedDialOverlayLayout
 import com.leinardi.android.speeddial.SpeedDialView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -92,45 +89,6 @@ open class MainActivity : AppCompatActivity() {
         }
 
 
-        // Floating button overlay
-
-//        floatingActionButton.setOnClickListener {
-//            val inflater: LayoutInflater = LayoutInflater.from(this)
-//            val overlayView = inflater.inflate(R.layout.floating_button_overlay, null)
-////            val hostView = inflater.inflate(R.layout.activity_main, null)
-////            val overlayView = R.layout.floating_button_overlay
-//
-//
-//            val hostView = this.findViewById<View>(android.R.id.content)
-//
-//            val viewGroup: ViewGroup = hostView as ViewGroup
-////            val viewGroupOverlay = viewGroup.overlay.add(overlayView)
-////            val viewGroupOverlay = ViewGroupOverlay
-//
-//            val overlayLayout = overlayView.findViewById<View>(R.id.overlay_view)
-//
-//            if (overlayLayout !== null) {
-//                Log.i("여기가문제인가요", "널값아닌데")
-//                hostView.overlay.add(overlayView)
-//            } else {
-//                Log.i("널값이면", "여기로")
-//            }
-//        }
-
-        // 달리기 버튼
-//        floatingActionButton.setOnClickListener {
-//            makeCurrentFragment(singleRunFragment, "hide")
-//            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
-//        }
-//
-//
-//        // 임시로 달아놓는 그룹런 버튼
-//        floatingActionButtonTEMP.setOnClickListener {
-//            makeCurrentFragment(groupRunFragment)
-//            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
-//        }
-
-
         // 상단 앱바 관련
         val settingsActivity = Intent(this, SettingsActivity::class.java)
 
@@ -182,7 +140,7 @@ open class MainActivity : AppCompatActivity() {
     //AchievementFragment로 이동하는 함수
     fun showAchievemnt(fragment: Fragment){
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.achievement_layout, fragment)
+        transaction.replace(R.id.ranking_layout, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }

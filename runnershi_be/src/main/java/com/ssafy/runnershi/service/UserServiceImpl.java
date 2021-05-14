@@ -11,6 +11,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
@@ -24,10 +25,13 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.runnershi.entity.Custom;
+import com.ssafy.runnershi.entity.Profile;
+import com.ssafy.runnershi.entity.SearchResult;
 import com.ssafy.runnershi.entity.User;
 import com.ssafy.runnershi.entity.UserInfo;
 import com.ssafy.runnershi.entity.UserResult;
 import com.ssafy.runnershi.repository.CustomRepository;
+import com.ssafy.runnershi.repository.ProfileRepository;
 import com.ssafy.runnershi.repository.UserInfoRepository;
 import com.ssafy.runnershi.repository.UserRepository;
 
@@ -55,6 +59,9 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private SetOperations<String, String> set;
+
+  @Autowired
+  private ProfileRepository profileRepo;
 
   @Override
   public UserResult signInKakao(String accessToken) {
@@ -488,6 +495,28 @@ public class UserServiceImpl implements UserService {
       userRepo.delete(user);
     }
 
+  }
+
+
+  @Override
+  public List<SearchResult> searchUser(String userId, String word) {
+    word = word.trim();
+    if ("".equals(word) || word == null)
+      return null;
+    return userRepo.findByUserNameContaining(word);
+  }
+
+
+  @Override
+  public Profile getUserProfile(String userId) {
+    UserInfo userInfo = userInfoRepo.findByUserId_UserId(userId);
+    if (userInfo == null)
+      return null;
+    Profile profile = new Profile(userInfo.getUserId().getUserId(),
+        userInfo.getUserName().getUserName(), userInfo.getTotalDistance(), userInfo.getTotalTime(),
+        userInfo.getTotalDay(), userInfo.getBestPace(), userInfo.getWeeklyDistance(),
+        userInfo.getWeeklyTime(), userInfo.getWeeklyPace());
+    return profile;
   }
 
 
