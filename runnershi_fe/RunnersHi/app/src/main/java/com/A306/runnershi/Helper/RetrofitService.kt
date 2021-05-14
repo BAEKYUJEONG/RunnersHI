@@ -47,6 +47,12 @@ interface RetrofitService {
         @Query("pwd") pwd:String
     ): Call<ResponseBody>
 
+    // 내 정보
+    @GET("/user/profile")
+    fun userProfile(
+            @Header("token") token:String
+    ): Call<ResponseBody>
+
     //-------------------------------------------------//
 
     // 친구 관련
