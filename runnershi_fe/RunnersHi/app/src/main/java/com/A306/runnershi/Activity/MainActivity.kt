@@ -5,7 +5,9 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.View
+import android.util.Log
+import android.view.*
+import android.widget.FrameLayout
 import android.widget.RadioButton
 import androidx.fragment.app.Fragment
 import androidx.room.Room
@@ -64,6 +66,8 @@ open class MainActivity : AppCompatActivity() {
 
         // 같이 달리기 Fragments
         val groupRunFragment = GroupRunRoomListFragment()
+
+
         // 첫 시작 Fragment
         makeCurrentFragment(homeFragment)
 
@@ -80,14 +84,40 @@ open class MainActivity : AppCompatActivity() {
             true
         }
 
+
+        // Floating button overlay
+
+//        floatingActionButton.setOnClickListener {
+//            val inflater: LayoutInflater = LayoutInflater.from(this)
+//            val overlayView = inflater.inflate(R.layout.floating_button_overlay, null)
+////            val hostView = inflater.inflate(R.layout.activity_main, null)
+////            val overlayView = R.layout.floating_button_overlay
+//
+//
+//            val hostView = this.findViewById<View>(android.R.id.content)
+//
+//            val viewGroup: ViewGroup = hostView as ViewGroup
+////            val viewGroupOverlay = viewGroup.overlay.add(overlayView)
+////            val viewGroupOverlay = ViewGroupOverlay
+//
+//            val overlayLayout = overlayView.findViewById<View>(R.id.overlay_view)
+//
+//            if (overlayLayout !== null) {
+//                Log.i("여기가문제인가요", "널값아닌데")
+//                hostView.overlay.add(overlayView)
+//            } else {
+//                Log.i("널값이면", "여기로")
+//            }
+//        }
+
         // 달리기 버튼
         floatingActionButton.setOnClickListener {
             makeCurrentFragment(singleRunFragment, "hide")
             sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
         }
 
-        // 임시로 달아놓는 그룹런 버튼
 
+        // 임시로 달아놓는 그룹런 버튼
         floatingActionButtonTEMP.setOnClickListener {
             makeCurrentFragment(groupRunFragment)
             sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
