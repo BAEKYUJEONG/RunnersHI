@@ -1,30 +1,36 @@
 package com.A306.runnershi.Fragment.Ranking
 
-import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
-import android.widget.RadioButton
 import android.widget.Spinner
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import com.A306.runnershi.Fragment.Profile.RunAdapter
 import com.A306.runnershi.Helper.RetrofitClient
+import com.A306.runnershi.Model.Ranking
 import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.UserViewModel
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_ranking.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import timber.log.Timber
 
 @AndroidEntryPoint
 class RankingFragment : Fragment(R.layout.fragment_ranking) {
 
     private val viewModel: UserViewModel by viewModels()
+    private lateinit var rankingAdapter: RankingAdapter
 
     // 전체, 친구
     var selectedGroup: String = "전체"
@@ -48,13 +54,13 @@ class RankingFragment : Fragment(R.layout.fragment_ranking) {
                 selectedDate = "전체"
                 getRankingInfo()
             }
-
-            Timber.e("FRAGMENT 전체 클릭")
         }
 
         weekRankingRadio.setOnClickListener {
-            selectedDate = "주간"
-            Timber.e("FRAGMENT 주간 클릭")
+            if (selectedDate != "주간"){
+                selectedDate = "주간"
+                getRankingInfo()
+            }
         }
     }
 
@@ -63,44 +69,89 @@ class RankingFragment : Fragment(R.layout.fragment_ranking) {
         Timber.e("랭킹 통신")
         if (selectedGroup != "" && selectedCategory != "" && selectedDate != ""){
             Timber.e("설마 들어오지도 못하나")
-            var type:String = ""
-            when (selectedCategory) {
-                "거리 순" -> {
-                    type = "time"
-                }
-                "페이스 순" -> {
-                    type = "pace"
-                }
-                "달린 시간 순" -> {
-                    type = "distance"
-                }
-            }
-            
             // 비동기 처리
             viewModel.userInfo.observe(viewLifecycleOwner, Observer {
                 Timber.e(it.token)
                 if (it?.token != null){
+                    val token:String = it.token!!
+                    var type = ""
+                    when (selectedCategory) {
+                        "거리 순" -> {
+                            type = "distance"
+                        }
+                        "페이스 순" -> {
+                            type = "pace"
+                        }
+                        "달린 시간 순" -> {
+                            type = "time"
+                        }
+                    }
+
+                    val body = mapOf("type" to type, "offset" to 0 )
                     // 서버 통신 시작
+                    if (selectedGroup == "전체"){
+                        if (selectedDate == "전체") {
+                            RetrofitClient.getInstance().totalAllRanking(token, body).enqueue(afterRetrofitConnection)
+                        } else if(selectedDate == "주간"){
+                            RetrofitClient.getInstance().weeklyAllRanking(token, body).enqueue(afterRetrofitConnection)
+                        }
+                    }else if(selectedGroup == "친구"){
+                        if (selectedDate == "전체") {
+                            RetrofitClient.getInstance().totalFriendRanking(token, body).enqueue(afterRetrofitConnection)
+                        } else if(selectedDate == "주간"){
+                            RetrofitClient.getInstance().weeklyFriendRanking(token, body).enqueue(afterRetrofitConnection)
+                        }
+                    }
                 }
                 viewModel.userInfo.removeObserver(Observer {  })
             })
-
-            if (selectedGroup == "전체"){
-                if(selectedDate == "전체"){
-
-                } else if (selectedDate == "주간"){
-
-                }
-
-            }else if (selectedGroup == "친구"){
-
-            }
         }
+    }
+    
+    // 레트로핏 통신 이후 실행
+    var afterRetrofitConnection = object:Callback<ResponseBody>{
+        override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+            val itemType = object : TypeToken<List<Map<String, Any>>>() {}.type
+            val userList = Gson().fromJson<List<Map<String, Any>>>(response.body()?.string(), itemType)
+            val userRankingList = ArrayList<Ranking>()
+            for (user in userList){
+                val userId = user["userId"].toString()
+                val userName = user["userName"].toString()
+                var userData = 0.0
+                Timber.e(user.toString())
+                when (selectedCategory) {
+                    "거리 순" -> {
+                        userData = user["distance"].toString().toDouble()
+                    }
+                    "페이스 순" -> {
+                        userData = user["pace"].toString().toDouble()
+                    }
+                    "달린 시간 순" -> {
+                        userData = user["time"].toString().toDouble()
+                    }
+                }
+                val ranking = Ranking(userId, userName, userData)
+                Timber.e("유저 아이디 : $userId, 유저 이름 : $userName, 유저 데이터 : $userData")
+                userRankingList.add(ranking)
+            }
+            setupRecyclerView(userRankingList.toTypedArray())
+        }
+
+        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            TODO("Not yet implemented")
+        }
+    }
+
+    private fun setupRecyclerView(rankingList:Array<Ranking>) = rankingListView.apply {
+        rankingAdapter = RankingAdapter(rankingList)
+        adapter = rankingAdapter
+        layoutManager = LinearLayoutManager(requireContext())
     }
 
     inner class GroupSpinnerClass:OnItemSelectedListener{
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
             selectedGroup = parent?.getItemAtPosition(position).toString()
+            getRankingInfo()
         }
 
         override fun onNothingSelected(parent: AdapterView<*>?) {
@@ -110,6 +161,7 @@ class RankingFragment : Fragment(R.layout.fragment_ranking) {
     inner class CategorySpinnerClass:OnItemSelectedListener{
         override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
             selectedCategory = parent?.getItemAtPosition(position).toString()
+            getRankingInfo()
         }
 
         override fun onNothingSelected(parent: AdapterView<*>?) {
