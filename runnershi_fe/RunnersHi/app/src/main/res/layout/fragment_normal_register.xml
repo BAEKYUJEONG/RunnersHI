@@ -17,11 +17,26 @@
         android:ems="10"
         android:hint="이메일"
         android:inputType="textEmailAddress"
-        app:layout_constraintBottom_toTopOf="@+id/nicknameInput"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/codeInput"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/login_container_margin"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="@dimen/login_container_margin"
+        android:background="@drawable/input_style"
+        android:ems="10"
+        android:hint="이메일 확인 후 코드 입력"
+        android:inputType="textEmailAddress"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/emailInput" />
 
     <EditText
         android:id="@+id/nicknameInput"
@@ -34,11 +49,10 @@
         android:ems="10"
         android:hint="닉네임"
         android:inputType="text"
-        app:layout_constraintBottom_toTopOf="@+id/pwdInput"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/emailInput" />
+        app:layout_constraintTop_toBottomOf="@+id/codeInput" />
 
     <EditText
         android:id="@+id/pwdInput"
