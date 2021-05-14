@@ -27,6 +27,9 @@ class GroupRunRoomListFragment : Fragment() {
             Room(3, "작심하루 다이어트", 2, 2)
     )
 
+    // 세션 list 불러온 다음
+    // 해당 세션 id를 백으로 보내서 거기에 해당되는 room 정보들을 가져온다
+
     private lateinit var roomListAdapter: RoomListAdapter
 
     override fun onCreateView(
@@ -61,7 +64,7 @@ class GroupRunRoomListFragment : Fragment() {
         val mainActivity = activity as MainActivity
         val roomFragment = RoomFragment(room)
 
-        mainActivity.makeCurrentFragment(roomFragment)
+        mainActivity.makeCurrentFragment(roomFragment, "hide")
     }
 
     inner class roomListAdapterToList {
