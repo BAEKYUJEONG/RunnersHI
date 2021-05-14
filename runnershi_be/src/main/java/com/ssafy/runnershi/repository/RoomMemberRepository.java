@@ -8,6 +8,6 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface RoomMemberRepository extends JpaRepository<RoomMember, Long> {
 
-
+    public RoomMember findByRoom_RoomIdAndUser_UserId(Long roomId, String userId);
 
 }

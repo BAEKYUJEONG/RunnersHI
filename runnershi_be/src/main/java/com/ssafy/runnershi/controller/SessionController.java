@@ -89,7 +89,7 @@ public class SessionController {
 
     try {
       Session session = this.openVidu.createSession();
-      Room room = new Room(title, 1, 0, 1);
+      Room room = new Room(title, type, 0, 1);
 
       room = roomRepository.save(room);
       roomId = room.getRoomId();
@@ -103,7 +103,7 @@ public class SessionController {
         System.out.println("members: " + members);
 
         for (String id : members) {
-          roomMemberRepository.save(new RoomMember(room, userRepository.findByUserName(id)));
+          roomMemberRepository.save(new RoomMember(room, userRepository.findByUserId(id)));
         }
         System.out.println("입장가능 멤버 추가 완료");
       }
@@ -136,6 +136,13 @@ public class SessionController {
     if (!r.isPresent()) {
       System.out.println("방 없음");
       return new ResponseEntity<>("session does not exist", HttpStatus.BAD_REQUEST);
+    }
+
+    // 방에 권한이 있는지
+    RoomMember rm = roomMemberRepository.findByRoom_RoomIdAndUser_UserId(roomId, jwt);
+    System.out.println(rm);
+    if (rm == null) {
+      return new ResponseEntity<>("Unauthorization", HttpStatus.BAD_REQUEST);
     }
 
     // 세션이 없는지
