@@ -13,13 +13,14 @@ import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_room.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
-import android.view.ViewGroupOverlay as ViewGroupOverlay
 
-class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), EasyPermissions.PermissionCallbacks  {
+@AndroidEntryPoint
+class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), EasyPermissions.PermissionCallbacks {
     private var curTimeMillis = 0L
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
