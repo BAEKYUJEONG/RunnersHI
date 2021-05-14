@@ -41,6 +41,15 @@
     <string name="attachment_summary_off">Only download attachments when manually requested</string>
     <string name="title_activity_settings">SettingsActivity</string>
     <string name="환경설정">환경설정</string>
+    <string-array name="group_spinner">
+        <item>전체</item>
+        <item>친구</item>
+    </string-array>
+    <string-array name="category_spinner">
+        <item>거리 순</item>
+        <item>페이스 순</item>
+        <item>달린 시간 순</item>
+    </string-array>
     <string name="large_text">
         "Material is the metaphor.\n\n"
 

@@ -117,6 +117,7 @@ interface RetrofitService {
     //    type : "time",
     //    offset : 0
     //}
+    @JvmSuppressWildcards
     @Headers("Content-Type: application/json")
     @POST("/ranking/total/all")
     fun totalAllRanking(
@@ -129,6 +130,7 @@ interface RetrofitService {
     //    type : "time",
     //    offset : 0
     //}
+    @JvmSuppressWildcards
     @Headers("Content-Type: application/json")
     @POST("/ranking/total/friend")
     fun totalFriendRanking(
@@ -141,6 +143,7 @@ interface RetrofitService {
     //    type : "pace",
     //    offset : 0
     //}
+    @JvmSuppressWildcards
     @Headers("Content-Type: application/json")
     @POST("/ranking/weekly/all")
     fun weeklyAllRanking(
@@ -153,6 +156,7 @@ interface RetrofitService {
     //    type : "distance",
     //    offset : 0
     //}
+    @JvmSuppressWildcards
     @Headers("Content-Type: application/json")
     @POST("/ranking/weekly/friend")
     fun weeklyFriendRanking(

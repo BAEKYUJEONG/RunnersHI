@@ -13,13 +13,3 @@ data class User (
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null
 }
-//    var accessToken:String = ""
-//    var refreshToken:String = ""
-//    var nickname:String = ""
-//
-//
-//    constructor(accessToken:String, refreshToken:String, nickname:String){
-//        this.accessToken = accessToken
-//        this.refreshToken = refreshToken
-//        this.nickname = nickname
-//    }
