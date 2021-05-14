@@ -10,20 +10,26 @@ import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Activity.MainActivity
-import com.A306.runnershi.Fragment.GroupRun.Room
-import com.A306.runnershi.Fragment.GroupRun.RoomFragment
-import com.A306.runnershi.Fragment.GroupRun.RoomListAdapter
 import com.A306.runnershi.Fragment.Ranking.RankingFragment
+import com.A306.runnershi.Helper.RetrofitClient
 import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.SingleRunViewModel
+import com.A306.runnershi.ViewModel.UserViewModel
+import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_running_detail.*
 import kotlinx.android.synthetic.main.history.view.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() { //, View.OnClickListener
 
-    private val viewModel : SingleRunViewModel by viewModels()
+    private val userViewModel: UserViewModel by viewModels()
+    private val singleRunViewModel : SingleRunViewModel by viewModels()
     private lateinit var runAdapter: RunAdapter
     var place = arrayOf(
             "노원구" , "군포", "대야동", "송파구", "강남구"
@@ -47,10 +53,33 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
 
         rankingClick()
         freindClick()
+        setupProfile()
         setupRecyclerView()
 
-        viewModel.runsSortedByDate.observe(viewLifecycleOwner, Observer {
+        singleRunViewModel.runsSortedByDate.observe(viewLifecycleOwner, Observer {
             runAdapter.submitList(it)
+        })
+    }
+
+    private fun setupProfile(){
+        userViewModel.userInfo.observe(viewLifecycleOwner, Observer {
+            val token = it.token
+
+            if (token != null) {
+                RetrofitClient.getInstance().userProfile(token).enqueue(object:Callback<ResponseBody>{
+                    override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                        TODO("Not yet implemented")
+                    }
+
+                    override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                        val user = Gson().fromJson(response.body()?.string(), Map::class.java)
+                        //val userId = user["userId"].toString()
+                        profileTab.text = user["userName"].toString()
+                        distance.text = user["total_distance"].toString()
+                        pace.text = user["best_pace"].toString()
+                    }
+                })
+            }
         })
     }
 
