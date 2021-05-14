@@ -14,7 +14,7 @@ import com.A306.runnershi.Dao.RunDAO
 
 import com.A306.runnershi.Dao.UserDAO
 import com.A306.runnershi.Fragment.GroupRun.GroupRunRoomListFragment
-import com.A306.runnershi.Fragment.HomeFragment
+import com.A306.runnershi.Fragment.Home.HomeFragment
 
 import com.A306.runnershi.Fragment.Profile.AchievementFragment
 import com.A306.runnershi.Fragment.Profile.ProfileFragment
@@ -92,7 +92,7 @@ open class MainActivity : AppCompatActivity() {
 
         floatingActionButtonTEMP.setOnClickListener {
             makeCurrentFragment(groupRunFragment)
-            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
+//            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
         }
 
 
