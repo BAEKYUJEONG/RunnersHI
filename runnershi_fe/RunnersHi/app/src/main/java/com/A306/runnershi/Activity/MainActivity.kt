@@ -9,6 +9,8 @@ import android.util.Log
 import android.view.*
 import android.widget.FrameLayout
 import android.widget.RadioButton
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.A306.runnershi.DB.RunningDB
@@ -24,6 +26,9 @@ import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearchFragment
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
+import com.leinardi.android.speeddial.SpeedDialActionItem
+import com.leinardi.android.speeddial.SpeedDialOverlayLayout
+import com.leinardi.android.speeddial.SpeedDialView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_profile.*
@@ -50,6 +55,8 @@ open class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        initSpeedDial(savedInstanceState == null)
 
 
         // 하단 Navigation Bar 설정
@@ -111,17 +118,17 @@ open class MainActivity : AppCompatActivity() {
 //        }
 
         // 달리기 버튼
-        floatingActionButton.setOnClickListener {
-            makeCurrentFragment(singleRunFragment, "hide")
-            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
-        }
-
-
-        // 임시로 달아놓는 그룹런 버튼
-        floatingActionButtonTEMP.setOnClickListener {
-            makeCurrentFragment(groupRunFragment)
-            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
-        }
+//        floatingActionButton.setOnClickListener {
+//            makeCurrentFragment(singleRunFragment, "hide")
+//            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
+//        }
+//
+//
+//        // 임시로 달아놓는 그룹런 버튼
+//        floatingActionButtonTEMP.setOnClickListener {
+//            makeCurrentFragment(groupRunFragment)
+//            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
+//        }
 
 
         // 상단 앱바 관련
@@ -156,10 +163,12 @@ open class MainActivity : AppCompatActivity() {
             replace(R.id.main_fragment, fragment, tag)
             commit()
         }
+
+        val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
         if (tag == "hide"){
-            floatingActionButton.visibility = View.GONE
+            speedDialView.visibility = View.GONE
         }else{
-            floatingActionButton.visibility = View.VISIBLE
+            speedDialView.visibility = View.VISIBLE
         }
     }
 
@@ -201,5 +210,77 @@ open class MainActivity : AppCompatActivity() {
                     }
             }
         }
+    }
+
+    private fun initSpeedDial(addActionItems: Boolean) {
+
+        val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
+
+        val singleRunFragment = SingleRunFragment()
+        val groupRunFragment = GroupRunRoomListFragment()
+
+        if (addActionItems) {
+
+            speedDialView.addActionItem(SpeedDialActionItem.Builder(R.id
+                .fab_SingleRun, R.drawable.ic_baseline_directions_run_24)
+                .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.purple_200, theme))
+                .setLabel("혼자달리기")
+                .setLabelColor(Color.WHITE)
+                .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.teal_700,
+                    theme))
+                .create())
+
+            speedDialView.addActionItem(SpeedDialActionItem.Builder(R.id
+                .fab_GroupRun, R.drawable.ic_baseline_directions_run_24)
+                .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.purple_200, theme))
+                .setLabel("같이달리기")
+                .setLabelColor(Color.WHITE)
+                .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.teal_700,
+                    theme))
+                .create())
+
+            val fabWithLabelView = speedDialView.addActionItem(SpeedDialActionItem.Builder(R.id
+                .fab_initRoom, R.drawable.ic_baseline_directions_run_24)
+                .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.purple_200, theme))
+                .setLabel("방 만들기")
+                .setLabelColor(Color.WHITE)
+                .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.teal_700,
+                    theme))
+                .create())
+//            fabWithLabelView?.apply {
+//                speedDialActionItem = speedDialActionItemBuilder
+//                    .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.white, theme))
+//                    .create()
+//            }
+        }
+
+        // Set main action clicklistener.
+//        speedDialView.setOnChangeListener(object : SpeedDialView.OnChangeListener {
+//            override fun onMainActionSelected(): Boolean {
+//                showToast("Main action clicked!")
+//                return false // True to keep the Speed Dial open
+//            }
+//
+//            override fun onToggleChanged(isOpen: Boolean) {
+//                Log.d(TAG, "Speed dial toggle state changed. Open = $isOpen")
+//            }
+//        })
+
+        // Set option fabs clicklisteners.
+        speedDialView.setOnActionSelectedListener(SpeedDialView.OnActionSelectedListener { actionItem ->
+            when (actionItem.id) {
+                R.id.fab_SingleRun -> {
+                    makeCurrentFragment(singleRunFragment, "hide")
+                    sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
+                    speedDialView.close()
+                }
+                R.id.fab_GroupRun -> {
+                    makeCurrentFragment(groupRunFragment)
+//                    sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
+                    speedDialView.close()
+                }
+            }
+            true // To keep the Speed Dial open
+        })
     }
 }

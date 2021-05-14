@@ -64,7 +64,7 @@ class GroupRunRoomListFragment : Fragment() {
         val mainActivity = activity as MainActivity
         val roomFragment = RoomFragment(room)
 
-        mainActivity.makeCurrentFragment(roomFragment)
+        mainActivity.makeCurrentFragment(roomFragment, "hide")
     }
 
     inner class roomListAdapterToList {
