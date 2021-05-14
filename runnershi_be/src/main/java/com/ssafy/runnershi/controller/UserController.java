@@ -168,4 +168,17 @@ public class UserController {
     return new ResponseEntity<Profile>(result, HttpStatus.OK);
   }
 
+  @GetMapping("/profile/{userId}")
+  public ResponseEntity<Profile> getUserProfile(@PathVariable String userId,
+      HttpServletRequest req) {
+    Profile result = null;
+    String jwt = req.getHeader("token");
+    String myUserId = jwtService.decode(jwt);
+    if (myUserId == null) {
+      return new ResponseEntity<Profile>(result, HttpStatus.OK);
+    }
+    result = userService.getUserProfile(userId);
+    return new ResponseEntity<Profile>(result, HttpStatus.OK);
+  }
+
 }
