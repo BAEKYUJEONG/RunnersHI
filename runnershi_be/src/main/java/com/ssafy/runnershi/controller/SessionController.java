@@ -33,7 +33,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @RestController
-@RequestMapping("/api-sessions")
+@RequestMapping("/room")
 public class SessionController {
 
   @Autowired
@@ -66,7 +66,7 @@ public class SessionController {
     this.openVidu = new OpenVidu(OPENVIDU_URL, SECRET);
   }
 
-  @PostMapping(value = "/create-session")
+  @PostMapping(value = "/create")
   public ResponseEntity<String> createSession(@RequestBody HashMap<String, String> map, HttpServletRequest req) {
 
     long roomId;
@@ -118,7 +118,7 @@ public class SessionController {
     }
   }
 
-  @PostMapping(value = "/generate-token")
+  @PostMapping(value = "/join")
   public ResponseEntity<String> generateToken(@RequestBody long roomId, HttpServletRequest req) {
     System.out.println("토큰 생성");
 
@@ -201,7 +201,7 @@ public class SessionController {
     }
   }
 
-  @PostMapping(value = "/leave-session")
+  @PostMapping(value = "/exit")
   public ResponseEntity<String> removeUser(@RequestBody long roomId, HttpServletRequest req) {
 
     // 토큰 검증
