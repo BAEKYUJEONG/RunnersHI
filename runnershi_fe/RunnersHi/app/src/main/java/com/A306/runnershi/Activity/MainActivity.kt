@@ -11,11 +11,9 @@ import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.A306.runnershi.DB.RunningDB
 import com.A306.runnershi.Dao.RunDAO
-
 import com.A306.runnershi.Dao.UserDAO
 import com.A306.runnershi.Fragment.GroupRun.GroupRunRoomListFragment
-import com.A306.runnershi.Fragment.HomeFragment
-
+import com.A306.runnershi.Fragment.Home.HomeFragment
 import com.A306.runnershi.Fragment.Profile.AchievementFragment
 import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Fragment.Ranking.RankingFragment
