@@ -76,3 +76,4 @@ class GroupRunRoomListFragment : Fragment() {
     }
 }
 
+}

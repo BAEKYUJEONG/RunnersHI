@@ -8,14 +8,10 @@ import android.os.Bundle
 import android.view.View
 import android.widget.RadioButton
 import androidx.fragment.app.Fragment
-import androidx.room.Room
-import com.A306.runnershi.DB.RunningDB
 import com.A306.runnershi.Dao.RunDAO
-
 import com.A306.runnershi.Dao.UserDAO
 import com.A306.runnershi.Fragment.GroupRun.GroupRunRoomListFragment
 import com.A306.runnershi.Fragment.Home.HomeFragment
-
 import com.A306.runnershi.Fragment.Profile.AchievementFragment
 import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Fragment.Ranking.RankingFragment
@@ -26,7 +22,6 @@ import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import timber.log.Timber
 import javax.inject.Inject
@@ -145,7 +140,7 @@ open class MainActivity : AppCompatActivity() {
     //AchievementFragment로 이동하는 함수
     fun showAchievemnt(fragment: Fragment){
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.achievement_layout, fragment)
+        transaction.replace(R.id.ranking_layout, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
     }
