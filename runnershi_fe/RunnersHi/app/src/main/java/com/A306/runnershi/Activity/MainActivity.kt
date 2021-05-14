@@ -9,9 +9,11 @@ import androidx.fragment.app.Fragment
 import androidx.room.Room
 import com.A306.runnershi.DB.RunningDB
 import com.A306.runnershi.Dao.RunDAO
+
 import com.A306.runnershi.Dao.UserDAO
-import com.A306.runnershi.Fragment.GroupRun.GroupRunFragment
-import com.A306.runnershi.Fragment.Home.HomeFragment
+import com.A306.runnershi.Fragment.GroupRun.GroupRunRoomListFragment
+import com.A306.runnershi.Fragment.HomeFragment
+
 import com.A306.runnershi.Fragment.Profile.AchievementFragment
 import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Fragment.RankingFragment
@@ -58,7 +60,7 @@ open class MainActivity : AppCompatActivity() {
         val mapFragment = MapFragment()
 
         // 같이 달리기 Fragments
-        val groupRunFragment = GroupRunFragment()
+        val groupRunFragment = GroupRunRoomListFragment()
         // 첫 시작 Fragment
         makeCurrentFragment(homeFragment)
 

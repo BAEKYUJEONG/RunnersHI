@@ -1,15 +1,22 @@
 package com.A306.runnershi.Fragment.GroupRun
 
+import android.app.Activity
+import android.content.Intent
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
+import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.R
-import kotlinx.android.synthetic.main.running_room.view.*
+import kotlinx.android.synthetic.main.group_run_room_preview.view.*
 
-class RoomListAdapter (private var list: MutableList<Room>): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
+//class RoomListAdapter (private var list: MutableList<Room>, private val listener:(Room) -> Unit): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
+//class RoomListAdapter (private var list: MutableList<Room>, private val callbackInterface:CallbackInterface): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
+
+class RoomListAdapter (private var list: MutableList<Room>, var link:GroupRunRoomListFragment.roomListAdapterToList): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
 
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
         var roomTitle: TextView = itemView!!.findViewById(R.id.roomTitle)
@@ -31,7 +38,7 @@ class RoomListAdapter (private var list: MutableList<Room>): RecyclerView.Adapte
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ListItemViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.running_room, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.group_run_room_preview, parent, false)
         return ListItemViewHolder(view)
     }
 
@@ -40,6 +47,20 @@ class RoomListAdapter (private var list: MutableList<Room>): RecyclerView.Adapte
     }
 
     override fun onBindViewHolder(holder: RoomListAdapter.ListItemViewHolder, position: Int) {
+
         holder.bind(list[position], position)
+
+        // 원래는 roomId만 갖고와서 넘겨줄까?
+//        holder.itemView.setOnClickListener {
+//            val roomId = list[position].room_id
+//            link.getRoomId(roomId)
+//        }
+
+        // 지금은 우선 room 째로 넘겨줘보겠습니다.
+        holder.itemView.setOnClickListener {
+            val room = list[position]
+            link.getRoomId(room)
+        }
     }
+
 }
