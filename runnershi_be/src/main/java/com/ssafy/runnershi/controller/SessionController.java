@@ -15,15 +15,18 @@ import io.openvidu.java.client.TokenOptions;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.concurrent.ConcurrentHashMap;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -84,16 +87,12 @@ public class SessionController {
     String title = map.get("title");
     int type = Integer.parseInt(map.get("type"));
 
-
     try {
       Session session = this.openVidu.createSession();
       Room room = new Room(title, 1, 0, 1);
 
       room = roomRepository.save(room);
       roomId = room.getRoomId();
-
-      this.roomIdSession.put(roomId, session);
-      this.sessionIdUserIdToken.put(session.getSessionId(), new HashMap<>());
 
       // 방에 입장 제한이 있는 경우
       if (type == 1) {
@@ -106,20 +105,22 @@ public class SessionController {
         for (String id : members) {
           roomMemberRepository.save(new RoomMember(room, userRepository.findByUserName(id)));
         }
+        System.out.println("입장가능 멤버 추가 완료");
       }
+      this.roomIdSession.put(roomId, session);
+      this.sessionIdUserIdToken.put(session.getSessionId(), new HashMap<>());
 
       showMap();
+
       return new ResponseEntity<>(Long.toString(roomId), HttpStatus.OK);
     } catch (Exception e) {
       return new ResponseEntity<>("session created error", HttpStatus.INTERNAL_SERVER_ERROR);
     }
   }
 
-
   @PostMapping(value = "/generate-token")
   public ResponseEntity<String> generateToken(@RequestBody long roomId, HttpServletRequest req) {
     System.out.println("토큰 생성");
-
 
     // 토큰 검증
     String jwt = req.getHeader("token");
@@ -128,8 +129,6 @@ public class SessionController {
     if (userId == null) {
       return new ResponseEntity<>("invalid token", HttpStatus.UNAUTHORIZED);
     }
-
-
 
     Optional<Room> r = roomRepository.findById(roomId);
 
@@ -184,6 +183,7 @@ public class SessionController {
 
           this.sessionIdUserIdToken.get(session.getSessionId()).put(userId, token);
           //responseJson.put(0, token);
+
           showMap();
 
           return new ResponseEntity<>(token, HttpStatus.OK);
@@ -195,7 +195,6 @@ public class SessionController {
       }
     }
   }
-
 
   @PostMapping(value = "/leave-session")
   public ResponseEntity<String> removeUser(@RequestBody long roomId, HttpServletRequest req) {
@@ -237,11 +236,16 @@ public class SessionController {
     return new ResponseEntity<>("success leave-session", HttpStatus.OK);
   }
 
+  @GetMapping(value = "/active-session")
+  public ResponseEntity<JSONObject> getActiveSession(HttpServletRequest req) {
+    JSONObject json = new JSONObject();
+    json.put(".?", "ssss");
+    json.put("list", this.openVidu.getActiveSessions());
 
-  private void checkUserLogged(HttpSession httpSession) throws Exception {
-    if (httpSession == null || httpSession.getAttribute("loggedUser") == null) {
-      throw new Exception("User not logged");
-    }
+    List<Session> s = this.openVidu.getActiveSessions();
+    System.out.println(s);
+
+    return new ResponseEntity<>(json, HttpStatus.OK);
   }
 
   private void showMap() {
