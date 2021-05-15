@@ -79,11 +79,24 @@ open class MainActivity : AppCompatActivity() {
 
         // 하단 메뉴에 따른 Fragment 변경
         bottom_navigation.setOnNavigationItemSelectedListener{
+            val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
             when(it.itemId){
-                R.id.navigation_home -> makeCurrentFragment(homeFragment)
-                R.id.navigation_search -> makeCurrentFragment(userSearchFragment)
-                R.id.navigation_ranking -> makeCurrentFragment(rankingFragment)
-                R.id.navigation_profile -> makeCurrentFragment(profileFragment)
+                R.id.navigation_home -> {
+                    makeCurrentFragment(homeFragment)
+                    speedDialView.close()
+                }
+                R.id.navigation_search -> {
+                    makeCurrentFragment(userSearchFragment)
+                    speedDialView.close()
+                }
+                R.id.navigation_ranking -> {
+                    makeCurrentFragment(rankingFragment)
+                    speedDialView.close()
+                }
+                R.id.navigation_profile -> {
+                    makeCurrentFragment(profileFragment)
+                    speedDialView.close()
+                }
             }
             true
         }
@@ -93,11 +106,15 @@ open class MainActivity : AppCompatActivity() {
         val settingsActivity = Intent(this, SettingsActivity::class.java)
 
         topAppBar.setOnMenuItemClickListener { menuItem ->
+            val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
             when(menuItem.itemId) {
                 R.id.navigation_alert -> {
-                    true
+                    // 여기 alert dialog 띄워주자
+                    speedDialView.close()
                 }
-                R.id.navigation_setting -> startActivity(settingsActivity)
+                R.id.navigation_setting -> {
+                    startActivity(settingsActivity)
+                }
             }
             true
         }
