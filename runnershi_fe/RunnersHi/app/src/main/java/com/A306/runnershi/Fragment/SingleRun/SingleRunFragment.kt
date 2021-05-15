@@ -37,8 +37,6 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
         val mapFragment = MapFragment()
 
         subscribeToObservers(mainActivity)
-
-        view
         
         // 정지 버튼
         stopRunButton.setOnClickListener {

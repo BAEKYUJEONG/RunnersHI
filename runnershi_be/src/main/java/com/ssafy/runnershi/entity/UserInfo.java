@@ -32,14 +32,14 @@ public class UserInfo implements Serializable {
   private double totalDistance;
   private int totalTime;
   private int totalDay;
-  private int bestPace;
+  private double bestPace;
 
   private double weeklyDistance;
   private int weeklyTime;
-  private int weeklyPace;
+  private double weeklyPace;
 
   private double thisWeekDistance;
   private int thisWeekTime;
-  private int thisWeekPace;
+  private double thisWeekPace;
 
 }

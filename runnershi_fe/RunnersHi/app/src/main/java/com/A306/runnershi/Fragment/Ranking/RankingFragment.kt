@@ -1,15 +1,18 @@
 package com.A306.runnershi.Fragment.Ranking
 
 import android.os.Bundle
+import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
+import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Fragment.Profile.RunAdapter
 import com.A306.runnershi.Helper.RetrofitClient
 import com.A306.runnershi.Model.Ranking
@@ -109,7 +112,7 @@ class RankingFragment : Fragment(R.layout.fragment_ranking) {
     }
     
     // 레트로핏 통신 이후 실행
-    var afterRetrofitConnection = object:Callback<ResponseBody>{
+    private var afterRetrofitConnection = object:Callback<ResponseBody>{
         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
             val itemType = object : TypeToken<List<Map<String, Any>>>() {}.type
             val userList = Gson().fromJson<List<Map<String, Any>>>(response.body()?.string(), itemType)
@@ -143,9 +146,13 @@ class RankingFragment : Fragment(R.layout.fragment_ranking) {
     }
 
     private fun setupRecyclerView(rankingList:Array<Ranking>) = rankingListView.apply {
-        rankingAdapter = RankingAdapter(rankingList)
+        rankingAdapter = RankingAdapter(rankingList, this@RankingFragment)
         adapter = rankingAdapter
         layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    fun itemClick(receivedData:String){
+        Timber.e("CLICK!! : $receivedData")
     }
 
     inner class GroupSpinnerClass:OnItemSelectedListener{
@@ -180,6 +187,4 @@ class RankingFragment : Fragment(R.layout.fragment_ranking) {
             whichSpinner.adapter = adapter
         }
     }
-
-
 }
