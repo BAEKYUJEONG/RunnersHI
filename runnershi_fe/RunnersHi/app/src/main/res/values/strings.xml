@@ -53,4 +53,6 @@
     <string name="default_openvidu_url">https://192.168.1.111:4443/</string>
     <string name="default_session_name">테스트세션</string>
     <string name="default_participant_name">테스트참가자</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

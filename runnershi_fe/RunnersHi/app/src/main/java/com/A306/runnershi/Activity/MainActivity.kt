@@ -14,6 +14,7 @@ import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.A306.runnershi.Dao.RunDAO
 import com.A306.runnershi.Dao.UserDAO
+import com.A306.runnershi.Fragment.GroupRun.CreateRoomFragment
 import com.A306.runnershi.Fragment.GroupRun.GroupRunRoomListFragment
 import com.A306.runnershi.Fragment.Home.HomeFragment
 import com.A306.runnershi.Fragment.Profile.AchievementFragment
@@ -65,11 +66,11 @@ open class MainActivity : AppCompatActivity() {
         val profileFragment = ProfileFragment()
         val achievementFragment = AchievementFragment()
         // 혼자 달리기 Fragments
-        val singleRunFragment = SingleRunFragment()
-        val mapFragment = MapFragment()
-
-        // 같이 달리기 Fragments
-        val groupRunFragment = GroupRunRoomListFragment()
+//        val singleRunFragment = SingleRunFragment()
+//        val mapFragment = MapFragment()
+//
+//        // 같이 달리기 Fragments
+//        val groupRunFragment = GroupRunRoomListFragment()
 
 
         // 첫 시작 Fragment
@@ -187,12 +188,14 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
+    // 스피드다이얼 버튼 설정
     private fun initSpeedDial(addActionItems: Boolean) {
 
         val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
 
         val singleRunFragment = SingleRunFragment()
         val groupRunFragment = GroupRunRoomListFragment()
+        val createRoomFragment = CreateRoomFragment()
 
         if (addActionItems) {
 
@@ -214,19 +217,14 @@ open class MainActivity : AppCompatActivity() {
                     theme))
                 .create())
 
-            val fabWithLabelView = speedDialView.addActionItem(SpeedDialActionItem.Builder(R.id
-                .fab_initRoom, R.drawable.ic_baseline_directions_run_24)
+            speedDialView.addActionItem(SpeedDialActionItem.Builder(R.id
+                .fab_CreateRoom, R.drawable.ic_baseline_directions_run_24)
                 .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.purple_200, theme))
                 .setLabel("방 만들기")
                 .setLabelColor(Color.WHITE)
                 .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.teal_700,
                     theme))
                 .create())
-//            fabWithLabelView?.apply {
-//                speedDialActionItem = speedDialActionItemBuilder
-//                    .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.white, theme))
-//                    .create()
-//            }
         }
 
         // Set main action clicklistener.
@@ -252,6 +250,10 @@ open class MainActivity : AppCompatActivity() {
                 R.id.fab_GroupRun -> {
                     makeCurrentFragment(groupRunFragment)
 //                    sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
+                    speedDialView.close()
+                }
+                R.id.fab_CreateRoom -> {
+                    makeCurrentFragment(createRoomFragment)
                     speedDialView.close()
                 }
             }
