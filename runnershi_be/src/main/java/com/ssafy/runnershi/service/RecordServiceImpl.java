@@ -187,4 +187,18 @@ public class RecordServiceImpl implements RecordService {
     return result;
   }
 
+  @Override
+  public RecordDetail recordTitleUpdate(Record r, String userId) {
+    if (r.getTitle() == null || "".equals(r.getTitle()))
+      return null;
+    Record record = recordRepo.findById(r.getRecordId()).orElse(null);
+    if (record == null || !record.getUser().getUserId().getUserId().equals(userId))
+      return null;
+
+    record.setTitle(r.getTitle());
+    recordRepo.save(record);
+
+    return recordRepo.findByRecordId(record.getRecordId());
+  }
+
 }

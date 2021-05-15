@@ -19,4 +19,6 @@ public interface RecordService {
 
   public List<AllRecord> allRecordList(String userId);
 
+  public RecordDetail recordTitleUpdate(Record record, String UserId);
+
 }
