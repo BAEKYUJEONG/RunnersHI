@@ -84,4 +84,15 @@ public class recordController {
         HttpStatus.OK);
   }
 
+  @GetMapping("/title")
+  public ResponseEntity<RecordDetail> recordTitleUpdate(Record record, HttpServletRequest req) {
+    String jwt = req.getHeader("token");
+    String tokenUserId = jwtService.decode(jwt);
+    if (tokenUserId == null) {
+      return new ResponseEntity<RecordDetail>((RecordDetail) null, HttpStatus.OK);
+    }
+    return new ResponseEntity<RecordDetail>(recordService.recordTitleUpdate(record, tokenUserId),
+        HttpStatus.OK);
+  }
+
 }
