@@ -14,7 +14,7 @@ import org.springframework.web.client.RestTemplate;
 public class AndroidPushNotificationService {
 
   @Value("${FCM.SERVER_KEY}")
-  private String firebase_server_key = "firebase server key!!";
+  private String firebase_server_key;
   private String firebase_api_url = "https://fcm.googleapis.com/fcm/send";
 
   @Async
@@ -24,11 +24,11 @@ public class AndroidPushNotificationService {
 
     body.put("to", token);
 
-    JSONObject notification = new JSONObject();
-    notification.put("title", title);
-    notification.put("body", content);
+    JSONObject data = new JSONObject();
+    data.put("title", title);
+    data.put("body", content);
 
-    body.put("notification", notification);
+    body.put("data", data);
 
     HttpEntity<String> entity = new HttpEntity<>(body.toString());
 

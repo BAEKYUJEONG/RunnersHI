@@ -27,11 +27,8 @@ public class Record {
   @JoinColumn(name = "user_id", referencedColumnName = "user_id")
   private UserInfo user;
 
-  private String gpsPath;
   private double distance;
 
-  @Temporal(TemporalType.TIMESTAMP)
-  private Date startTime;
   @Temporal(TemporalType.TIMESTAMP)
   private Date endTime;
 

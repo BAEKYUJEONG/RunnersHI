@@ -18,6 +18,7 @@ import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -31,7 +32,6 @@ import com.ssafy.runnershi.entity.User;
 import com.ssafy.runnershi.entity.UserInfo;
 import com.ssafy.runnershi.entity.UserResult;
 import com.ssafy.runnershi.repository.CustomRepository;
-import com.ssafy.runnershi.repository.ProfileRepository;
 import com.ssafy.runnershi.repository.UserInfoRepository;
 import com.ssafy.runnershi.repository.UserRepository;
 
@@ -61,7 +61,7 @@ public class UserServiceImpl implements UserService {
   private SetOperations<String, String> set;
 
   @Autowired
-  private ProfileRepository profileRepo;
+  private ZSetOperations<String, String> zset;
 
   @Override
   public UserResult signInKakao(String accessToken) {
@@ -512,10 +512,13 @@ public class UserServiceImpl implements UserService {
     UserInfo userInfo = userInfoRepo.findByUserId_UserId(userId);
     if (userInfo == null)
       return null;
-    Profile profile = new Profile(userInfo.getUserId().getUserId(),
-        userInfo.getUserName().getUserName(), userInfo.getTotalDistance(), userInfo.getTotalTime(),
-        userInfo.getTotalDay(), userInfo.getBestPace(), userInfo.getWeeklyDistance(),
-        userInfo.getWeeklyTime(), userInfo.getWeeklyPace());
+    Profile profile =
+        new Profile(userInfo.getUserId().getUserId(), userInfo.getUserName().getUserName(),
+            zset.reverseRank("totalDistanceRank",
+                userInfo.getUserId().getUserId() + ";" + userInfo.getUserName().getUserName()) + 1,
+            userInfo.getTotalDistance(), userInfo.getTotalTime(), userInfo.getTotalDay(),
+            userInfo.getBestPace(), userInfo.getWeeklyDistance(), userInfo.getWeeklyTime(),
+            userInfo.getWeeklyPace());
     return profile;
   }
 

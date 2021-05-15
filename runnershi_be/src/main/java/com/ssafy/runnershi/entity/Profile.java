@@ -10,6 +10,7 @@ import lombok.NoArgsConstructor;
 public class Profile {
   private String userId;
   private String userName;
+  private long totalRank;
 
   private double totalDistance;
   private int totalTime;

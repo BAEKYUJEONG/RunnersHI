@@ -10,9 +10,6 @@ public interface RecordDetail {
   double getDistance();
 
   @Temporal(TemporalType.TIMESTAMP)
-  Date getStartTime();
-
-  @Temporal(TemporalType.TIMESTAMP)
   Date getEndTime();
 
   int getRunningTime();
