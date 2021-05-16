@@ -21,6 +21,10 @@ android {
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
     }
 
+    viewBinding {
+        enabled = true
+    }
+
     buildTypes {
         release {
             minifyEnabled false
@@ -145,6 +149,9 @@ dependencies {
 
     // 동그란 이미지 뷰 만들어주는 외부 라이브러리
     implementation "de.hdodenhof:circleimageview:3.0.0"
+    // FAB 만들어주는 외부 라이브러리
+    implementation "com.leinardi.android:speed-dial:3.1.1"
+
 
     // GSON
     implementation 'com.google.code.gson:gson:2.8.6'

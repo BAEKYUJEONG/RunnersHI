@@ -20,7 +20,7 @@ public class RankingController {
   private RankingService rankingService;
 
   @Autowired
-  JwtService jwtService;
+  private JwtService jwtService;
 
   @PostMapping("/total/all")
   public ResponseEntity<Object> totalAll(@RequestBody HashMap<String, Object> map,

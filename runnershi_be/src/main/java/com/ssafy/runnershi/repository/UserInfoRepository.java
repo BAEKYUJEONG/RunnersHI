@@ -9,4 +9,6 @@ public interface UserInfoRepository extends JpaRepository<UserInfo, Long> {
 
   public UserInfo findByUserName_UserName(String userName);
 
+  // public void updateRecord()
+
 }
