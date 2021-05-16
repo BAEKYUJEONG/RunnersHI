@@ -10,7 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:divider="@drawable/divider_style"
+        android:orientation="vertical"
+        android:showDividers="middle">
 
         <TextView
             android:id="@+id/profileTab"
@@ -27,7 +29,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="20dp">
+            android:paddingLeft="20dp"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="80dp"
@@ -49,9 +53,9 @@
                 android:id="@+id/ranking_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/ranking_text"
@@ -77,9 +81,9 @@
                 android:id="@+id/friend_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_gravity="center"
                 android:layout_weight="1"
-                android:orientation="vertical"
-                android:padding="10dp">
+                android:orientation="vertical">
 
                 <TextView
                     android:id="@+id/friend_text"
@@ -189,9 +193,9 @@
             android:layout_height="match_parent" />
 
         <!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/profile_history"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
+        <!--            android:id="@+id/profile_history"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent" />-->
 
 
     </LinearLayout>
