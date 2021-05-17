@@ -191,4 +191,17 @@ interface RetrofitService {
 
     //------나머지 부분은 SWAGGER가 되는대로 추가하겠습니다.------//
 
+    //-------------------------------------------------//
+
+    // 세션 관리
+
+    // 방 만들기
+    @JvmSuppressWildcards
+    @Headers("Content-Type: application/json")
+    @POST("/room/create")
+    fun roomCreate(
+        @Header("token") token:String,
+        @Body body:Map<String, Any>
+    ): Call<ResponseBody>
+
 }

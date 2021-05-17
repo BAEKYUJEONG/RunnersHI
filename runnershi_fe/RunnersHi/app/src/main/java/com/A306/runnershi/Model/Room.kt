@@ -1,4 +1,4 @@
-package com.A306.runnershi.Fragment.GroupRun
+package com.A306.runnershi.Model
 
 data class Room(
     val room_id: Int? = null,

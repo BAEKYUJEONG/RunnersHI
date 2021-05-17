@@ -22,4 +22,19 @@ object RetrofitClient {
 
         return instance!!
     }
+
+    // 임시로 받아올 티캔 서버
+    private const val BASE_URL_TEMP = "https://skeldtcan.iptime.org:8081"
+
+    fun getInstanceTemp(): RetrofitService {
+        if (instance == null) {
+            instance = Retrofit.Builder()
+                .baseUrl(BASE_URL_TEMP)
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build()
+                .create(RetrofitService::class.java)
+        }
+
+        return instance!!
+    }
 }

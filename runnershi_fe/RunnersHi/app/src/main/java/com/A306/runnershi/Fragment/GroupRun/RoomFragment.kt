@@ -8,9 +8,15 @@ import android.view.LayoutInflater
 import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
+import android.widget.LinearLayout
+import android.widget.TextView
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
+import com.A306.runnershi.Model.Room
+import com.A306.runnershi.Model.User
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import dagger.hilt.android.AndroidEntryPoint
@@ -21,9 +27,25 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), EasyPermissions.PermissionCallbacks {
+
+    // 임시로 넘겨줄 UserList:
+    var tempUserList: ArrayList<User> = arrayListOf(
+        User(null, null, "티캔", null),
+        User(null, null, "디니", null),
+        User(null, null, "바비", null),
+        User(null, null, "에리얼", null),
+        User(null, null, "클로이", null)
+    )
+
+    private lateinit var mateListAdapter: MateListAdapter
+
+
     private var curTimeMillis = 0L
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+        Log.i("입장하였습니다", "${room.title}")
+
         val mainActivity = activity as MainActivity
         mainActivity.sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
         return super.onCreateView(inflater, container, savedInstanceState)
@@ -31,9 +53,20 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // 방 이름 설정해주기
+        roomTitle.text = room.title
+
         requestPermissions()
         Timber.e(room.title)
         subscribeToObservers()
+
+        // 함께 뛰는 메이트들 불러오기
+        var list: ArrayList<User> = tempUserList
+
+        mateListAdapter = MateListAdapter(list)
+        mateListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        mateListView.adapter = mateListAdapter
     }
 
     private fun subscribeToObservers(){
