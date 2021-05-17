@@ -5,11 +5,8 @@ import android.content.Intent
 import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.*
-import android.widget.FrameLayout
 import android.widget.RadioButton
-import androidx.appcompat.content.res.AppCompatResources
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.A306.runnershi.Dao.RunDAO
@@ -20,13 +17,11 @@ import com.A306.runnershi.Fragment.Home.HomeFragment
 import com.A306.runnershi.Fragment.Profile.AchievementFragment
 import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Fragment.Ranking.RankingFragment
-import com.A306.runnershi.Fragment.SingleRun.MapFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
-import com.A306.runnershi.Fragment.UserSearchFragment
+import com.A306.runnershi.Fragment.UserSearch.UserSearchFragment
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import com.leinardi.android.speeddial.SpeedDialActionItem
-import com.leinardi.android.speeddial.SpeedDialOverlayLayout
 import com.leinardi.android.speeddial.SpeedDialView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
@@ -61,7 +56,8 @@ open class MainActivity : AppCompatActivity() {
         // Fragment 할당
         // 하단 메뉴 Fragments
         val homeFragment = HomeFragment()
-        val userSearchFragment = UserSearchFragment()
+        val userSearchFragment =
+            UserSearchFragment()
         val rankingFragment = RankingFragment()
         val profileFragment = ProfileFragment()
         val achievementFragment = AchievementFragment()
