@@ -43,6 +43,8 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
                 token = it.token.toString()
             }
         })
+        viewModel.userInfo.removeObserver(Observer {  })
+
 
         // 방 만들기 버튼 클릭
         createRoomButton.setOnClickListener {
@@ -52,7 +54,6 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
 
             Log.i("크리에이트룸", "온클릭리스너")
         }
-        viewModel.userInfo.removeObserver(Observer {  })
     }
 
     // 레트로핏 통신 이후: 방 만들어졌으므로 방 화면으로 연결해주자

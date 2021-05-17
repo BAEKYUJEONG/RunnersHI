@@ -1,10 +1,8 @@
 package com.A306.runnershi.Helper
 
 import com.A306.runnershi.Model.Token
-import com.A306.runnershi.Model.User
 import okhttp3.ResponseBody
 import retrofit2.Call
-import retrofit2.Response
 import retrofit2.http.*
 
 interface RetrofitService {
@@ -190,6 +188,15 @@ interface RetrofitService {
     ): Call<ResponseBody>
 
     //------나머지 부분은 SWAGGER가 되는대로 추가하겠습니다.------//
+
+    //-------------------------------------------------//
+    // 검색
+
+    @GET("/user/search/{word}")
+    fun searchUserName(
+        @Header("token") token: String,
+        @Path("word") word:String
+    ) : Call<ResponseBody>
 
     //-------------------------------------------------//
 
