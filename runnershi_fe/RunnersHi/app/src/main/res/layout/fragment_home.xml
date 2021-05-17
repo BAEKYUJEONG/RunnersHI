@@ -57,8 +57,6 @@
             android:layout_height="match_parent"
             android:divider="@drawable/blank_divider"
             android:orientation="vertical"
-            android:paddingLeft="20dp"
-            android:paddingRight="20dp"
             android:showDividers="middle">
 
             <androidx.cardview.widget.CardView
@@ -84,16 +82,6 @@
                     android:textSize="24sp" />
 
             </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="100dp">
-
-            </androidx.cardview.widget.CardView>
-
-            <androidx.cardview.widget.CardView
-                android:layout_width="match_parent"
-                android:layout_height="100dp" />
 
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/homeRecyclerView"

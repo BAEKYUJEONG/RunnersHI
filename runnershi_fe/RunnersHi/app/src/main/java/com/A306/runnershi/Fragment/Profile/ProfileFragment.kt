@@ -74,9 +74,9 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                         val user = Gson().fromJson(response.body()?.string(), Map::class.java)
                         //val userId = user["userId"].toString()
-                        profileTab.text = user["userName"].toString()
-                        distance.text = user["total_distance"].toString()
-                        pace.text = user["best_pace"].toString()
+                        //profileTab.text = user["userName"].toString()
+                        //distance.text = user["total_distance"].toString()
+                        //pace.text = user["best_pace"].toString()
                     }
                 })
             }
