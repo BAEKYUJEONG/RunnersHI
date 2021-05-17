@@ -50,9 +50,12 @@
         <item>페이스 순</item>
         <item>달린 시간 순</item>
     </string-array>
-    <string name="default_openvidu_url">https://192.168.1.111:4443/</string>
-    <string name="default_session_name">테스트세션</string>
-    <string name="default_participant_name">테스트참가자</string>
+    <!--    Openvidu URL-->
+    <string name="default_openvidu_url">https://k4a3061.p.ssafy.io/</string>
+    <string name="default_openvidu_secret">MY_SECRET</string>
+    <string name="default_session_name">방0</string>
+    <string name="default_participant_name">참가자0</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
 </resources>

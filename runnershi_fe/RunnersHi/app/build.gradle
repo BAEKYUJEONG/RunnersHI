@@ -73,6 +73,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
     implementation 'com.squareup.retrofit2:converter-gson:2.6.2'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.3.0'
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 
     // Feature module Support
     implementation "androidx.navigation:navigation-dynamic-features-fragment:$nav_version"
@@ -116,11 +117,11 @@ dependencies {
 //    implementation 'com.google.maps.android:android-maps-utils:0.5'
 
     // Dagger Core
-    implementation "com.google.dagger:dagger:2.31"
+    implementation "com.google.dagger:dagger:2.35.1"
     kapt "com.google.dagger:dagger-compiler:2.31"
 
     // Dagger Android
-    api 'com.google.dagger:dagger-android:2.28.1'
+    api 'com.google.dagger:dagger-android:2.35.1'
     api 'com.google.dagger:dagger-android-support:2.28.1'
     kapt 'com.google.dagger:dagger-android-processor:2.23.2'
 
@@ -152,8 +153,9 @@ dependencies {
     // FAB 만들어주는 외부 라이브러리
     implementation "com.leinardi.android:speed-dial:3.1.1"
 
-
     // GSON
     implementation 'com.google.code.gson:gson:2.8.6'
-    
+
+    implementation 'com.neovisionaries:nv-websocket-client:2.9'
+    implementation 'org.webrtc:google-webrtc:1.0.32006'
 }

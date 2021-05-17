@@ -6,6 +6,8 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object OpenviduRetrofitClient {
+    private var okHttpClient = UnsafeOpenvidu().getUnsafeClient()
+
     private var instance: OpenviduRetrofitService? = null
     private val gson = GsonBuilder().setLenient().create()
     // 서버 주소
@@ -15,6 +17,7 @@ object OpenviduRetrofitClient {
         if (instance == null) {
             instance = Retrofit.Builder()
                     .baseUrl(BASE_URL)
+                    .client(okHttpClient)
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build()
                     .create(OpenviduRetrofitService::class.java)
