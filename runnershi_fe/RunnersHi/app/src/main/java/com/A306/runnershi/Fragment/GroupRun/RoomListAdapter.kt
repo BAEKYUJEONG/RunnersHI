@@ -1,17 +1,12 @@
 package com.A306.runnershi.Fragment.GroupRun
 
-import android.app.Activity
-import android.content.Intent
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
-import com.A306.runnershi.Activity.MainActivity
+import com.A306.runnershi.Model.Room
 import com.A306.runnershi.R
-import kotlinx.android.synthetic.main.group_run_room_preview.view.*
 
 //class RoomListAdapter (private var list: MutableList<Room>, private val listener:(Room) -> Unit): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
 //class RoomListAdapter (private var list: MutableList<Room>, private val callbackInterface:CallbackInterface): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
