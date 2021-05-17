@@ -19,7 +19,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
     private val TAG = "FirebaseService"
 
     // FirebaseInstanceIdService는 이제 사라짐. 이제 이걸 사용함
-    override fun onNewToken(token: String?) {
+    override fun onNewToken(token: String) {
         Log.d(TAG, "new Token: $token")
 
         // 토큰 값을 따로 저장해둔다.
@@ -31,7 +31,7 @@ class MyFirebaseMessagingService : FirebaseMessagingService() {
         Log.i("로그: ", "성공적으로 토큰을 저장함")
     }
 
-    override fun onMessageReceived(remoteMessage: RemoteMessage?) {
+    override fun onMessageReceived(remoteMessage: RemoteMessage) {
         Log.d(TAG, "From: " + remoteMessage!!.from)
 
         // Notification 메시지를 수신할 경우는
