@@ -158,4 +158,9 @@ dependencies {
 
     implementation 'com.neovisionaries:nv-websocket-client:2.9'
     implementation 'org.webrtc:google-webrtc:1.0.32006'
+
+    //WEBRTC
+    implementation 'com.squareup.okhttp3:okhttp:4.2.0'
+    implementation 'com.neovisionaries:nv-websocket-client:2.9'
+    implementation 'org.webrtc:google-webrtc:1.0.30039'
 }

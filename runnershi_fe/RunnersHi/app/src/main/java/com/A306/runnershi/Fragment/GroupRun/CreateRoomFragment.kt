@@ -8,6 +8,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.Model.Room
+import com.A306.runnershi.Openvidu.OpenviduModel.RoomInfo
 import com.A306.runnershi.Openvidu.OpenviduRetrofitClient
 import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.UserViewModel
@@ -15,24 +16,13 @@ import com.google.gson.Gson
 import com.neovisionaries.ws.client.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_create_room.*
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.runBlocking
 import okhttp3.ResponseBody
 import org.webrtc.*
-import org.webrtc.PeerConnectionFactory.InitializationOptions
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
-import java.net.MalformedURLException
-import java.net.URL
 import java.net.URLDecoder
-import java.security.SecureRandom
-import java.security.cert.CertificateException
-import java.security.cert.X509Certificate
-import javax.net.ssl.SSLContext
-import javax.net.ssl.TrustManager
-import javax.net.ssl.X509TrustManager
 
 
 @AndroidEntryPoint
@@ -48,12 +38,13 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
     var title = ""
     var type = 1
     var members = ""
+    var mainActivity:MainActivity? = null
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        val mainActivity = activity as MainActivity
+        mainActivity = activity as MainActivity
         // 유저 토큰 꺼내서 정의해보자:
         viewModel.userInfo.observe(viewLifecycleOwner, Observer {
             if (it == null) {
@@ -109,6 +100,10 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
 
             Timber.e(sessionMap["sessionId"])
             Timber.e(sessionMap["token"])
+            mainActivity?.setTokenAndSession(sessionMap["token"].toString(), sessionMap["sessionId"].toString())
+            val room = Room(roomId, title, type, 1)
+            val roomFragment = RoomFragment(room)
+            mainActivity?.makeCurrentFragment(roomFragment)
         }
 
         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
