@@ -8,6 +8,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
+import org.hibernate.annotations.DynamicUpdate;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -16,6 +17,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@DynamicUpdate
 public class UserInfo implements Serializable {
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,5 +34,14 @@ public class UserInfo implements Serializable {
   private double totalDistance;
   private int totalTime;
   private int totalDay;
-  private int bestPace;
+  private double bestPace;
+
+  private double weeklyDistance;
+  private int weeklyTime;
+  private double weeklyPace;
+
+  private double thisWeekDistance;
+  private int thisWeekTime;
+  private double thisWeekPace;
+
 }

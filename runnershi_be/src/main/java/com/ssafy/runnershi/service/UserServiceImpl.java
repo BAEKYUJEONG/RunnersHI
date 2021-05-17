@@ -11,11 +11,14 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -23,6 +26,8 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.runnershi.entity.Custom;
+import com.ssafy.runnershi.entity.Profile;
+import com.ssafy.runnershi.entity.SearchResult;
 import com.ssafy.runnershi.entity.User;
 import com.ssafy.runnershi.entity.UserInfo;
 import com.ssafy.runnershi.entity.UserResult;
@@ -51,6 +56,12 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private PasswordEncodingService pwdEncoding;
+
+  @Autowired
+  private SetOperations<String, String> set;
+
+  @Autowired
+  private ZSetOperations<String, String> zset;
 
   @Override
   public UserResult signInKakao(String accessToken) {
@@ -201,6 +212,9 @@ public class UserServiceImpl implements UserService {
     userInfo.setUserName(user);
     userInfoRepo.save(userInfo);
 
+    set.add(idName.getUserId() + ";" + idName.getUserName(),
+        idName.getUserId() + ";" + idName.getUserName());
+
     userResult.setResult("SUCCESS");
     userResult.setToken(jwtService.create(user.getUserId()));
     userResult.setUserId(user.getUserId());
@@ -330,6 +344,9 @@ public class UserServiceImpl implements UserService {
     userInfo.setUserId(user);
     userInfo.setUserName(user);
     userInfoRepo.save(userInfo);
+
+    set.add(user.getUserId() + ";" + user.getUserName(),
+        user.getUserId() + ";" + user.getUserName());
 
     userResult.setResult("SUCCESS");
     userResult.setToken(jwtService.create(user.getUserId()));
@@ -478,6 +495,31 @@ public class UserServiceImpl implements UserService {
       userRepo.delete(user);
     }
 
+  }
+
+
+  @Override
+  public List<SearchResult> searchUser(String userId, String word) {
+    word = word.trim();
+    if ("".equals(word) || word == null)
+      return null;
+    return userRepo.findByUserNameContaining(word);
+  }
+
+
+  @Override
+  public Profile getUserProfile(String userId) {
+    UserInfo userInfo = userInfoRepo.findByUserId_UserId(userId);
+    if (userInfo == null)
+      return null;
+    Profile profile =
+        new Profile(userInfo.getUserId().getUserId(), userInfo.getUserName().getUserName(),
+            zset.reverseRank("totalDistanceRank",
+                userInfo.getUserId().getUserId() + ";" + userInfo.getUserName().getUserName()) + 1,
+            userInfo.getTotalDistance(), userInfo.getTotalTime(), userInfo.getTotalDay(),
+            userInfo.getBestPace(), userInfo.getWeeklyDistance(), userInfo.getWeeklyTime(),
+            userInfo.getWeeklyPace());
+    return profile;
   }
 
 

@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <item name="fab_CreateRoom" type="id" />
+    <item name="fab_SingleRun" type="id" />
+    <item name="fab_GroupRun" type="id" />
+</resources>

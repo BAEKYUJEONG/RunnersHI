@@ -2,7 +2,7 @@
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/frameLayout"
+    android:id="@+id/profileFrameLayout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".Fragment.Profile.ProfileFragment">
@@ -19,25 +19,34 @@
             android:gravity="center_vertical"
             android:padding="10dp"
             android:paddingStart="15dp"
-            android:text="에리얼"
-            android:textSize="24sp" />
+            android:text="닉네임"
+            android:textSize="24sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="20dp">
+            android:paddingLeft="20dp">
 
-            <ImageView
-                android:id="@+id/profileImg"
-                android:layout_width="50dp"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:padding="10dp"
-                android:src="@drawable/runner_profile" />
+            <androidx.cardview.widget.CardView
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center"
+                app:cardCornerRadius="10dp">
+
+                <ImageView
+                    android:id="@+id/profileImg"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center"
+                    android:foregroundGravity="center"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/runners_profile" />
+            </androidx.cardview.widget.CardView>
 
             <LinearLayout
-                android:id="@+id/achievement_layout"
+                android:id="@+id/ranking_layout"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
@@ -45,20 +54,22 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/achievement_text"
+                    android:id="@+id/ranking_text"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="랭킹"
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
+
+                <TextView
+                    android:id="@+id/ranking_num"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:text="업적"
-                    android:textAlignment="center" />
-
-                <EditText
-                    android:id="@+id/achievement_num"
-                    android:layout_width="100dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:ems="10"
-                    android:inputType="number" />
+                    android:inputType="numberSigned"
+                    android:padding="5dp"
+                    android:text="13"
+                    android:textSize="26sp" />
 
             </LinearLayout>
 
@@ -71,20 +82,23 @@
                 android:padding="10dp">
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/friend_text"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="친구"
-                    android:textAlignment="center" />
+                    android:textAlignment="center"
+                    android:textSize="18sp" />
 
-                <EditText
-                    android:id="@+id/editTextNumber2"
-                    android:layout_width="100dp"
+                <TextView
+                    android:id="@+id/friend_num"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:ems="10"
-                    android:inputType="number" />
+                    android:gravity="center"
+                    android:inputType="numberSigned"
+                    android:padding="5dp"
+                    android:text="4"
+                    android:textSize="26sp" />
 
             </LinearLayout>
 
@@ -94,7 +108,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="20dp">
+            android:padding="10dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -110,12 +124,15 @@
                     android:text="거리"
                     android:textSize="24sp" />
 
-                <EditText
-                    android:id="@+id/editTextNumberDecimal"
+                <TextView
+                    android:id="@+id/distance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
+                    android:gravity="center_vertical"
+                    android:inputType="numberSigned"
+                    android:padding="5dp"
+                    android:text="27.3K"
+                    android:textSize="30sp" />
 
             </LinearLayout>
 
@@ -134,12 +151,15 @@
                     android:textAlignment="center"
                     android:textSize="24sp" />
 
-                <EditText
-                    android:id="@+id/editTextNumberDecimal2"
+                <TextView
+                    android:id="@+id/pace"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:ems="10"
-                    android:inputType="numberDecimal" />
+                    android:gravity="center_vertical"
+                    android:inputType="numberSigned"
+                    android:padding="5dp"
+                    android:text="0' 00''"
+                    android:textSize="30sp" />
 
             </LinearLayout>
 
@@ -156,31 +176,19 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:gravity="center"
-                android:text="지도"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/textView20"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="장소"
-                android:textSize="20sp" />
-
-            <TextView
-                android:id="@+id/textView21"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:gravity="center"
-                android:text="시간"
-                android:textSize="20sp" />
+                android:paddingLeft="10dp"
+                android:text="최근 활동"
+                android:textSize="20sp"
+                android:textStyle="bold" />
 
         </LinearLayout>
 
-<!--        <androidx.recyclerview.widget.RecyclerView-->
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/historyListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+        <!--        <androidx.recyclerview.widget.RecyclerView-->
 <!--            android:id="@+id/profile_history"-->
 <!--            android:layout_width="match_parent"-->
 <!--            android:layout_height="match_parent" />-->

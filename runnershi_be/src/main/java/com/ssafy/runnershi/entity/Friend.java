@@ -25,7 +25,7 @@ public class Friend implements Serializable {
 
   @Id
   @GeneratedValue(strategy = GenerationType.IDENTITY)
-  private Long friendId;
+  private long friendId;
 
   // @ManyToOne
   // @JoinColumn(name = "user_id", referencedColumnName = "user_id")

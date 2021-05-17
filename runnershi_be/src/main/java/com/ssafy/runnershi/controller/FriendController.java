@@ -6,10 +6,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.ssafy.runnershi.entity.FriendListResult;
 import com.ssafy.runnershi.service.FriendService;
 import com.ssafy.runnershi.service.JwtService;
 
@@ -45,7 +47,7 @@ public class FriendController {
       return new ResponseEntity<String>("invalid token", HttpStatus.OK);
     }
     String friendUserId = (String) map.get("friendUserId");
-    Integer alarmId = (Integer) map.get("alarmId");
+    Long alarmId = Long.parseLong(String.valueOf(map.get("alarmId")));
     String result = friendService.acceptFriend(userId, friendUserId, alarmId);
     return new ResponseEntity<String>(result, HttpStatus.OK);
   }
@@ -74,6 +76,18 @@ public class FriendController {
     String friendUserId = map.get("friendUserId");
     String result = friendService.deleteFriend(userId, friendUserId);
     return new ResponseEntity<String>(result, HttpStatus.OK);
+  }
+
+  @GetMapping("/list")
+  public ResponseEntity<FriendListResult> friendList(HttpServletRequest req) {
+    FriendListResult result = null;
+    String jwt = req.getHeader("token");
+    String userId = jwtService.decode(jwt);
+    if (userId == null) {
+      return new ResponseEntity<FriendListResult>(result, HttpStatus.OK);
+    }
+    result = friendService.friendList(userId);
+    return new ResponseEntity<FriendListResult>(result, HttpStatus.OK);
   }
 
 }

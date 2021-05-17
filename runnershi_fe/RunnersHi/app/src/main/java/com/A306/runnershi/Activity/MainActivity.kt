@@ -2,26 +2,36 @@ package com.A306.runnershi.Activity
 
 
 import android.content.Intent
+import android.graphics.Color
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
-import android.view.View
+import android.view.*
+import android.widget.FrameLayout
+import android.widget.RadioButton
+import androidx.appcompat.content.res.AppCompatResources
+import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
 import com.A306.runnershi.Dao.RunDAO
-import com.A306.runnershi.Fragment.GroupRun.GroupRunFragment
-import com.A306.runnershi.Fragment.HomeFragment
+import com.A306.runnershi.Dao.UserDAO
+import com.A306.runnershi.Fragment.GroupRun.CreateRoomFragment
+import com.A306.runnershi.Fragment.GroupRun.GroupRunRoomListFragment
+import com.A306.runnershi.Fragment.Home.HomeFragment
 import com.A306.runnershi.Fragment.Profile.AchievementFragment
 import com.A306.runnershi.Fragment.Profile.ProfileFragment
-import com.A306.runnershi.Fragment.RankingFragment
+import com.A306.runnershi.Fragment.Ranking.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.MapFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearchFragment
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
-import com.kakao.sdk.common.util.SharedPrefsWrapper
+import com.leinardi.android.speeddial.SpeedDialActionItem
+import com.leinardi.android.speeddial.SpeedDialOverlayLayout
+import com.leinardi.android.speeddial.SpeedDialView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
-import kotlinx.android.synthetic.main.fragment_profile.*
+import kotlinx.android.synthetic.main.fragment_ranking.*
+import timber.log.Timber
 import javax.inject.Inject
 
 @AndroidEntryPoint
@@ -37,10 +47,14 @@ open class MainActivity : AppCompatActivity() {
     // 데이터 끌어오기
     @Inject
     lateinit var runDao: RunDAO
+    @Inject
+    lateinit var userDao: UserDAO
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        initSpeedDial(savedInstanceState == null)
 
 
         // 하단 Navigation Bar 설정
@@ -52,11 +66,11 @@ open class MainActivity : AppCompatActivity() {
         val profileFragment = ProfileFragment()
         val achievementFragment = AchievementFragment()
         // 혼자 달리기 Fragments
-        val singleRunFragment = SingleRunFragment()
-        val mapFragment = MapFragment()
-
-        // 같이 달리기 Fragments
-        val groupRunFragment = GroupRunFragment()
+//        val singleRunFragment = SingleRunFragment()
+//        val mapFragment = MapFragment()
+//
+//        // 같이 달리기 Fragments
+//        val groupRunFragment = GroupRunRoomListFragment()
 
 
         // 첫 시작 Fragment
@@ -66,28 +80,26 @@ open class MainActivity : AppCompatActivity() {
 
         // 하단 메뉴에 따른 Fragment 변경
         bottom_navigation.setOnNavigationItemSelectedListener{
+            val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
             when(it.itemId){
-                R.id.navigation_home -> makeCurrentFragment(homeFragment)
-                R.id.navigation_search -> makeCurrentFragment(userSearchFragment)
-                R.id.navigation_ranking -> makeCurrentFragment(rankingFragment)
-                R.id.navigation_profile -> makeCurrentFragment(profileFragment)
+                R.id.navigation_home -> {
+                    makeCurrentFragment(homeFragment)
+                    speedDialView.close()
+                }
+                R.id.navigation_search -> {
+                    makeCurrentFragment(userSearchFragment)
+                    speedDialView.close()
+                }
+                R.id.navigation_ranking -> {
+                    makeCurrentFragment(rankingFragment)
+                    speedDialView.close()
+                }
+                R.id.navigation_profile -> {
+                    makeCurrentFragment(profileFragment)
+                    speedDialView.close()
+                }
             }
             true
-        }
-
-
-
-        // 달리기 버튼
-        floatingActionButton.setOnClickListener {
-            makeCurrentFragment(singleRunFragment, "hide")
-            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
-        }
-
-        // 임시로 달아놓는 그룹런 버튼
-
-        floatingActionButtonTEMP.setOnClickListener {
-            makeCurrentFragment(groupRunFragment)
-            sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
         }
 
 
@@ -95,18 +107,18 @@ open class MainActivity : AppCompatActivity() {
         val settingsActivity = Intent(this, SettingsActivity::class.java)
 
         topAppBar.setOnMenuItemClickListener { menuItem ->
+            val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
             when(menuItem.itemId) {
                 R.id.navigation_alert -> {
-                    true
+                    // 여기 alert dialog 띄워주자
+                    speedDialView.close()
                 }
-                R.id.navigation_setting -> startActivity(settingsActivity)
+                R.id.navigation_setting -> {
+                    startActivity(settingsActivity)
+                }
             }
             true
         }
-
-//        achievement_layout.setOnClickListener{
-//            ShowAchievemnt(achievementFragment)
-//        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -127,10 +139,12 @@ open class MainActivity : AppCompatActivity() {
             replace(R.id.main_fragment, fragment, tag)
             commit()
         }
+
+        val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
         if (tag == "hide"){
-            floatingActionButton.visibility = View.GONE
+            speedDialView.visibility = View.GONE
         }else{
-            floatingActionButton.visibility = View.VISIBLE
+            speedDialView.visibility = View.VISIBLE
         }
     }
 
@@ -141,10 +155,109 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
-    private fun ShowAchievemnt(fragment: Fragment){
+    //AchievementFragment로 이동하는 함수
+    fun showAchievemnt(fragment: Fragment){
         val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.achievement_layout, fragment)
+        transaction.replace(R.id.ranking_layout, fragment)
         transaction.addToBackStack(null)
         transaction.commit()
+    }
+
+    // 라디오 클릭
+    fun radioButtonClicked(view: View) {
+        if (view is RadioButton) {
+            // Is the button now checked?
+            val checked = view.isChecked
+
+            // Check which radio button was clicked
+            when (view.getId()) {
+                R.id.allRankingRadio ->
+                    if (checked) {
+                        Timber.e("전체 클릭")
+
+                        allRankingRadio.setTextColor(Color.parseColor("#ffffff"))
+                        weekRankingRadio.setTextColor(Color.parseColor("#000000"))
+                    }
+                R.id.weekRankingRadio ->
+                    if (checked) {
+                        Timber.e("주간 클릭")
+                        weekRankingRadio.setTextColor(Color.parseColor("#ffffff"))
+                        allRankingRadio.setTextColor(Color.parseColor("#000000"))
+                    }
+            }
+        }
+    }
+
+    // 스피드다이얼 버튼 설정
+    private fun initSpeedDial(addActionItems: Boolean) {
+
+        val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
+
+        val singleRunFragment = SingleRunFragment()
+        val groupRunFragment = GroupRunRoomListFragment()
+        val createRoomFragment = CreateRoomFragment()
+
+        if (addActionItems) {
+
+            speedDialView.addActionItem(SpeedDialActionItem.Builder(R.id
+                .fab_SingleRun, R.drawable.ic_baseline_directions_run_24)
+                .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.purple_200, theme))
+                .setLabel("혼자달리기")
+                .setLabelColor(Color.WHITE)
+                .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.teal_700,
+                    theme))
+                .create())
+
+            speedDialView.addActionItem(SpeedDialActionItem.Builder(R.id
+                .fab_GroupRun, R.drawable.ic_baseline_directions_run_24)
+                .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.purple_200, theme))
+                .setLabel("같이달리기")
+                .setLabelColor(Color.WHITE)
+                .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.teal_700,
+                    theme))
+                .create())
+
+            speedDialView.addActionItem(SpeedDialActionItem.Builder(R.id
+                .fab_CreateRoom, R.drawable.ic_baseline_directions_run_24)
+                .setFabImageTintColor(ResourcesCompat.getColor(resources, R.color.purple_200, theme))
+                .setLabel("방 만들기")
+                .setLabelColor(Color.WHITE)
+                .setLabelBackgroundColor(ResourcesCompat.getColor(resources, R.color.teal_700,
+                    theme))
+                .create())
+        }
+
+        // Set main action clicklistener.
+//        speedDialView.setOnChangeListener(object : SpeedDialView.OnChangeListener {
+//            override fun onMainActionSelected(): Boolean {
+//                showToast("Main action clicked!")
+//                return false // True to keep the Speed Dial open
+//            }
+//
+//            override fun onToggleChanged(isOpen: Boolean) {
+//                Log.d(TAG, "Speed dial toggle state changed. Open = $isOpen")
+//            }
+//        })
+
+        // Set option fabs clicklisteners.
+        speedDialView.setOnActionSelectedListener(SpeedDialView.OnActionSelectedListener { actionItem ->
+            when (actionItem.id) {
+                R.id.fab_SingleRun -> {
+                    makeCurrentFragment(singleRunFragment, "hide")
+                    sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
+                    speedDialView.close()
+                }
+                R.id.fab_GroupRun -> {
+                    makeCurrentFragment(groupRunFragment)
+//                    sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
+                    speedDialView.close()
+                }
+                R.id.fab_CreateRoom -> {
+                    makeCurrentFragment(createRoomFragment)
+                    speedDialView.close()
+                }
+            }
+            true // To keep the Speed Dial open
+        })
     }
 }
