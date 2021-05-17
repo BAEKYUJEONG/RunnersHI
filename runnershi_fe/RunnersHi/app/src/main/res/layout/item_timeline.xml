@@ -7,14 +7,6 @@
     android:orientation="vertical"
     android:padding="10dp">
 
-    <TextView
-        android:id="@+id/timestamp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right"
-        android:padding="10dp"
-        android:text="7:20 PM" />
-
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
@@ -36,16 +28,15 @@
             android:layout_height="match_parent"
             android:orientation="vertical">
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:gravity="center_vertical"
-                android:orientation="horizontal">
+                android:layout_height="match_parent">
 
                 <TextView
                     android:id="@+id/nickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
+                    android:layout_gravity="start"
                     android:padding="8dp"
                     android:text="닉네임"
                     android:textSize="18sp"
@@ -55,12 +46,21 @@
                     android:id="@+id/nim"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom"
+                    android:layout_gravity="bottom|start"
+                    android:layout_marginLeft="65dp"
                     android:paddingBottom="8dp"
                     android:text="님"
                     android:textSize="15sp" />
 
-            </LinearLayout>
+                <TextView
+                    android:id="@+id/timestamp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="right"
+                    android:padding="10dp"
+                    android:text="7:20 PM" />
+
+            </FrameLayout>
 
             <TextView
                 android:id="@+id/friendTitle"
@@ -89,7 +89,7 @@
                         android:id="@+id/tvDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="DISTANCE"
+                        android:text="27.3"
                         android:textSize="18dp"
                         android:textStyle="bold" />
 
@@ -111,7 +111,7 @@
                         android:id="@+id/tvTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:text="TIME"
+                        android:text="00:42:13"
                         android:textSize="18dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/tvDistance"
