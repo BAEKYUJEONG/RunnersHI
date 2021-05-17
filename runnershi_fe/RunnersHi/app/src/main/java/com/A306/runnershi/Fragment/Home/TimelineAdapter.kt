@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Model.Run
 import com.A306.runnershi.R
+import kotlinx.android.synthetic.main.item_timeline.view.*
 
 class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.TimelineViewHolder>() {
 
@@ -40,10 +41,9 @@ class TimelineAdapter : RecyclerView.Adapter<TimelineAdapter.TimelineViewHolder>
     }
 
     override fun onBindViewHolder(holder: TimelineViewHolder, position: Int) {
-        val run = differ.currentList[position]
 
         holder.itemView.apply {
-
+            nickname.text
         }
     }
 
