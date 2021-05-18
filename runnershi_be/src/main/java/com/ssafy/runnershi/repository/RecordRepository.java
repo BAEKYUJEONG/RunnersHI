@@ -21,9 +21,9 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
       Date endTime);
 
   @Query(
-      value = "SELECT * FROM record WHERE DATE_FORMAT(end_time, '%Y-%m-%d') = :today AND user_id = :userId",
+      value = "SELECT COUNT(user_id) FROM record WHERE DATE_FORMAT(end_time, '%Y-%m-%d') = :today AND user_id = :userId",
       nativeQuery = true)
-  public Record searchTodayRecord(@Param("userId") String userId, @Param("today") String today);
+  public int searchTodayRecord(@Param("userId") String userId, @Param("today") String today);
 
   @Query(value = "SELECT * FROM record WHERE user_id in :friendList", nativeQuery = true)
   public ArrayList<Record> getFriendRecordList(@Param("friendList") List<String> friendList);
