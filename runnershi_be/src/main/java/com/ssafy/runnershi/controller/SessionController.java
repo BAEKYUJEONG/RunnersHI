@@ -169,7 +169,7 @@ public class SessionController {
     //OpenViduRole role = user.hasRoleTeacher() ? OpenViduRole.PUBLISHER : OpenViduRole.SUBSCRIBER;
 
     TokenOptions tokenOpts = new TokenOptions.Builder()
-        .data("SERVER=" + userId).build();
+        .data("{userID:" + userId + ",title:" + r.get().getTitle() + "}").build();
     try {
       String token = this.roomIdSession.get(roomId).generateToken(tokenOpts);
 
@@ -248,7 +248,7 @@ public class SessionController {
     return new ResponseEntity<>("success leave-session", HttpStatus.OK);
   }
 
-  @GetMapping(value = "/room-list")
+  @GetMapping(value = "/list")
   public ResponseEntity<JSONObject> getRoomList(HttpServletRequest req) {
     this.openViduCustom.getSessionList();
     JSONObject json = new JSONObject();
