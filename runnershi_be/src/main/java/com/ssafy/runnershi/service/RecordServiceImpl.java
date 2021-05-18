@@ -158,7 +158,7 @@ public class RecordServiceImpl implements RecordService {
     zset.add("totalTimeRank", value, userInfo.getTotalTime());
     zset.add("totalPaceRank", value, userInfo.getBestPace());
 
-    return null;
+    return "SUCCESS";
   }
 
   @Override
