@@ -55,10 +55,6 @@ class GroupRunRoomListFragment : Fragment() {
     }
 
     inner class roomListAdapterToList {
-//        fun getRoomId(id: Int?) {
-//            Log.i("roomId", "$id")
-//            openRoom(id)
-//        }
 
         fun getRoomId(room: Room) {
             openRoom(room)

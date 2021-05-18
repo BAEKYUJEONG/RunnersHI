@@ -10,7 +10,9 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:divider="@drawable/profile_divider"
+        android:orientation="vertical"
+        android:showDividers="middle">
 
         <TextView
             android:id="@+id/profileTab"
@@ -27,7 +29,9 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingLeft="20dp">
+            android:paddingLeft="20dp"
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp">
 
             <androidx.cardview.widget.CardView
                 android:layout_width="80dp"
@@ -66,7 +70,6 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:inputType="numberSigned"
                     android:padding="5dp"
                     android:text="13"
                     android:textSize="26sp" />
@@ -95,7 +98,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center"
-                    android:inputType="numberSigned"
+                    android:inputType="number"
                     android:padding="5dp"
                     android:text="4"
                     android:textSize="26sp" />
@@ -108,7 +111,10 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:padding="10dp">
+            android:paddingLeft="10dp"
+            android:paddingTop="5dp"
+            android:paddingRight="10dp"
+            android:paddingBottom="5dp">
 
             <LinearLayout
                 android:layout_width="wrap_content"
@@ -129,7 +135,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:gravity="center_vertical"
-                    android:inputType="numberSigned"
+                    android:inputType="numberDecimal"
                     android:padding="5dp"
                     android:text="27.3K"
                     android:textSize="30sp" />
@@ -189,9 +195,9 @@
             android:layout_height="match_parent" />
 
         <!--        <androidx.recyclerview.widget.RecyclerView-->
-<!--            android:id="@+id/profile_history"-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="match_parent" />-->
+        <!--            android:id="@+id/profile_history"-->
+        <!--            android:layout_width="match_parent"-->
+        <!--            android:layout_height="match_parent" />-->
 
 
     </LinearLayout>

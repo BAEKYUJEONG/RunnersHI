@@ -55,6 +55,8 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
                 members = it.userId.toString()
             }
         })
+        viewModel.userInfo.removeObserver(Observer {  })
+
 
         // 방 만들기 버튼 클릭
         createRoomButton.setOnClickListener {
