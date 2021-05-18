@@ -109,8 +109,7 @@ class RoomInfo {
                     super.onAddTrack(rtpReceiver, mediaStreams)
                     mediaStreams?.get(0)?.let {
                         activity?.setRemoteMediaStream(
-                            it,
-                            remoteParticipants.get(connectionId)!!
+                            it
                         )
                     }
                 }

@@ -156,11 +156,10 @@ dependencies {
     // GSON
     implementation 'com.google.code.gson:gson:2.8.6'
 
+    //WEBRTC
+    implementation 'com.squareup.okhttp3:okhttp:4.9.1'
     implementation 'com.neovisionaries:nv-websocket-client:2.9'
     implementation 'org.webrtc:google-webrtc:1.0.32006'
-
-    //WEBRTC
-    implementation 'com.squareup.okhttp3:okhttp:4.2.0'
-    implementation 'com.neovisionaries:nv-websocket-client:2.9'
-    implementation 'org.webrtc:google-webrtc:1.0.30039'
+    annotationProcessor 'com.jakewharton:butterknife-compiler:10.2.0'
+    implementation 'com.jakewharton:butterknife:10.2.0'
 }

@@ -3,6 +3,7 @@ package com.A306.runnershi.Openvidu.OpenviduModel
 import android.content.Context
 import android.os.Build
 import org.webrtc.*
+import timber.log.Timber
 import java.util.*
 
 class LocalParticipant : Participant {
@@ -21,6 +22,16 @@ class LocalParticipant : Participant {
         localVideoView: SurfaceViewRenderer?
     ) : super(participantName, roomInfo) {
         this.localVideoView = localVideoView
+        this.context = context
+        localIceCandidates = ArrayList()
+        roomInfo.localParticipant = this
+    }
+
+    constructor(
+        participantName: String?,
+        roomInfo: RoomInfo,
+        context: Context?
+    ) : super(participantName, roomInfo) {
         this.context = context
         localIceCandidates = ArrayList()
         roomInfo.localParticipant = this
@@ -48,6 +59,17 @@ class LocalParticipant : Participant {
         videoTrack = peerConnectionFactory?.createVideoTrack("100", videoSource)
         // display in localView
         videoTrack?.addSink(localVideoView)
+    }
+
+    fun startAudio() {
+        Timber.e("Start Audio")
+        val eglBaseContext = EglBase.create().eglBaseContext
+        val peerConnectionFactory: PeerConnectionFactory? = this.roomInfo?.peerConnectionFactory
+
+        // create AudioSource
+        val audioSource = peerConnectionFactory?.createAudioSource(MediaConstraints())
+        audioTrack = peerConnectionFactory?.createAudioTrack("101", audioSource)
+        surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", eglBaseContext)
     }
 
     private fun createCameraCapturer(): VideoCapturer? {

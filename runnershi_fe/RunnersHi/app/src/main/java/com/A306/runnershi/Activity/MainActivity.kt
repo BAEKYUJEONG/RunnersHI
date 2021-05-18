@@ -17,12 +17,13 @@ import com.A306.runnershi.Dao.RunDAO
 import com.A306.runnershi.Dao.UserDAO
 import com.A306.runnershi.Fragment.GroupRun.CreateRoomFragment
 import com.A306.runnershi.Fragment.GroupRun.GroupRunRoomListFragment
+import com.A306.runnershi.Fragment.GroupRun.RoomFragment
 import com.A306.runnershi.Fragment.Home.HomeFragment
 import com.A306.runnershi.Fragment.Profile.AchievementFragment
 import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Fragment.Ranking.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
-import com.A306.runnershi.Fragment.UserSearchFragment
+import com.A306.runnershi.Fragment.UserSearch.UserSearchFragment
 import com.A306.runnershi.Openvidu.OpenviduModel.RemoteParticipant
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
@@ -31,6 +32,7 @@ import com.leinardi.android.speeddial.SpeedDialView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_ranking.*
+import org.webrtc.AudioTrack
 import org.webrtc.MediaStream
 import timber.log.Timber
 import javax.inject.Inject
@@ -371,5 +373,13 @@ open class MainActivity : AppCompatActivity() {
     }
 
     fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipant?){}
-    fun leaveSession(){}
+    fun leaveSession(){
+        val roomFragment = RoomFragment(null)
+        roomFragment.leaveSession()
+    }
+
+    fun setRemoteMediaStream(stream:MediaStream){
+        var audioTrack: AudioTrack = stream.audioTracks.get(0)
+        audioTrack.setVolume(100.0)
+    }
 }

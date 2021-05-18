@@ -1,6 +1,5 @@
 package com.A306.runnershi.Openvidu.OpenviduWebSocket
 
-import android.app.Activity
 import android.os.AsyncTask
 import android.os.Build
 import android.os.Handler
@@ -239,6 +238,7 @@ class CustomWebSocket : WebSocketListener, AsyncTask<MainActivity, Void, Void> {
     @Synchronized
     fun sendJson(method: String?, params: MutableMap<String, String?>): Int {
         val id = RPC_ID.get()
+        Timber.e("JSON 가보자!!!")
         val jsonObject = JSONObject()
         try {
             val paramsJson = JSONObject()
@@ -425,7 +425,12 @@ class CustomWebSocket : WebSocketListener, AsyncTask<MainActivity, Void, Void> {
             sslContext.init(null, trustManagers, SecureRandom())
             factory.sslContext = sslContext
             factory.verifyHostname = false
+            Timber.e("FACTORY : $factory")
+            Timber.e(openviduUrl)
+            Timber.e(openviduUrl?.let { getWebSocketAddress(it) })
+            Timber.e("WEBSOCKET 생성")
             websocket = factory.createSocket(openviduUrl?.let { getWebSocketAddress(it) })
+
             websocket!!.addListener(this)
             websocket!!.connect()
         } catch (e: KeyManagementException) {
@@ -477,14 +482,16 @@ class CustomWebSocket : WebSocketListener, AsyncTask<MainActivity, Void, Void> {
     }
 
     override fun onStateChanged(websocket: WebSocket?, newState: WebSocketState?) {
-        TODO("Not yet implemented")
+        Timber.e("State changed: ${newState!!.name}")
     }
 
     override fun onConnected(
         websocket: WebSocket?,
         headers: MutableMap<String, MutableList<String>>?
     ) {
-        TODO("Not yet implemented")
+        pingMessageHandler()
+        Timber.e("CONNECTED!!!!!!!!!!!!!!!!!!!!!!!")
+        this.joinRoom()
     }
 
     override fun onConnectError(websocket: WebSocket?, cause: WebSocketException?) {
@@ -617,7 +624,8 @@ class CustomWebSocket : WebSocketListener, AsyncTask<MainActivity, Void, Void> {
         requestLine: String?,
         headers: MutableList<Array<String>>?
     ) {
-        TODO("Not yet implemented")
+        Timber.e("Sending Handshake! Hello!")
+        Timber.e(headers.toString())
     }
 
 

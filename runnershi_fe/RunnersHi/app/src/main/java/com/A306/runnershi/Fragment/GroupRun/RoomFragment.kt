@@ -10,6 +10,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,21 +18,34 @@ import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.Model.Room
 import com.A306.runnershi.Model.User
+import com.A306.runnershi.Openvidu.OpenviduModel.LocalParticipant
+import com.A306.runnershi.Openvidu.OpenviduModel.RemoteParticipant
+import com.A306.runnershi.Openvidu.OpenviduModel.RoomInfo
 import com.A306.runnershi.Openvidu.OpenviduUtil.CustomHttpClient
+import com.A306.runnershi.Openvidu.OpenviduWebSocket.CustomWebSocket
 import com.A306.runnershi.Openvidu.Permission.PermissionsDialogFragment
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
+import com.A306.runnershi.ViewModel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_room.*
+import kotlinx.android.synthetic.main.grouprun_mate.*
+import org.webrtc.AudioTrack
+import org.webrtc.MediaStream
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 
 @AndroidEntryPoint
-class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), EasyPermissions.PermissionCallbacks {
+class RoomFragment(private val room: Room?) : Fragment(R.layout.fragment_room), EasyPermissions.PermissionCallbacks {
+    val userViewModel:UserViewModel by viewModels()
+
 
     var mainActivity:MainActivity? = null
     var httpClient:CustomHttpClient? = null
+    lateinit var roomInfo:RoomInfo
+    var currentUser:User? = null
+
 
     // 임시로 넘겨줄 UserList:
     var tempUserList: ArrayList<User> = arrayListOf(
@@ -53,9 +67,8 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
         savedInstanceState: Bundle?
     ): View? {
 
-        Log.i("입장하였습니다", "${room.title}")
-
         val mainActivity = activity as MainActivity
+
         mainActivity.sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -65,10 +78,10 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
         mainActivity = activity as MainActivity
 
         // 방 이름 설정해주기
-        roomTitle.text = room.title
+        roomTitle.text = room?.title
 
         requestPermissions()
-        Timber.e(room.title)
+        Timber.e(room?.title)
         subscribeToObservers()
 
         if(mainActivity != null){
@@ -81,6 +94,8 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
                         "OPENVIDUAPP:MY_SECRET".toByteArray(), android.util.Base64.DEFAULT
                     ).trim()
                 )
+
+                getTokenSuccess(mainActivity!!.roomToken, mainActivity!!.roomSession)
             }else{
                 val permissionsFragment: DialogFragment = PermissionsDialogFragment()
                 permissionsFragment.show(mainActivity!!.supportFragmentManager, "Permissions Fragment")
@@ -93,6 +108,30 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
         mateListAdapter = MateListAdapter(list)
         mateListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         mateListView.adapter = mateListAdapter
+    }
+
+    private fun getTokenSuccess(token:String, sessionId:String){
+        roomInfo = RoomInfo(sessionId, token, groupRunLayout, mainActivity)
+        Timber.e("ROOMINFO : ${roomInfo}")
+        userViewModel.userInfo.observe(viewLifecycleOwner, Observer {
+            currentUser = it
+            var localParticipant = LocalParticipant(currentUser?.userName, roomInfo, requireContext())
+            localParticipant.startAudio()
+
+            startWebSocket()
+        })
+
+    }
+
+    private fun startWebSocket(){
+        var webSocket = CustomWebSocket(roomInfo, "https://k4a3061.p.ssafy.io", mainActivity)
+        webSocket.execute()
+        roomInfo.setWebSocket(webSocket)
+    }
+
+    fun setRemoteMediaStream(stream:MediaStream){
+        var audioTrack:AudioTrack = stream.audioTracks.get(0)
+        audioTrack.setVolume(100.0)
     }
 
     private fun subscribeToObservers(){
@@ -162,6 +201,11 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
         Log.e("PERMISSION RESULT", requestCode.toString())
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    fun leaveSession(){
+        this.roomInfo.leaveSession()
+        this.httpClient?.dispose()
     }
 
 }

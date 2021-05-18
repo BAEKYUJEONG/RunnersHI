@@ -100,11 +100,11 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
             } else{
                 Timber.e("드디어 방에 들어간다.")
                 val receivedURL = response.body()?.string()
+                Timber.e("소켓 URL : ${receivedURL}")
                 val sessionMap = getSessionIdAndToken(receivedURL)
 
                 Timber.e(sessionMap["sessionId"])
-                Timber.e(sessionMap["token"])
-                mainActivity?.setTokenAndSession(sessionMap["token"].toString(), sessionMap["sessionId"].toString())
+                mainActivity?.setTokenAndSession(receivedURL.toString(), sessionMap["sessionId"].toString())
                 val room = Room(roomId, title, type, 1)
                 val roomFragment = RoomFragment(room)
                 mainActivity?.makeCurrentFragment(roomFragment)
