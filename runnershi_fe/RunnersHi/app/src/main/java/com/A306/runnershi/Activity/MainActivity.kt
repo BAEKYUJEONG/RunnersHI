@@ -364,11 +364,6 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun leaveSession(){
-        val roomFragment = RoomFragment(null)
-        roomFragment.leaveSession()
-    }
-
     fun setRemoteMediaStream(stream: MediaStream, remoteParticipant: RemoteParticipant){
         var audioTrack: AudioTrack = stream.audioTracks.get(0)
         audioTrack.setVolume(100.0)

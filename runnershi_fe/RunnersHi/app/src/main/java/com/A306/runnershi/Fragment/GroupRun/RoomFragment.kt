@@ -20,6 +20,7 @@ import com.A306.runnershi.Openvidu.constant.JsonConstants.OPENVIDU_SECRET
 import com.A306.runnershi.Openvidu.constant.JsonConstants.OPENVIDU_URL
 import com.A306.runnershi.Openvidu.fragment.PermissionsDialogFragment
 import com.A306.runnershi.Openvidu.model.LocalParticipant
+import com.A306.runnershi.Openvidu.model.RemoteParticipant
 import com.A306.runnershi.Openvidu.model.Session
 import com.A306.runnershi.Openvidu.utils.CustomHttpClient
 import com.A306.runnershi.Openvidu.websocket.CustomWebSocket
@@ -41,9 +42,8 @@ class RoomFragment(private val room: Room?) : Fragment(R.layout.fragment_room), 
     var httpClient:CustomHttpClient? = null
     var currentUser: User? = null
     lateinit var session: Session
-
-
     private lateinit var mateListAdapter: MateListAdapter
+
 
 
     private var curTimeMillis = 0L
@@ -119,9 +119,13 @@ class RoomFragment(private val room: Room?) : Fragment(R.layout.fragment_room), 
     }
 
     private fun startWebSocket(){
-        val webSocket = CustomWebSocket(session, OPENVIDU_URL, mainActivity)
+        val webSocket = CustomWebSocket(session, OPENVIDU_URL, mainActivity, this)
         webSocket.execute()
         session.setWebSocket(webSocket)
+    }
+
+    fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipant){
+
     }
 
     fun leaveSession() {

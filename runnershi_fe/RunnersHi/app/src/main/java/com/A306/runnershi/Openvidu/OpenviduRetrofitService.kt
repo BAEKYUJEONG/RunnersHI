@@ -5,10 +5,6 @@ import retrofit2.Call
 import retrofit2.http.*
 
 interface OpenviduRetrofitService {
-    @Headers("Content-Type: application/json")
-    @GET("/api/sessions")
-    fun getRoomList(): Call<ResponseBody>
-
     @JvmSuppressWildcards
     @Headers("Content-Type: application/json")
     @POST("/room/create")

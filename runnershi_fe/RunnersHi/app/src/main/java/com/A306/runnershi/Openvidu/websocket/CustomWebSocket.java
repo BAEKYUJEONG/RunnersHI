@@ -7,6 +7,7 @@ import android.util.Pair;
 import android.widget.Toast;
 
 import com.A306.runnershi.Activity.MainActivity;
+import com.A306.runnershi.Fragment.GroupRun.RoomFragment;
 import com.A306.runnershi.Openvidu.constant.JsonConstants;
 import com.A306.runnershi.Openvidu.model.LocalParticipant;
 import com.A306.runnershi.Openvidu.model.Participant;
@@ -86,12 +87,14 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
     private String openviduUrl;
     private MainActivity activity;
     private WebSocket websocket;
+    private RoomFragment roomFragment;
     private boolean websocketCancelled = false;
 
-    public CustomWebSocket(Session session, String openviduUrl, MainActivity activity) {
+    public CustomWebSocket(Session session, String openviduUrl, MainActivity activity, RoomFragment roomFragment) {
         this.session = session;
         this.openviduUrl = openviduUrl;
         this.activity = activity;
+        this.roomFragment = roomFragment;
     }
 
     @Override
@@ -365,7 +368,7 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
             }
         }
         final RemoteParticipant remoteParticipant = new RemoteParticipant(connectionId, participantName, this.session);
-//        this.activity.createRemoteParticipantVideo(remoteParticipant);
+        this.roomFragment.createRemoteParticipantVideo(remoteParticipant);
         this.session.createRemotePeerConnection(remoteParticipant.getConnectionId());
         return remoteParticipant;
     }
@@ -591,7 +594,7 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
             Runnable myRunnable = () -> {
                 Toast toast = Toast.makeText(activity, e.getMessage(), Toast.LENGTH_LONG);
                 toast.show();
-                activity.leaveSession();
+                roomFragment.leaveSession();
             };
             mainHandler.post(myRunnable);
             websocketCancelled = true;

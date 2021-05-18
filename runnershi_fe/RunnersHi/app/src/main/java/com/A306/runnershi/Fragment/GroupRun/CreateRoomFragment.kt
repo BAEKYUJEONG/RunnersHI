@@ -3,6 +3,7 @@ package com.A306.runnershi.Fragment.GroupRun
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -71,16 +72,23 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
     // 레트로핏 통신 이후: 방 만들어졌으므로 방 화면으로 연결해주자
     private var afterRetrofitConnection = object:Callback<ResponseBody>{
         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-            roomId = Gson().fromJson(response.body()?.string(), String::class.java).toInt()
+            val receivedText = response.body()?.string()
+            Timber.e("RECEIVED NUMBER ${receivedText}")
+            if (receivedText != null){
+                roomId = receivedText.toInt()
 //            roomId = 93
-            Timber.e(roomId.toString())
-            val room = Room(roomId, title, type, 1)
+                Timber.e(roomId.toString())
+                val room = Room(roomId, title, type, 1)
 
-            val roomJoinBody = mapOf("roomId" to roomId)
-            Timber.e("JOIN 시작 $members")
-            OpenviduRetrofitClient.getInstance().joinRoom(token, roomId).enqueue(
-                afterRoomNumberReceived
-            )
+                val roomJoinBody = mapOf("roomId" to roomId)
+                Timber.e("JOIN 시작 $members")
+                OpenviduRetrofitClient.getInstance().joinRoom(token, roomId).enqueue(
+                        afterRoomNumberReceived
+                )
+            }else{
+                Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_LONG).show()
+            }
+
         }
 
         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
