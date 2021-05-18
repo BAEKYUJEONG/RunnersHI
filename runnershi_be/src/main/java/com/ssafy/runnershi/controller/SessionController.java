@@ -248,6 +248,19 @@ public class SessionController {
     return new ResponseEntity<>("success leave-session", HttpStatus.OK);
   }
 
+  @GetMapping(value = "/room-list")
+  public ResponseEntity<JSONObject> getRoomList(HttpServletRequest req) {
+    this.openViduCustom.getSessionList();
+    JSONObject json = new JSONObject();
+    json.put(".?", "ssss");
+    json.put("list", this.openVidu.getActiveSessions());
+
+    List<Session> s = this.openVidu.getActiveSessions();
+    System.out.println(s);
+
+    return new ResponseEntity<>(json, HttpStatus.OK);
+  }
+
   private void showMap() {
     System.out.println("------------------------------");
     System.out.println(this.roomIdSession.toString());
