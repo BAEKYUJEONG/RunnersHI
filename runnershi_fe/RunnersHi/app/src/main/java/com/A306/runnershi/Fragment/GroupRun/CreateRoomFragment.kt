@@ -8,7 +8,6 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.Model.Room
-import com.A306.runnershi.Openvidu.OpenviduModel.RoomInfo
 import com.A306.runnershi.Openvidu.OpenviduRetrofitClient
 import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.UserViewModel

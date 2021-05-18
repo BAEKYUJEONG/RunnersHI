@@ -24,7 +24,7 @@ import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Fragment.Ranking.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearch.UserSearchFragment
-import com.A306.runnershi.Openvidu.OpenviduModel.RemoteParticipant
+import com.A306.runnershi.Openvidu.model.RemoteParticipant
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import com.leinardi.android.speeddial.SpeedDialActionItem
@@ -318,14 +318,6 @@ open class MainActivity : AppCompatActivity() {
     }
 
     // RTC 관련 함수
-    open fun setRemoteMediaStream(stream: MediaStream, remoteParticipant: RemoteParticipant) {
-        val videoTrack = stream.videoTracks[0]
-        videoTrack.addSink(remoteParticipant.getVideoView())
-        runOnUiThread {
-            remoteParticipant.getVideoView()?.setVisibility(View.VISIBLE)
-        }
-    }
-
     fun setTokenAndSession(token: String, sessionId: String){
         roomToken = token
         roomSession = sessionId
@@ -372,13 +364,12 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
-    fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipant?){}
     fun leaveSession(){
         val roomFragment = RoomFragment(null)
         roomFragment.leaveSession()
     }
 
-    fun setRemoteMediaStream(stream:MediaStream){
+    fun setRemoteMediaStream(stream: MediaStream, remoteParticipant: RemoteParticipant){
         var audioTrack: AudioTrack = stream.audioTracks.get(0)
         audioTrack.setVolume(100.0)
     }
