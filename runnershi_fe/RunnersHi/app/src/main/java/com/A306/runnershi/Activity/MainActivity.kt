@@ -72,7 +72,8 @@ open class MainActivity : AppCompatActivity() {
         // Fragment 할당
         // 하단 메뉴 Fragments
         val homeFragment = HomeFragment()
-        val userSearchFragment = UserSearchFragment()
+        val userSearchFragment =
+            UserSearchFragment()
         val rankingFragment = RankingFragment()
         val profileFragment = ProfileFragment()
         val achievementFragment = AchievementFragment()
