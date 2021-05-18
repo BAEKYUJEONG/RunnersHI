@@ -36,7 +36,7 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
     var roomId = 0
     var userId = ""
     var title = ""
-    var type = 1
+    var type = 0
     var members = ""
     var mainActivity:MainActivity? = null
 
@@ -70,7 +70,8 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
     // 레트로핏 통신 이후: 방 만들어졌으므로 방 화면으로 연결해주자
     private var afterRetrofitConnection = object:Callback<ResponseBody>{
         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-            roomId = Gson().fromJson(response.body()?.string(), String::class.java).toInt()
+//            roomId = Gson().fromJson(response.body()?.string(), String::class.java).toInt()
+            roomId = 93
             Timber.e(roomId.toString())
             val room = Room(roomId, title, type, 1)
 
@@ -94,16 +95,19 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
             Timber.e("JOIN 통신!!")
             if (response.body() == null){
                 Timber.e("왜 답이 없니")
-            }
-            val receivedURL = response.body()?.string()
-            val sessionMap = getSessionIdAndToken(receivedURL)
+            } else{
+                Timber.e("드디어 방에 들어간다.")
+                val receivedURL = response.body()?.string()
+                val sessionMap = getSessionIdAndToken(receivedURL)
 
-            Timber.e(sessionMap["sessionId"])
-            Timber.e(sessionMap["token"])
-            mainActivity?.setTokenAndSession(sessionMap["token"].toString(), sessionMap["sessionId"].toString())
-            val room = Room(roomId, title, type, 1)
-            val roomFragment = RoomFragment(room)
-            mainActivity?.makeCurrentFragment(roomFragment)
+                Timber.e(sessionMap["sessionId"])
+                Timber.e(sessionMap["token"])
+                mainActivity?.setTokenAndSession(sessionMap["token"].toString(), sessionMap["sessionId"].toString())
+                val room = Room(roomId, title, type, 1)
+                val roomFragment = RoomFragment(room)
+                mainActivity?.makeCurrentFragment(roomFragment)
+            }
+
         }
 
         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
