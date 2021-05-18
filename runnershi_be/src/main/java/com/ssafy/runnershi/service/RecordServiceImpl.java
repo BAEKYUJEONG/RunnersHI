@@ -40,12 +40,12 @@ public class RecordServiceImpl implements RecordService {
     if (userInfo == null)
       return "invalid token";
 
-    // if (record.getEndTime() == null || record.getTitle() == null
-    // || "".contentEquals(record.getTitle()))
-    // return "invalid data";
-    if (record.getEndTime() == null) {
-      record.setEndTime(new Date());
-    }
+    if (record.getEndTime() == null || record.getTitle() == null
+        || "".contentEquals(record.getTitle()))
+      return "invalid data";
+    // if (record.getEndTime() == null) {
+    // record.setEndTime(new Date());
+    // }
 
     // 유저 정보 업데이트
     double pace = record.getRunningTime() / record.getDistance();
