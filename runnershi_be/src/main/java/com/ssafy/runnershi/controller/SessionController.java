@@ -80,8 +80,7 @@ public class SessionController {
 
     // 토큰 검증
     String jwt = req.getHeader("token");
-    //String userId = jwtService.decode(jwt);
-    String userId = jwt;
+    String userId = jwtService.decode(jwt);
 
     if (userId == null) {
       return new ResponseEntity<>("invalid token", HttpStatus.UNAUTHORIZED);
@@ -128,8 +127,8 @@ public class SessionController {
 
     // 토큰 검증
     String jwt = req.getHeader("token");
-    //String userId = jwtService.decode(jwt);
-    String userId = jwt;
+    String userId = jwtService.decode(jwt);
+
     if (userId == null) {
       return new ResponseEntity<>("invalid token", HttpStatus.UNAUTHORIZED);
     }
@@ -145,7 +144,7 @@ public class SessionController {
     // 권한이 있는 방인지
     if (r.get().getRoomType() == 1) {
       // 방에 권한이 있는지
-      if (roomMemberRepository.findByRoom_RoomIdAndUser_UserId(roomId, jwt) == null) {
+      if (roomMemberRepository.findByRoom_RoomIdAndUser_UserId(roomId, userId) == null) {
         return new ResponseEntity<>("Unauthorization", HttpStatus.BAD_REQUEST);
       }
     }
@@ -213,8 +212,8 @@ public class SessionController {
 
     // 토큰 검증
     String jwt = req.getHeader("token");
-    //String userId = jwtService.decode(jwt);
-    String userId = jwt;
+    String userId = jwtService.decode(jwt);
+
     if (userId == null) {
       return new ResponseEntity<>("invalid token", HttpStatus.UNAUTHORIZED);
     }
