@@ -70,14 +70,14 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
     // 레트로핏 통신 이후: 방 만들어졌으므로 방 화면으로 연결해주자
     private var afterRetrofitConnection = object:Callback<ResponseBody>{
         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-//            roomId = Gson().fromJson(response.body()?.string(), String::class.java).toInt()
-            roomId = 93
+            roomId = Gson().fromJson(response.body()?.string(), String::class.java).toInt()
+//            roomId = 93
             Timber.e(roomId.toString())
             val room = Room(roomId, title, type, 1)
 
             val roomJoinBody = mapOf("roomId" to roomId)
             Timber.e("JOIN 시작 $members")
-            OpenviduRetrofitClient.getInstance().joinRoom(userId, roomId).enqueue(
+            OpenviduRetrofitClient.getInstance().joinRoom(token, roomId).enqueue(
                 afterRoomNumberReceived
             )
         }
