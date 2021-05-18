@@ -1,11 +1,11 @@
 package com.A306.runnershi.Model
 
 data class Friend (
-    val userName: String? = null,
-    // 달리기 날짜
-    var timestamp: Long = 0L,
-    // 거리
-    var distance: Int = 0,
-    // 시간
-    var time: String? = null
+    val userName: String? = null
+    //var timestamp: Long = 0L,
+    //var distance: Int = 0,
+    //var time: String? = null,
+    //var title: String? = null,
+    //var ranking: Int = 0
+
 )

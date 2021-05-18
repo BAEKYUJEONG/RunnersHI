@@ -75,7 +75,7 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
                         val user = Gson().fromJson(response.body()?.string(), Map::class.java)
                         //val userId = user["userId"].toString()
                         profileTab.text = user["userName"].toString()
-                        ranking_num.text = user["totalRank"].toString()
+                        ranking_num.text = user["totalRank"].toString().replace(".0","")
                         distance.text = user["total_distance"].toString()
                         pace.text = user["best_pace"].toString()
                     }
@@ -88,7 +88,7 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
 
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                         val friend = Gson().fromJson(response.body()?.string(), Map::class.java)
-                        friend_num.text = friend["friendNum"].toString()
+                        friend_num.text = friend["friendNum"].toString().replace(".0","")
                     }
 
                 })
