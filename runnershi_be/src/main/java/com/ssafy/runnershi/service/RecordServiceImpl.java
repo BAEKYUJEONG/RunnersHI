@@ -57,7 +57,7 @@ public class RecordServiceImpl implements RecordService {
     String date = format.format(new Date());
     // Date today = format.parse(date);
     // System.out.println(today);
-    if (recordRepo.searchTodayRecord(userId, date) == null) {
+    if (recordRepo.searchTodayRecord(userId, date) == 0) {
       userInfo.setTotalDay(userInfo.getTotalDay() + 1);
     }
 
@@ -150,7 +150,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
 
-    if (recordRepo.searchTodayRecord(userId, date) == null) {
+    if (recordRepo.searchTodayRecord(userId, date) == 0) {
       userInfo.setTotalDay(userInfo.getTotalDay() - 1);
     }
 
