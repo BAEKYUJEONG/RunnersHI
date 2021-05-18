@@ -3,13 +3,13 @@ package com.A306.runnershi.Fragment.GroupRun
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
+import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
-import androidx.fragment.app.Fragment
 import android.view.View
 import android.view.ViewGroup
-import android.widget.LinearLayout
-import android.widget.TextView
+import androidx.fragment.app.DialogFragment
+import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
@@ -17,6 +17,8 @@ import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.Model.Room
 import com.A306.runnershi.Model.User
+import com.A306.runnershi.Openvidu.OpenviduUtil.CustomHttpClient
+import com.A306.runnershi.Openvidu.Permission.PermissionsDialogFragment
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import dagger.hilt.android.AndroidEntryPoint
@@ -27,6 +29,9 @@ import timber.log.Timber
 
 @AndroidEntryPoint
 class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), EasyPermissions.PermissionCallbacks {
+
+    var mainActivity:MainActivity? = null
+    var httpClient:CustomHttpClient? = null
 
     // 임시로 넘겨줄 UserList:
     var tempUserList: ArrayList<User> = arrayListOf(
@@ -42,7 +47,11 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
 
     private var curTimeMillis = 0L
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
 
         Log.i("입장하였습니다", "${room.title}")
 
@@ -53,6 +62,7 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        mainActivity = activity as MainActivity
 
         // 방 이름 설정해주기
         roomTitle.text = room.title
@@ -60,6 +70,22 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
         requestPermissions()
         Timber.e(room.title)
         subscribeToObservers()
+
+        if(mainActivity != null){
+            Timber.e("MAIN NULL 아님")
+            if (mainActivity!!.arePermissionGranted()){
+                Timber.e("HTTP CLIENT 실행")
+                httpClient = CustomHttpClient(
+                    "https://k4a3061.p.ssafy.io/",
+                    "Basic " + Base64.encodeToString(
+                        "OPENVIDUAPP:MY_SECRET".toByteArray(), android.util.Base64.DEFAULT
+                    ).trim()
+                )
+            }else{
+                val permissionsFragment: DialogFragment = PermissionsDialogFragment()
+                permissionsFragment.show(mainActivity!!.supportFragmentManager, "Permissions Fragment")
+            }
+        }
 
         // 함께 뛰는 메이트들 불러오기
         var list: ArrayList<User> = tempUserList
@@ -71,19 +97,19 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
 
     private fun subscribeToObservers(){
         TrackingService.totalDistance.observe(viewLifecycleOwner, Observer {
-            distanceText.text = String.format("%.2f", it/1000f)
+            distanceText.text = String.format("%.2f", it / 1000f)
         })
 
         TrackingService.totalPace.observe(viewLifecycleOwner, Observer {
-            if (it > 0){
+            if (it > 0) {
                 val formattedPace = TrackingUtility.getPaceWithMilliAndDistance(it)
                 paceText.text = formattedPace
-            }else{
+            } else {
                 paceText.text = "0' 00''"
             }
         })
 
-        TrackingService.timeRunInMillis.observe(viewLifecycleOwner, Observer{
+        TrackingService.timeRunInMillis.observe(viewLifecycleOwner, Observer {
             curTimeMillis = it
             val formattedTime = TrackingUtility.getFormattedStopWatchTime(curTimeMillis, false)
             timeText.text = formattedTime
@@ -91,25 +117,29 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
     }
 
     private fun requestPermissions(){
-        if(TrackingUtility.hasLocationPermissions(requireContext())){
+        if(TrackingUtility.hasLocationPermissions(requireContext()) && TrackingUtility.hasLocationPermissions(requireContext())){
             return
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
             EasyPermissions.requestPermissions(
-                    this,
-                    "앱 사용을 위해 위치 권한 항상 허용이 필요합니다.",
-                    0,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION
+                this,
+                "앱 사용을 위해 위치 권한 항상 허용이 필요합니다.",
+                0,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.MODIFY_AUDIO_SETTINGS
             )
         } else{
             EasyPermissions.requestPermissions(
-                    this,
-                    "앱 사용을 위해 위치 권한 항상 허용이 필요합니다.",
-                    0,
-                    Manifest.permission.ACCESS_COARSE_LOCATION,
-                    Manifest.permission.ACCESS_FINE_LOCATION,
-                    Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                this,
+                "앱 사용을 위해 위치 권한 항상 허용이 필요합니다.",
+                0,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.MODIFY_AUDIO_SETTINGS
             )
         }
     }
@@ -125,12 +155,13 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
     }
 
     override fun onRequestPermissionsResult(
-            requestCode: Int,
-            permissions: Array<out String>,
-            grantResults: IntArray
+        requestCode: Int,
+        permissions: Array<out String>,
+        grantResults: IntArray
     ) {
         Log.e("PERMISSION RESULT", requestCode.toString())
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
+
 }

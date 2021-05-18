@@ -27,6 +27,7 @@ class SplashActivity : AppCompatActivity() {
                 overridePendingTransition(0, 0)
             } else{
                 Timber.e(it.token.toString())
+                Timber.e(it.userId.toString())
                 val mainIntent = Intent(this, MainActivity::class.java)
                 startActivity(mainIntent)
                 overridePendingTransition(0, 0)
