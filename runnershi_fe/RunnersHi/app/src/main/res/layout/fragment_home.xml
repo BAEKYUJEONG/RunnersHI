@@ -14,8 +14,7 @@
         android:layout_height="match_parent"
         android:clipToPadding="false"
         android:divider="@drawable/blank_divider"
-        android:orientation="vertical"
-        android:showDividers="middle">
+        android:orientation="vertical">
 
         <androidx.cardview.widget.CardView
             android:id="@+id/eventCardView"
@@ -45,12 +44,19 @@
         </androidx.cardview.widget.CardView>
 
         <ImageView
-            android:id="@+id/line_divider"
+            android:id="@+id/imageView2"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:scaleType="centerCrop"
-            android:src="@android:drawable/divider_horizontal_textfield"
-            tools:src="@android:drawable/divider_horizontal_textfield" />
+            android:src="@drawable/blank_divider" />
+
+        <TextView
+            android:id="@+id/timelineTextView"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:paddingLeft="15dp"
+            android:text="타임라인"
+            android:textSize="16sp"
+            android:textStyle="bold" />
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -59,35 +65,12 @@
             android:orientation="vertical"
             android:showDividers="middle">
 
-            <androidx.cardview.widget.CardView
-                android:id="@+id/timeline"
-                android:layout_width="match_parent"
-                android:layout_height="100dp"
-                app:cardCornerRadius="10dp"
-                app:cardElevation="5dp"
-                app:contentPadding="10dp">
-
-                <TextView
-                    android:id="@+id/userName"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="에리얼님" />
-
-                <TextView
-                    android:id="@+id/content"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:text="9.8K를 달렸습니다!"
-                    android:textSize="24sp" />
-
-            </androidx.cardview.widget.CardView>
-
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/homeRecyclerView"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent" />
         </LinearLayout>
+
     </LinearLayout>
 
 </LinearLayout>
