@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.A306.runnershi.Fragment.Ranking.RankingAdapter
 import com.A306.runnershi.Helper.RetrofitClient
 import com.A306.runnershi.Model.Friend
 import com.A306.runnershi.R
