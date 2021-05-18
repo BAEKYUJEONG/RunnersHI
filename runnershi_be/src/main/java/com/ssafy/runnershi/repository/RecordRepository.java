@@ -2,6 +2,7 @@ package com.ssafy.runnershi.repository;
 
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -23,5 +24,8 @@ public interface RecordRepository extends JpaRepository<Record, Long> {
       value = "SELECT * FROM record WHERE DATE_FORMAT(end_time, '%Y-%m-%d') = :today AND user_id = :userId",
       nativeQuery = true)
   public Record searchTodayRecord(@Param("userId") String userId, @Param("today") String today);
+
+  @Query(value = "SELECT * FROM record WHERE user_id in :friendList", nativeQuery = true)
+  public ArrayList<Record> getFriendRecordList(@Param("friendList") List<String> friendList);
 
 }

@@ -15,6 +15,7 @@ import com.ssafy.runnershi.entity.Record;
 import com.ssafy.runnershi.entity.RecordDetail;
 import com.ssafy.runnershi.entity.RecordResult;
 import com.ssafy.runnershi.entity.UserInfo;
+import com.ssafy.runnershi.repository.FriendRepository;
 import com.ssafy.runnershi.repository.RecordRepository;
 import com.ssafy.runnershi.repository.UserInfoRepository;
 
@@ -28,6 +29,9 @@ public class RecordServiceImpl implements RecordService {
   private UserInfoRepository userInfoRepo;
 
   @Autowired
+  private FriendRepository friendRepo;
+
+  @Autowired
   private ZSetOperations<String, String> zset;
 
   @Override
@@ -36,12 +40,12 @@ public class RecordServiceImpl implements RecordService {
     if (userInfo == null)
       return "invalid token";
 
-    if (record.getEndTime() == null || record.getTitle() == null
-        || "".contentEquals(record.getTitle()))
-      return "invalid data";
-    // if (record.getEndTime() == null) {
-    // record.setEndTime(new Date());
-    // }
+    // if (record.getEndTime() == null || record.getTitle() == null
+    // || "".contentEquals(record.getTitle()))
+    // return "invalid data";
+    if (record.getEndTime() == null) {
+      record.setEndTime(new Date());
+    }
 
     // 유저 정보 업데이트
     double pace = record.getRunningTime() / record.getDistance();
@@ -177,7 +181,17 @@ public class RecordServiceImpl implements RecordService {
     if (userInfo == null)
       return null;
 
-    ArrayList<Record> recordList = (ArrayList<Record>) recordRepo.findAll();
+    // ArrayList<Record> recordList = (ArrayList<Record>) recordRepo.findAll();
+    // ArrayList<AllRecord> result = new ArrayList<AllRecord>();
+    // for (Record record : recordList) {
+    // result.add(new AllRecord(record.getRecordId(), record.getUser().getUserName().getUserName(),
+    // record.getDistance(), record.getEndTime(), record.getRunningTime(), record.getTitle()));
+    // }
+    //
+    // return result;
+
+    ArrayList<Record> recordList =
+        recordRepo.getFriendRecordList(friendRepo.getFriendsUserId(userId));
     ArrayList<AllRecord> result = new ArrayList<AllRecord>();
     for (Record record : recordList) {
       result.add(new AllRecord(record.getRecordId(), record.getUser().getUserName().getUserName(),
