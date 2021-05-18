@@ -10,7 +10,15 @@ import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.R
 import com.A306.runnershi.Model.Room
+import com.A306.runnershi.Openvidu.OpenviduRetrofitClient
+import com.google.gson.Gson
+import com.google.gson.reflect.TypeToken
 import kotlinx.android.synthetic.main.fragment_group_run_room_list.*
+import okhttp3.ResponseBody
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
+import timber.log.Timber
 
 
 class GroupRunRoomListFragment : Fragment() {
@@ -41,6 +49,30 @@ class GroupRunRoomListFragment : Fragment() {
 
         var list: ArrayList<Room> = tempRoomList
         var link = roomListAdapterToList()
+
+        OpenviduRetrofitClient.getSessionInstance().getRoomList().enqueue(object :Callback<ResponseBody>{
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                Timber.e("세션 리스트 제발!!!!!")
+                val receivedJson = Gson().fromJson(response.body()?.string(), Map::class.java)
+                var receivedContent = receivedJson["content"].toString()
+                Timber.e(receivedContent)
+                receivedContent = receivedContent.replace("=,", "=\"\",")
+                Timber.e(receivedContent)
+                val sessionList = Gson().fromJson(receivedContent, List::class.java)
+                if (sessionList.isNotEmpty()){
+                    for (session in sessionList){
+                        Timber.e(session.toString())
+                    }
+                }
+
+//                Timber.e(response.body()?.string())
+            }
+
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                TODO("Not yet implemented")
+            }
+
+        })
 
         roomListAdapter = RoomListAdapter(list, link)
         runningListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)

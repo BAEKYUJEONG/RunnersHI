@@ -2,6 +2,7 @@ package com.A306.runnershi.Openvidu
 
 import com.A306.runnershi.Helper.RetrofitService
 import com.google.gson.GsonBuilder
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
@@ -21,6 +22,19 @@ object OpenviduRetrofitClient {
                     .addConverterFactory(GsonConverterFactory.create(gson))
                     .build()
                     .create(OpenviduRetrofitService::class.java)
+        }
+
+        return instance!!
+    }
+
+    fun getSessionInstance(): OpenviduRetrofitService{
+        if (instance == null) {
+            instance = Retrofit.Builder()
+                .baseUrl("https://k4a3061.p.ssafy.io")
+                .client(OkHttpClient().newBuilder().addInterceptor(BasicAuthInterceptor("OPENVIDUAPP", "MY_SECRET")).build())
+                .addConverterFactory(GsonConverterFactory.create(gson))
+                .build()
+                .create(OpenviduRetrofitService::class.java)
         }
 
         return instance!!
