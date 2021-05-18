@@ -5,12 +5,14 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.R
 import kotlinx.android.synthetic.main.fragment_home.*
-import kotlinx.android.synthetic.main.fragment_profile.*
 
 class HomeFragment : Fragment() {
+
+    private lateinit var timelineAdapter: TimelineAdapter
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -27,6 +29,7 @@ class HomeFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         eventClick()
+        setupRecyclerView()
     }
 
     private fun eventClick(){
@@ -45,5 +48,11 @@ class HomeFragment : Fragment() {
         eventTextView.setOnClickListener{
             mainActivity.makeCurrentFragment(eventFragment)
         }
+    }
+
+    private fun setupRecyclerView() = homeRecyclerView.apply{
+        timelineAdapter = TimelineAdapter()
+        adapter = timelineAdapter
+        layoutManager = LinearLayoutManager(requireContext())
     }
 }
