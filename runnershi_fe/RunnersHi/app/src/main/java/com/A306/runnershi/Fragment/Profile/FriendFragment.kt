@@ -16,6 +16,7 @@ import com.A306.runnershi.ViewModel.UserViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_friend.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -68,7 +69,8 @@ class FriendFragment : Fragment() {
                         for(friend in friend_list){
                             Timber.e(friend["userName"].toString())
                             val friendName = friend["userName"].toString()
-                            val friendItem = Friend(friendName)
+                            val friendRank = friend["rank"].toString().replace(".0","")
+                            val friendItem = Friend(friendName, friendRank)
                             friendViewList.add(friendItem)
                         }
                         setupRecyclerView(friendViewList.toTypedArray())
@@ -79,5 +81,9 @@ class FriendFragment : Fragment() {
         })
     }
 
-    private fun setupRecyclerView(friendList:Array<Friend>) {}
+    private fun setupRecyclerView(friendList:Array<Friend>) = friendRecyclerView.apply {
+        friendAdapter = FriendAdapter(friendList, this@FriendFragment)
+        adapter = friendAdapter
+        layoutManager = LinearLayoutManager(requireContext())
+    }
 }
