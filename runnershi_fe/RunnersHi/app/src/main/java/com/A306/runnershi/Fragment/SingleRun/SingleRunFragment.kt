@@ -13,12 +13,15 @@ import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.AppModule
 import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.Fragment.Home.HomeFragment
+import com.A306.runnershi.Fragment.SingleRun.RunResultFragment
+import com.A306.runnershi.Model.Run
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import com.A306.runnershi.ViewModel.SingleRunViewModel
 import com.A306.runnershi.ViewModel.UserViewModel
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_single_run.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
@@ -29,19 +32,30 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
 
     private var curTimeMillis = 0L
 
+    var runResult = Run()
+
+    inner class mapFragmentToSingleRunFragment {
+        fun getRunData(runData: Run) {
+            runResult = runData
+        }
+    }
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         requestPermissions()
         val mainActivity = activity as MainActivity
         val homeFragment = HomeFragment()
-        val mapFragment = MapFragment()
+        val link = mapFragmentToSingleRunFragment()
+        val mapFragment = MapFragment(link)
+        val run = Run()
+        val runResultFragment = RunResultFragment()
 
         subscribeToObservers(mainActivity)
-        
+
         // 정지 버튼
         stopRunButton.setOnClickListener {
             // Dialog 띄우기
-            showCancelRunningDialog(mainActivity, homeFragment, mapFragment)
+            showCancelRunningDialog(mainActivity, homeFragment, mapFragment, runResultFragment)
         }
 
         // 지도로 보기 버튼
@@ -50,15 +64,18 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
         }
     }
 
-    private fun showCancelRunningDialog(activity: MainActivity, fragment: HomeFragment, mapFragment: MapFragment){
+    private fun showCancelRunningDialog(activity: MainActivity, fragment: HomeFragment, mapFragment: MapFragment, runResultFragment: RunResultFragment){
         activity.sendCommandToService("ACTION_PAUSE_SERVICE")
+//        activity.makeCurrentFragment(mapFragment, "hide")
         val dialog = MaterialAlertDialogBuilder(requireContext())
                 .setTitle("종료하십니까?")
                 .setMessage("정말 달리기를 종료하시겠습니까?")
                 .setIcon(R.drawable.ic_baseline_person_24)
                 .setPositiveButton("종료"){ _, _ ->
                     TrackingService.totallyFinished.postValue(1)
-                    activity.makeCurrentFragment(mapFragment, "hide")
+                    // TODO "여기서 맵 프래그 대신 result 프래그로 돌려보자"
+                    tempfunction(activity)
+//                    activity.makeCurrentFragment(mapFragment, "hide")
                 }
                 .setNegativeButton("다시 뛰기"){ dialogInteface, _ ->
                     activity.sendCommandToService("ACTION_START_OR_RESUME_SERVICE")
@@ -66,6 +83,12 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
                 }
                 .create()
         dialog.show()
+    }
+
+    private fun tempfunction(activity: MainActivity) {
+        Log.i("임시로", "${runResult.title}")
+        val runResultFragment = RunResultFragment()
+        activity.makeCurrentFragment(runResultFragment, "hide")
     }
 
     private fun subscribeToObservers(activity: MainActivity){
