@@ -11,7 +11,7 @@ object OpenviduRetrofitClient {
     private var instance: OpenviduRetrofitService? = null
     private val gson = GsonBuilder().setLenient().create()
     // 서버 주소
-    private const val BASE_URL = "https://skeldtcan.iptime.org:8081"
+    private const val BASE_URL = "https://k4a306.p.ssafy.io:8081"
 
     fun getInstance(): OpenviduRetrofitService {
         if (instance == null) {

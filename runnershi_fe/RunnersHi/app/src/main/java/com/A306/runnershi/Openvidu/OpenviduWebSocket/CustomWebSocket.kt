@@ -6,6 +6,7 @@ import android.os.Build
 import android.os.Handler
 import android.util.Log
 import android.widget.Toast
+import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.Openvidu.OpenviduConstant.JsonConstants
 import com.A306.runnershi.Openvidu.OpenviduModel.LocalParticipant
 import com.A306.runnershi.Openvidu.OpenviduModel.Participant
@@ -35,7 +36,7 @@ import javax.net.ssl.SSLContext
 import javax.net.ssl.TrustManager
 import javax.net.ssl.X509TrustManager
 
-class CustomWebSocket : WebSocketListener, AsyncTask<Activity, Void, Void> {
+class CustomWebSocket : WebSocketListener, AsyncTask<MainActivity, Void, Void> {
     private val TAG = "CustomWebSocketListener"
     private val PING_MESSAGE_INTERVAL = 5
     private val trustManagers = arrayOf<TrustManager>(object : X509TrustManager {
@@ -63,11 +64,11 @@ class CustomWebSocket : WebSocketListener, AsyncTask<Activity, Void, Void> {
     private val IDS_ONICECANDIDATE = Collections.newSetFromMap(ConcurrentHashMap<Int, Boolean>())
     private var roomInfo: RoomInfo? = null
     private var openviduUrl: String? = null
-    private var activity: Activity? = null
+    private var activity: MainActivity? = null
     private var websocket: WebSocket? = null
     private var websocketCancelled = false
 
-    constructor(roomInfo: RoomInfo, openviduUrl: String?, activity: Activity?) {
+    constructor(roomInfo: RoomInfo, openviduUrl: String?, activity: MainActivity?) {
         this.roomInfo = roomInfo
         this.openviduUrl = openviduUrl
         this.activity = activity
@@ -356,7 +357,7 @@ class CustomWebSocket : WebSocketListener, AsyncTask<Activity, Void, Void> {
         }
         val remoteParticipant =
             this.roomInfo?.let { RemoteParticipant(connectionId, participantName, it) }
-        activity.createRemoteParticipantVideo(remoteParticipant)
+        activity?.createRemoteParticipantVideo(remoteParticipant)
         if (remoteParticipant != null) {
             this.roomInfo?.createRemotePeerConnection(remoteParticipant.connectionId)
         }
@@ -417,7 +418,7 @@ class CustomWebSocket : WebSocketListener, AsyncTask<Activity, Void, Void> {
         }
     }
 
-    override fun doInBackground(vararg params: Activity?): Void? {
+    override fun doInBackground(vararg params: MainActivity?): Void? {
         try {
             val factory = WebSocketFactory()
             val sslContext = SSLContext.getInstance("TLS")
@@ -433,7 +434,7 @@ class CustomWebSocket : WebSocketListener, AsyncTask<Activity, Void, Void> {
             val myRunnable = Runnable {
                 val toast = Toast.makeText(activity, e.message, Toast.LENGTH_LONG)
                 toast.show()
-                activity.leaveSession()
+                activity!!.leaveSession()
             }
             mainHandler.post(myRunnable)
             websocketCancelled = true
@@ -443,7 +444,7 @@ class CustomWebSocket : WebSocketListener, AsyncTask<Activity, Void, Void> {
             val myRunnable = Runnable {
                 val toast = Toast.makeText(activity, e.message, Toast.LENGTH_LONG)
                 toast.show()
-                activity.leaveSession()
+                activity!!.leaveSession()
             }
             mainHandler.post(myRunnable)
             websocketCancelled = true
@@ -453,7 +454,7 @@ class CustomWebSocket : WebSocketListener, AsyncTask<Activity, Void, Void> {
             val myRunnable = Runnable {
                 val toast = Toast.makeText(activity, e.message, Toast.LENGTH_LONG)
                 toast.show()
-                activity.leaveSession()
+                activity!!.leaveSession()
             }
             mainHandler.post(myRunnable)
             websocketCancelled = true
@@ -463,7 +464,7 @@ class CustomWebSocket : WebSocketListener, AsyncTask<Activity, Void, Void> {
             val myRunnable = Runnable {
                 val toast = Toast.makeText(activity, e.message, Toast.LENGTH_LONG)
                 toast.show()
-                activity.leaveSession()
+                activity!!.leaveSession()
             }
             mainHandler.post(myRunnable)
             websocketCancelled = true

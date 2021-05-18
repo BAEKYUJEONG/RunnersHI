@@ -38,7 +38,8 @@ import javax.inject.Inject
 @AndroidEntryPoint
 open class MainActivity : AppCompatActivity() {
 
-    val MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 101
+    private val MY_PERMISSIONS_REQUEST_CAMERA = 100
+    private val MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 101
     private val MY_PERMISSIONS_REQUEST = 102
 
     // 권한 관련 리스트 설정 : 나중에 허가 요청 받아서 연결하기!
@@ -62,6 +63,9 @@ open class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         initSpeedDial(savedInstanceState == null)
+
+        Timber.e("권한이 있나?? ${arePermissionGranted()}")
+        askForPermissions()
 
 
         // 하단 Navigation Bar 설정
@@ -335,8 +339,18 @@ open class MainActivity : AppCompatActivity() {
                 ) != PackageManager.PERMISSION_DENIED
     }
 
-    open fun askForPermissions() {
-        if (ContextCompat.checkSelfPermission(
+    fun askForPermissions() {
+        Timber.e("권한 설정??")
+        if ((ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+                    != PackageManager.PERMISSION_GRANTED) &&
+            (ContextCompat.checkSelfPermission(this, Manifest.permission.RECORD_AUDIO)
+                    != PackageManager.PERMISSION_GRANTED)
+        ) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.CAMERA, Manifest.permission.RECORD_AUDIO),
+                MY_PERMISSIONS_REQUEST
+            )
+        } else if (ContextCompat.checkSelfPermission(
                 this,
                 Manifest.permission.RECORD_AUDIO
             ) != PackageManager.PERMISSION_GRANTED
@@ -345,6 +359,16 @@ open class MainActivity : AppCompatActivity() {
                 this, arrayOf(Manifest.permission.RECORD_AUDIO),
                 MY_PERMISSIONS_REQUEST_RECORD_AUDIO
             )
+        } else if (ContextCompat.checkSelfPermission(this, Manifest.permission.CAMERA)
+            != PackageManager.PERMISSION_GRANTED
+        ) {
+            ActivityCompat.requestPermissions(
+                this, arrayOf(Manifest.permission.CAMERA),
+                MY_PERMISSIONS_REQUEST_CAMERA
+            )
         }
     }
+
+    fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipant?){}
+    fun leaveSession(){}
 }

@@ -8,6 +8,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -17,6 +18,7 @@ import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.Model.Room
 import com.A306.runnershi.Model.User
 import com.A306.runnershi.Openvidu.OpenviduUtil.CustomHttpClient
+import com.A306.runnershi.Openvidu.Permission.PermissionsDialogFragment
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import dagger.hilt.android.AndroidEntryPoint
@@ -70,11 +72,18 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
         subscribeToObservers()
 
         if(mainActivity != null){
+            Timber.e("MAIN NULL 아님")
             if (mainActivity!!.arePermissionGranted()){
-                httpClient = CustomHttpClient("https://k4a3061.p.ssafy.io/",
+                Timber.e("HTTP CLIENT 실행")
+                httpClient = CustomHttpClient(
+                    "https://k4a3061.p.ssafy.io/",
                     "Basic " + Base64.encodeToString(
-                        "OPENVIDUAPP:MY_SECRET".toByteArray(), android.util.Base64.DEFAULT).trim()
-                    )
+                        "OPENVIDUAPP:MY_SECRET".toByteArray(), android.util.Base64.DEFAULT
+                    ).trim()
+                )
+            }else{
+                val permissionsFragment: DialogFragment = PermissionsDialogFragment()
+                permissionsFragment.show(mainActivity!!.supportFragmentManager, "Permissions Fragment")
             }
         }
 
@@ -108,7 +117,7 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
     }
 
     private fun requestPermissions(){
-        if(TrackingUtility.hasLocationPermissions(requireContext())){
+        if(TrackingUtility.hasLocationPermissions(requireContext()) && TrackingUtility.hasLocationPermissions(requireContext())){
             return
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
@@ -117,7 +126,9 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
                 "앱 사용을 위해 위치 권한 항상 허용이 필요합니다.",
                 0,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.MODIFY_AUDIO_SETTINGS
             )
         } else{
             EasyPermissions.requestPermissions(
@@ -126,7 +137,9 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
                 0,
                 Manifest.permission.ACCESS_COARSE_LOCATION,
                 Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                Manifest.permission.RECORD_AUDIO,
+                Manifest.permission.MODIFY_AUDIO_SETTINGS
             )
         }
     }
