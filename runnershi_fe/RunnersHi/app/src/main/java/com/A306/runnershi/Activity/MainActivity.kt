@@ -102,19 +102,19 @@ open class MainActivity : AppCompatActivity() {
         // 상단 앱바 관련
         val settingsActivity = Intent(this, SettingsActivity::class.java)
 
-        topAppBar.setOnMenuItemClickListener { menuItem ->
-            val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
-            when(menuItem.itemId) {
-                R.id.navigation_alert -> {
-                    // 여기 alert dialog 띄워주자
-                    speedDialView.close()
-                }
-                R.id.navigation_setting -> {
-                    startActivity(settingsActivity)
-                }
-            }
-            true
-        }
+//        topAppBar.setOnMenuItemClickListener { menuItem ->
+//            val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
+//            when(menuItem.itemId) {
+//                R.id.navigation_alert -> {
+//                    // 여기 alert dialog 띄워주자
+//                    speedDialView.close()
+//                }
+//                R.id.navigation_setting -> {
+//                    startActivity(settingsActivity)
+//                }
+//            }
+//            true
+//        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -149,14 +149,6 @@ open class MainActivity : AppCompatActivity() {
         if(intent?.action == "ACTION_SHOW_TRACKING_FRAGMENT"){
             makeCurrentFragment(singleRunFragment)
         }
-    }
-
-    //AchievementFragment로 이동하는 함수
-    fun showAchievemnt(fragment: Fragment){
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.ranking_layout, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
     }
 
     // 라디오 클릭
