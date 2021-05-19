@@ -17,6 +17,7 @@ import java.util.Random;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.SetOperations;
 import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.mail.SimpleMailMessage;
@@ -26,12 +27,14 @@ import org.springframework.stereotype.Service;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.ssafy.runnershi.entity.Custom;
+import com.ssafy.runnershi.entity.Friend;
 import com.ssafy.runnershi.entity.Profile;
 import com.ssafy.runnershi.entity.SearchResult;
 import com.ssafy.runnershi.entity.User;
 import com.ssafy.runnershi.entity.UserInfo;
 import com.ssafy.runnershi.entity.UserResult;
 import com.ssafy.runnershi.repository.CustomRepository;
+import com.ssafy.runnershi.repository.FriendRepository;
 import com.ssafy.runnershi.repository.UserInfoRepository;
 import com.ssafy.runnershi.repository.UserRepository;
 
@@ -49,6 +52,9 @@ public class UserServiceImpl implements UserService {
   private CustomRepository customRepo;
 
   @Autowired
+  private FriendRepository friendRepo;
+
+  @Autowired
   private JwtService jwtService;
 
   @Autowired
@@ -62,6 +68,9 @@ public class UserServiceImpl implements UserService {
 
   @Autowired
   private ZSetOperations<String, String> zset;
+
+  @Autowired
+  private RedisTemplate<String, String> redisTemplate;
 
   @Override
   public UserResult signInKakao(String accessToken) {
@@ -519,6 +528,68 @@ public class UserServiceImpl implements UserService {
             userInfo.getTotalDistance(), userInfo.getTotalTime(), userInfo.getTotalDay(),
             userInfo.getBestPace(), userInfo.getWeeklyDistance(), userInfo.getWeeklyTime(),
             userInfo.getWeeklyPace());
+    return profile;
+  }
+
+
+  @Override
+  public Profile updateUserName(String userId, String userName) {
+    User user = userRepo.findByUserId(userId);
+    if (user == null || userName == null || "".equals(userName))
+      return null;
+
+    // 이전 닉네임 레디스에서 제거
+    String oldValue = user.getUserId() + ";" + user.getUserName();
+    zset.remove("totalDistanceRank", oldValue);
+    zset.remove("totalTimeRank", oldValue);
+    zset.remove("totalPaceRank", oldValue);
+
+    zset.remove("weeklyDistanceRank", oldValue);
+    zset.remove("weeklyTimeRank", oldValue);
+    zset.remove("weeklyPaceRank", oldValue);
+
+    redisTemplate.delete(oldValue);
+
+    ArrayList<Friend> friendList = friendRepo.findByUser_UserId_UserId(user.getUserId());
+    for (Friend friend : friendList) {
+      User friendUser = friend.getFriendUser().getUserName();
+      set.remove(friendUser.getUserId() + ";" + friendUser.getUserName(), oldValue);
+    }
+
+    user.setUserName(userName);
+    userRepo.save(user);
+
+    UserInfo userInfo = userInfoRepo.findByUserId_UserId(userId);
+    if (userInfo == null)
+      return null;
+
+    // 바꾼 닉네임 레디스에 추가
+    String value = user.getUserId() + ";" + user.getUserName();
+    zset.add("totalDistanceRank", value, userInfo.getTotalDistance());
+    zset.add("totalTimeRank", value, userInfo.getTotalTime());
+    zset.add("totalPaceRank", value, userInfo.getBestPace());
+
+    zset.add("weeklyDistanceRank", value, userInfo.getWeeklyDistance());
+    zset.add("weeklyTimeRank", value, userInfo.getWeeklyTime());
+    zset.add("weeklyPaceRank", value, userInfo.getWeeklyPace());
+
+    set.add(value, value);
+
+    friendList = friendRepo.findByUser_UserId_UserId(userInfo.getUserId().getUserId());
+    for (Friend friend : friendList) {
+      User friendUser = friend.getFriendUser().getUserName();
+      set.add(value, friendUser.getUserId() + ";" + friendUser.getUserName());
+    }
+
+    // profile 리턴
+    Profile profile =
+        new Profile(userInfo.getUserId().getUserId(), userInfo.getUserName().getUserName(),
+            zset.reverseRank("totalDistanceRank",
+                userInfo.getUserId().getUserId() + ";" + userInfo.getUserName().getUserName()) + 1,
+            userInfo.getTotalDistance(), userInfo.getTotalTime(), userInfo.getTotalDay(),
+            userInfo.getBestPace(), userInfo.getWeeklyDistance(), userInfo.getWeeklyTime(),
+            userInfo.getWeeklyPace());
+
     return profile;
   }
 

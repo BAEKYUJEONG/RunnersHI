@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -180,5 +181,19 @@ public class UserController {
     result = userService.getUserProfile(userId);
     return new ResponseEntity<Profile>(result, HttpStatus.OK);
   }
+
+  @PutMapping("/username/{userName}")
+  public ResponseEntity<Profile> updateUserName(@PathVariable String userName,
+      HttpServletRequest req) {
+    Profile result = null;
+    String jwt = req.getHeader("token");
+    String userId = jwtService.decode(jwt);
+    if (userId == null) {
+      return new ResponseEntity<Profile>(result, HttpStatus.OK);
+    }
+    result = userService.updateUserName(userId, userName);
+    return new ResponseEntity<Profile>(result, HttpStatus.OK);
+  }
+
 
 }
