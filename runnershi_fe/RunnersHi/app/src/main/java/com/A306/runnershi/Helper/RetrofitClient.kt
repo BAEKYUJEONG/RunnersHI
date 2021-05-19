@@ -9,7 +9,7 @@ object RetrofitClient {
     private var instance: RetrofitService? = null
     private val gson = GsonBuilder().setLenient().create()
     // 서버 주소
-    private const val BASE_URL = "http://k4a306.p.ssafy.io:8081"
+    private const val BASE_URL = "https://k4a306.p.ssafy.io:8081"
 
     fun getInstance(): RetrofitService {
         if (instance == null) {
