@@ -147,6 +147,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/spoqahansansneo_regular"
+                    android:paddingLeft="5dp"
                     android:text="거리"
                     android:textSize="22sp" />
 
@@ -154,10 +155,12 @@
                     android:id="@+id/distance"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/sebang_gothic_bold"
                     android:gravity="center_vertical"
                     android:inputType="numberDecimal"
                     android:padding="5dp"
                     android:text="27.3K"
+                    android:textColor="@color/brand"
                     android:textSize="28sp" />
 
             </LinearLayout>
@@ -174,6 +177,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:fontFamily="@font/spoqahansansneo_regular"
+                    android:paddingLeft="5dp"
                     android:text="페이스"
                     android:textAlignment="center"
                     android:textSize="22sp" />
@@ -182,10 +186,12 @@
                     android:id="@+id/pace"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/sebang_gothic_bold"
                     android:gravity="center_vertical"
                     android:inputType="numberSigned"
                     android:padding="5dp"
                     android:text="0' 00''"
+                    android:textColor="@color/brand"
                     android:textSize="28sp" />
 
             </LinearLayout>
