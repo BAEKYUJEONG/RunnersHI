@@ -13,6 +13,7 @@ import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.Activity.RegisterActivity
 import com.A306.runnershi.Helper.RetrofitClient
 import com.A306.runnershi.Model.User
+import com.A306.runnershi.Openvidu.Permission.PermissionInfo
 import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.UserViewModel
 import com.google.gson.Gson
@@ -71,9 +72,13 @@ class SocialRegisterFragment : Fragment() {
                                     Timber.e("해치웠나")
                                     var user = User(result["token"].toString(), result["userId"].toString(), result["userName"].toString(), result["runningType"].toString())
                                     viewModel.insertUser(user)
-                                    val intent = Intent(activity, MainActivity::class.java)
-                                    startActivity(intent)
-                                    activity?.overridePendingTransition(0, 0)
+
+                                    val permissionInfo = PermissionInfo(requireContext())
+                                    permissionInfo.showLocationPermissionInfo(Intent(activity, MainActivity::class.java))
+
+//                                    val intent = Intent(activity, MainActivity::class.java)
+//                                    startActivity(intent)
+//                                    activity?.overridePendingTransition(0, 0)
                                 }
                             } else{
                                 Timber.e("FUCK")

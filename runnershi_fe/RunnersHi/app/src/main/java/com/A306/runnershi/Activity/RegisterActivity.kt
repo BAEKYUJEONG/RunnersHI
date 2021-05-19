@@ -1,9 +1,14 @@
 package com.A306.runnershi.Activity
 
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.provider.Settings.Global.getString
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.compose.ui.graphics.drawscope.DrawContext
+import androidx.core.content.ContextCompat.startActivity
 import androidx.fragment.app.Fragment
 import com.A306.runnershi.Fragment.Register.NormalRegisterFragment
 import com.A306.runnershi.Fragment.Register.SocialRegisterFragment
