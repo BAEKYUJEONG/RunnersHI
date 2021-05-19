@@ -151,6 +151,14 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
+//    //AchievementFragment로 이동하는 함수
+//    fun showAchievemnt(fragment: Fragment){
+//        val transaction = supportFragmentManager.beginTransaction()
+//        transaction.replace(R.id.ranking_layout, fragment)
+//        transaction.addToBackStack(null)
+//        transaction.commit()
+//    }
+
     // 라디오 클릭
     fun radioButtonClicked(view: View) {
         if (view is RadioButton) {

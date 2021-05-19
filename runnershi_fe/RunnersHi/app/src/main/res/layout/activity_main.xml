@@ -6,22 +6,23 @@
     android:layout_height="match_parent"
     tools:context=".Activity.MainActivity">
 
-<!--    <com.google.android.material.appbar.MaterialToolbar-->
-<!--        android:id="@+id/topAppBar"-->
-<!--        android:layout_width="match_parent"-->
-<!--        android:layout_height="50dp"-->
-<!--        android:layout_alignParentTop="true"-->
-<!--        android:layout_alignParentStart="true"-->
-<!--        app:title="@string/app_name"-->
-<!--        app:menu="@menu/top_navigation_menu"-->
-<!--        style="@style/Widget.MaterialComponents.Toolbar.Primary"-->
-<!--        />-->
+    <com.google.android.material.appbar.MaterialToolbar
+        android:id="@+id/topAppBar"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true"
+        app:title="@string/app_name"
+        app:menu="@menu/top_navigation_menu"
+        style="@style/Widget.MaterialComponents.Toolbar.Primary"
+        />
 
     <FrameLayout
         android:id="@+id/main_fragment"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_above="@id/bottom_navigation"
+        android:layout_below="@id/topAppBar"
         android:layout_alignParentEnd="true">
 
         <com.leinardi.android.speeddial.SpeedDialOverlayLayout
@@ -39,29 +40,29 @@
             app:sdOverlayLayout="@id/overlay" />
 
 
-<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--            android:id="@+id/floatingActionButton"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom|center"-->
-<!--            android:layout_margin="16dp"-->
-<!--            android:elevation="4dp"-->
-<!--            android:clickable="true"-->
-<!--            android:contentDescription="@string/fab_content_desc"-->
-<!--            android:focusable="true"-->
-<!--            app:srcCompat="@drawable/ic_baseline_directions_run_24" />-->
+        <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--            android:id="@+id/floatingActionButton"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="bottom|center"-->
+        <!--            android:layout_margin="16dp"-->
+        <!--            android:elevation="4dp"-->
+        <!--            android:clickable="true"-->
+        <!--            android:contentDescription="@string/fab_content_desc"-->
+        <!--            android:focusable="true"-->
+        <!--            app:srcCompat="@drawable/ic_baseline_directions_run_24" />-->
 
-<!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
-<!--            android:id="@+id/floatingActionButtonTEMP"-->
-<!--            android:layout_width="wrap_content"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_gravity="bottom|right"-->
-<!--            android:layout_margin="16dp"-->
-<!--            android:clickable="true"-->
-<!--            android:contentDescription="@string/fab_content_desc"-->
-<!--            android:focusable="true"-->
-<!--            app:rippleColor="#FFEB3B"-->
-<!--            app:srcCompat="@drawable/ic_baseline_directions_run_24" />-->
+        <!--        <com.google.android.material.floatingactionbutton.FloatingActionButton-->
+        <!--            android:id="@+id/floatingActionButtonTEMP"-->
+        <!--            android:layout_width="wrap_content"-->
+        <!--            android:layout_height="wrap_content"-->
+        <!--            android:layout_gravity="bottom|right"-->
+        <!--            android:layout_margin="16dp"-->
+        <!--            android:clickable="true"-->
+        <!--            android:contentDescription="@string/fab_content_desc"-->
+        <!--            android:focusable="true"-->
+        <!--            app:rippleColor="#FFEB3B"-->
+        <!--            app:srcCompat="@drawable/ic_baseline_directions_run_24" />-->
 
     </FrameLayout>
 
