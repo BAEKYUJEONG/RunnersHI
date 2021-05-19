@@ -12,7 +12,7 @@ class FriendAdapter(private val friendList:Array<Friend>, private val friendFrag
 
     class FriendViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
         val friend_nick: TextView = itemView.findViewById(R.id.friend_nick)
-        val friend_rank : TextView = itemView.findViewById(R.id.friend_rank)
+        val friend_rank: TextView = itemView.findViewById(R.id.friend_rank)
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FriendViewHolder {

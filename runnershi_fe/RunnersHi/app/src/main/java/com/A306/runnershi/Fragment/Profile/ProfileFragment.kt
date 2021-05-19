@@ -24,6 +24,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() { //, View.OnClickListener
@@ -75,10 +76,19 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                         val user = Gson().fromJson(response.body()?.string(), Map::class.java)
                         //val userId = user["userId"].toString()
+                        //Timber.e(user["userName"].toString())
                         profileTab.text = user["userName"].toString()
                         ranking_num.text = user["totalRank"].toString().replace(".0","")
-                        distance.text = user["total_distance"].toString()
-                        pace.text = user["best_pace"].toString()
+                        if(user["total_distance"].toString().equals("null")){
+                            distance.text = "달려주세요!"
+                        } else {
+                            distance.text = user["total_distance"].toString()
+                        }
+                        if(user["best_pace"].toString().equals("null")){
+                            pace.text = ""
+                        } else {
+                            pace.text = user["best_pace"].toString()
+                        }
                     }
                 })
 

@@ -184,4 +184,31 @@ public class FriendServiceImpl implements FriendService {
   }
 
 
+  @Override
+  public String addFriendTest(String userId1, String userId2) {
+    UserInfo user1 = userInfoRepo.findByUserId_UserId(userId1);
+    UserInfo user2 = userInfoRepo.findByUserId_UserId(userId2);
+
+    Friend friend1 = new Friend();
+    friend1.setAlarm((byte) 1);
+    friend1.setFriendUser(user1);
+    friend1.setUser(user2);
+    friendRepo.save(friend1);
+
+    set.add(user1.getUserId().getUserId() + ";" + user1.getUserName().getUserName(),
+        user2.getUserId().getUserId() + ";" + user2.getUserName().getUserName());
+
+    Friend friend2 = new Friend();
+    friend2.setAlarm((byte) 1);
+    friend2.setFriendUser(user2);
+    friend2.setUser(user1);
+    friendRepo.save(friend2);
+
+    set.add(user2.getUserId().getUserId() + ";" + user2.getUserName().getUserName(),
+        user1.getUserId().getUserId() + ";" + user1.getUserName().getUserName());
+
+    return "SUCCESS";
+  }
+
+
 }

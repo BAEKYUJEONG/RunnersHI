@@ -130,12 +130,13 @@ open class MainActivity : AppCompatActivity() {
 
         // 상단 앱바 관련
         val settingsActivity = Intent(this, SettingsActivity::class.java)
+        val alarmActivity = Intent(this, AlarmActivity::class.java)
 
         topAppBar.setOnMenuItemClickListener { menuItem ->
             val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
             when(menuItem.itemId) {
                 R.id.navigation_alert -> {
-                    // 여기 alert dialog 띄워주자
+                    startActivity(alarmActivity)
                     speedDialView.close()
                 }
                 R.id.navigation_setting -> {
