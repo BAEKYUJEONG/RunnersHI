@@ -2,12 +2,15 @@ package com.A306.runnershi.Activity
 
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.RadioButton
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -118,19 +121,19 @@ open class MainActivity : AppCompatActivity() {
         // 상단 앱바 관련
         val settingsActivity = Intent(this, SettingsActivity::class.java)
 
-//        topAppBar.setOnMenuItemClickListener { menuItem ->
-//            val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
-//            when(menuItem.itemId) {
-//                R.id.navigation_alert -> {
-//                    // 여기 alert dialog 띄워주자
-//                    speedDialView.close()
-//                }
-//                R.id.navigation_setting -> {
-//                    startActivity(settingsActivity)
-//                }
-//            }
-//            true
-//        }
+        topAppBar.setOnMenuItemClickListener { menuItem ->
+            val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
+            when(menuItem.itemId) {
+                R.id.navigation_alert -> {
+                    // 여기 alert dialog 띄워주자
+                    speedDialView.close()
+                }
+                R.id.navigation_setting -> {
+                    startActivity(settingsActivity)
+                }
+            }
+            true
+        }
     }
 
     override fun onNewIntent(intent: Intent?) {
@@ -372,4 +375,5 @@ open class MainActivity : AppCompatActivity() {
 
     fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipant?){}
     fun leaveSession(){}
+
 }
