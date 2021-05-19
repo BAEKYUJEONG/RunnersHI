@@ -9,9 +9,6 @@ import com.A306.runnershi.Model.Room
 import com.A306.runnershi.R
 import kotlinx.android.synthetic.main.group_run_room_preview.view.*
 
-//class RoomListAdapter (private var list: MutableList<Room>, private val listener:(Room) -> Unit): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
-//class RoomListAdapter (private var list: MutableList<Room>, private val callbackInterface:CallbackInterface): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
-
 class RoomListAdapter (private var list: MutableList<Room>, var link:GroupRunRoomListFragment.roomListAdapterToList): RecyclerView.Adapter<RoomListAdapter.ListItemViewHolder> () {
 
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
@@ -27,9 +24,9 @@ class RoomListAdapter (private var list: MutableList<Room>, var link:GroupRunRoo
                 1 -> roomType.text = "친구공개방"
                 2 -> roomType.text = "비공개방"
             }
-            var countToString: String = data.count.toString()
+            val countToString: String = data.count.toString()
 
-            roomCount.text = "$countToString /5"
+            roomCount.text = "$countToString 명"
         }
     }
 

@@ -1,11 +1,13 @@
 package com.A306.runnershi.Fragment.GroupRun
 
-import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
+import androidx.fragment.app.viewModels
+import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Activity.MainActivity
@@ -13,8 +15,8 @@ import com.A306.runnershi.Model.Room
 import com.A306.runnershi.Openvidu.OpenviduRetrofitClient
 import com.A306.runnershi.Openvidu.OpenviduSessionRetrofitClient
 import com.A306.runnershi.R
-import com.google.gson.Gson
-import com.google.gson.JsonObject
+import com.A306.runnershi.ViewModel.UserViewModel
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_group_run_room_list.*
 import okhttp3.ResponseBody
 import org.json.JSONArray
@@ -24,9 +26,9 @@ import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
 
-
+@AndroidEntryPoint
 class GroupRunRoomListFragment : Fragment() {
-
+    private val userViewModel: UserViewModel by viewModels()
 
     // 데이터를 불러와서 넘겨줄 예정입니다. 지금은 임시로 생성한 데이터를 넘겨주자:
     var tempRoomList: ArrayList<Room> = arrayListOf(
@@ -34,6 +36,8 @@ class GroupRunRoomListFragment : Fragment() {
             Room(2, "도란도란 밤산책", 1, 3),
             Room(3, "작심하루 다이어트", 2, 2)
     )
+
+    var token = ""
 
     // 세션 list 불러온 다음
     // 해당 세션 id를 백으로 보내서 거기에 해당되는 room 정보들을 가져온다
@@ -51,6 +55,12 @@ class GroupRunRoomListFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         getRoomList()
+        userViewModel.userInfo.observe(viewLifecycleOwner, Observer {
+            if (it != null){
+                token = it.token.toString()
+            }
+        })
+
 
     }
 
@@ -120,7 +130,24 @@ class GroupRunRoomListFragment : Fragment() {
 
     inner class roomListAdapterToList {
         fun getRoomId(room: Room) {
-            openRoom(room)
+            OpenviduRetrofitClient.getInstance().joinRoom(token, room.room_id).enqueue(object :Callback<ResponseBody>{
+                override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                    val receivedBody = response.body()?.string()
+                    Timber.e("TOKEN : ${token}, ROOM ID: ${room.room_id}")
+                    if(receivedBody != null){
+                        val newRoom = Room(room.room_id, room.title, room.type, room.count, receivedBody, room.roomSession)
+                        openRoom(newRoom)
+                    }else{
+                        Toast.makeText(requireContext(), "모종의 이유로 입장이 불가능합니다.", Toast.LENGTH_LONG).show()
+                    }
+                }
+
+                override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                    Timber.e("연결 실패")
+                }
+
+            })
+
         }
     }
 

@@ -53,7 +53,7 @@ public class LocalParticipant extends Participant {
         AudioSource audioSource = peerConnectionFactory.createAudioSource(new MediaConstraints());
         this.audioTrack = peerConnectionFactory.createAudioTrack("101", audioSource);
 
-        surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", eglBaseContext);
+//        surfaceTextureHelper = SurfaceTextureHelper.create("CaptureThread", eglBaseContext);
     }
 
     public void startCamera() {

@@ -78,9 +78,6 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
                 roomId = receivedText.toInt()
 //            roomId = 93
                 Timber.e(roomId.toString())
-                val room = Room(roomId, title, type, 1)
-
-                val roomJoinBody = mapOf("roomId" to roomId)
                 Timber.e("JOIN 시작 $members")
                 OpenviduRetrofitClient.getInstance().joinRoom(token, roomId).enqueue(
                         afterRoomNumberReceived
@@ -112,7 +109,7 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
 
                 Timber.e(sessionMap["sessionId"])
                 mainActivity?.setTokenAndSession(receivedURL.toString(), sessionMap["sessionId"].toString())
-                val room = Room(roomId, title, type, 1)
+                val room = Room(roomId, title, type, 1, receivedURL.toString(), sessionMap["sessionId"].toString())
                 val roomFragment = RoomFragment(room)
                 mainActivity?.makeCurrentFragment(roomFragment)
             }

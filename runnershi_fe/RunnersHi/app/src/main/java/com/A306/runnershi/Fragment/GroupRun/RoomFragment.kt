@@ -84,7 +84,7 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
                             "OPENVIDUAPP:${OPENVIDU_SECRET}".toByteArray(), Base64.DEFAULT
                         ).trim()
                     )
-
+                    Timber.e("ROOM SESSION : ${room.roomSession}, ROOM TOKEN : ${room.roomToken}")
                     getTokenSuccess(room.roomToken, room.roomSession)
                 } else {
                     val permissionsFragment: DialogFragment = PermissionsDialogFragment()
@@ -95,9 +95,6 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
                 }
             }
         })
-
-
-
         // 함께 뛰는 메이트들 불러오기
 //        var list: ArrayList<User> = tempUserList
 //
