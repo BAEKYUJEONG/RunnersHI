@@ -106,6 +106,15 @@ interface RetrofitService {
 
     //-------------------------------------------------//
 
+    // 알람
+    // 친구 신청 리스트
+    @GET("alarm/addfriendlist")
+    fun getAlarmFriendList(
+        @Header("token") token: String
+    ): Call<ResponseBody>
+
+    //-------------------------------------------------//
+
     // 커스텀 관리
     // 커스텀 수정
     @PUT("/custom")
