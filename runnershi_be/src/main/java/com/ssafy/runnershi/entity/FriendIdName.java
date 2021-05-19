@@ -10,4 +10,5 @@ import lombok.NoArgsConstructor;
 public class FriendIdName {
   private String userId;
   private String userName;
+  private long rank;
 }

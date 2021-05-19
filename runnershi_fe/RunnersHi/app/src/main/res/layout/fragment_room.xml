@@ -130,6 +130,7 @@
             android:gravity="center_vertical">
 
             <TextView
+                android:id="@+id/roomTitle"
                 android:layout_width="286dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -156,7 +157,7 @@
     </androidx.cardview.widget.CardView>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/recyclerView2"
+        android:id="@+id/mateListView"
         android:layout_width="350dp"
         android:layout_height="371dp"
         android:layout_marginStart="4dp"

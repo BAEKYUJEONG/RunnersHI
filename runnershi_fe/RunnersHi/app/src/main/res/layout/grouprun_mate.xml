@@ -3,35 +3,36 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <androidx.cardview.widget.CardView
         android:layout_width="match_parent"
-        android:layout_height="96dp"
+        android:layout_height="72dp"
         android:layout_gravity="center"
+        app:cardBackgroundColor="@color/teal_700"
         app:cardCornerRadius="16dp"
         app:cardElevation="10dp"
-        app:contentPadding="20dp">
+        app:contentPadding="12dp">
 
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            android:layout_gravity="center_vertical">
+            android:layout_gravity="center_vertical"
+            android:orientation="horizontal">
 
             <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/imageView"
+                android:id="@+id/matePhoto"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:scaleType="centerCrop"
-                app:civ_border_width="5dp"
                 app:civ_border_color="@color/teal_200"
+                app:civ_border_width="5dp"
                 tools:src="@tools:sample/avatars" />
 
             <TextView
-                android:id="@+id/roomName"
+                android:id="@+id/mateName"
                 android:layout_width="154dp"
                 android:layout_height="match_parent"
                 android:gravity="center_vertical"
@@ -53,12 +54,13 @@
                     android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/mateRun1"
+                        android:id="@+id/mateDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
                         android:gravity="bottom"
                         android:text="2.15"
-                        android:textSize="18sp" />
+                        android:textSize="16sp" />
+
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="match_parent"
@@ -70,26 +72,26 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="0dp"
-                    android:orientation="horizontal"
-                    android:layout_weight="2">
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
 
                     <TextView
-                        android:id="@+id/mateRun2"
+                        android:id="@+id/mateTime"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="00:00"
-                        android:textSize="18sp" />
+                        android:textSize="12sp" />
 
                     <TextView
-                        android:id="@+id/mateRun3"
+                        android:id="@+id/matePace"
                         android:layout_width="0dp"
                         android:layout_height="wrap_content"
-                        android:gravity="center"
                         android:layout_weight="1"
+                        android:gravity="center"
                         android:text="0&apos; 00&quot;"
-                        android:textSize="18sp" />
+                        android:textSize="12sp" />
                 </LinearLayout>
 
             </LinearLayout>

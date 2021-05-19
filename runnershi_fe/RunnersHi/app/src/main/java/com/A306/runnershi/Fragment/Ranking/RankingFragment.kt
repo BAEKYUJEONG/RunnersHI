@@ -10,7 +10,6 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.A306.runnershi.Fragment.Profile.RunAdapter
 import com.A306.runnershi.Helper.RetrofitClient
 import com.A306.runnershi.Model.Ranking
 import com.A306.runnershi.R
@@ -18,7 +17,6 @@ import com.A306.runnershi.ViewModel.UserViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -109,7 +107,7 @@ class RankingFragment : Fragment(R.layout.fragment_ranking) {
     }
     
     // 레트로핏 통신 이후 실행
-    var afterRetrofitConnection = object:Callback<ResponseBody>{
+    private var afterRetrofitConnection = object:Callback<ResponseBody>{
         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
             val itemType = object : TypeToken<List<Map<String, Any>>>() {}.type
             val userList = Gson().fromJson<List<Map<String, Any>>>(response.body()?.string(), itemType)
@@ -143,9 +141,13 @@ class RankingFragment : Fragment(R.layout.fragment_ranking) {
     }
 
     private fun setupRecyclerView(rankingList:Array<Ranking>) = rankingListView.apply {
-        rankingAdapter = RankingAdapter(rankingList)
+        rankingAdapter = RankingAdapter(rankingList, this@RankingFragment)
         adapter = rankingAdapter
         layoutManager = LinearLayoutManager(requireContext())
+    }
+
+    fun itemClick(receivedData:String){
+        Timber.e("CLICK!! : $receivedData")
     }
 
     inner class GroupSpinnerClass:OnItemSelectedListener{
@@ -180,6 +182,4 @@ class RankingFragment : Fragment(R.layout.fragment_ranking) {
             whichSpinner.adapter = adapter
         }
     }
-
-
 }

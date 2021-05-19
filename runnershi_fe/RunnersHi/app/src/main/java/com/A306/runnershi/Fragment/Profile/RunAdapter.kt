@@ -6,8 +6,6 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
-import com.A306.runnershi.DI.TrackingUtility
-import com.A306.runnershi.Fragment.GroupRun.GroupRunRoomListFragment
 import com.A306.runnershi.Model.Run
 import com.A306.runnershi.R
 import com.bumptech.glide.Glide
@@ -64,9 +62,9 @@ class RunAdapter(var link: ProfileFragment.runAdapterToList) : RecyclerView.Adap
             tvAvgSpeed.text = avgSpeed
 
             val distance = "${run.distance / 1000f}km"
-            tvDistance.text = distance
+            fDistance.text = distance
 
-            tvTime.text = run.time
+            fTime.text = run.time
         }
 
         holder.itemView.setOnClickListener {

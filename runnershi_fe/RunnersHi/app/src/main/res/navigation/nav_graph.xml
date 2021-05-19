@@ -39,7 +39,7 @@
         tools:layout="@layout/fragment_ranking" />
     <fragment
         android:id="@+id/userSearchFragment"
-        android:name="com.A306.runnershi.Fragment.UserSearchFragment"
+        android:name="com.A306.runnershi.Fragment.UserSearch.UserSearchFragment"
         android:label="fragment_user_search"
         tools:layout="@layout/fragment_user_search" />
 </navigation>

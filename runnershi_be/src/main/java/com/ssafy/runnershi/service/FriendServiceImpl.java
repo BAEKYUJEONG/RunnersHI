@@ -3,6 +3,7 @@ package com.ssafy.runnershi.service;
 import java.util.ArrayList;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.SetOperations;
+import org.springframework.data.redis.core.ZSetOperations;
 import org.springframework.stereotype.Service;
 import com.ssafy.runnershi.entity.Alarm;
 import com.ssafy.runnershi.entity.Friend;
@@ -35,6 +36,9 @@ public class FriendServiceImpl implements FriendService {
 
   @Autowired
   private SetOperations<String, String> set;
+
+  @Autowired
+  private ZSetOperations<String, String> zset;
 
   @Override
   public String addFriend(String userId, String friendName) {
@@ -160,8 +164,9 @@ public class FriendServiceImpl implements FriendService {
     result.setFriendList(new ArrayList<FriendIdName>());
     for (Friend friend : list) {
       User friendUser = friend.getFriendUser().getUserId();
-      FriendIdName friendIdName =
-          new FriendIdName(friendUser.getUserId(), friendUser.getUserName());
+      FriendIdName friendIdName = new FriendIdName(friendUser.getUserId(), friendUser.getUserName(),
+          zset.reverseRank("totalDistanceRank",
+              friendUser.getUserId() + ";" + friendUser.getUserName()) + 1);
       result.getFriendList().add(friendIdName);
     }
 

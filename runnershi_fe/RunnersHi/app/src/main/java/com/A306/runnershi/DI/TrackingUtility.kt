@@ -25,6 +25,13 @@ object TrackingUtility {
             )
         }
 
+    fun hasVoicePermissions(context: Context) =
+        EasyPermissions.hasPermissions(
+            context,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.MODIFY_AUDIO_SETTINGS
+        )
+
     fun getFormattedStopWatchTime(ms: Long, includeMillis:Boolean = false): String{
         var milliseconds = ms
         val hours = TimeUnit.MILLISECONDS.toHours(milliseconds)

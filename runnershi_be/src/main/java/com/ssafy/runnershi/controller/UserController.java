@@ -1,6 +1,7 @@
 package com.ssafy.runnershi.controller;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import javax.servlet.http.HttpServletRequest;
 import org.slf4j.Logger;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import com.ssafy.runnershi.entity.Profile;
+import com.ssafy.runnershi.entity.SearchResult;
 import com.ssafy.runnershi.entity.User;
 import com.ssafy.runnershi.entity.UserResult;
 import com.ssafy.runnershi.service.JwtService;
@@ -138,6 +141,44 @@ public class UserController {
 
     result = userService.leave(userId);
     return new ResponseEntity<String>(result, HttpStatus.OK);
+  }
+
+  @GetMapping("/search/{word}")
+  public ResponseEntity<List<SearchResult>> searchUser(@PathVariable String word,
+      HttpServletRequest req) {
+    List<SearchResult> result = null;
+    String jwt = req.getHeader("token");
+    String userId = jwtService.decode(jwt);
+    if (userId == null) {
+      return new ResponseEntity<List<SearchResult>>(result, HttpStatus.OK);
+    }
+    result = userService.searchUser(userId, word);
+    return new ResponseEntity<List<SearchResult>>(result, HttpStatus.OK);
+  }
+
+  @GetMapping("/profile")
+  public ResponseEntity<Profile> getUserProfile(HttpServletRequest req) {
+    Profile result = null;
+    String jwt = req.getHeader("token");
+    String userId = jwtService.decode(jwt);
+    if (userId == null) {
+      return new ResponseEntity<Profile>(result, HttpStatus.OK);
+    }
+    result = userService.getUserProfile(userId);
+    return new ResponseEntity<Profile>(result, HttpStatus.OK);
+  }
+
+  @GetMapping("/profile/{userId}")
+  public ResponseEntity<Profile> getUserProfile(@PathVariable String userId,
+      HttpServletRequest req) {
+    Profile result = null;
+    String jwt = req.getHeader("token");
+    String myUserId = jwtService.decode(jwt);
+    if (myUserId == null) {
+      return new ResponseEntity<Profile>(result, HttpStatus.OK);
+    }
+    result = userService.getUserProfile(userId);
+    return new ResponseEntity<Profile>(result, HttpStatus.OK);
   }
 
 }

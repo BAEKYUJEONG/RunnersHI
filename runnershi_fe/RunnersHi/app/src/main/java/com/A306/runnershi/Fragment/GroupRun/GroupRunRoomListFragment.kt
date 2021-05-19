@@ -1,20 +1,16 @@
 package com.A306.runnershi.Fragment.GroupRun
 
-import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.R
-import com.A306.runnershi.Fragment.GroupRun.Room
+import com.A306.runnershi.Model.Room
 import kotlinx.android.synthetic.main.fragment_group_run_room_list.*
-import kotlinx.android.synthetic.main.group_run_room_preview.*
 
 
 class GroupRunRoomListFragment : Fragment() {
@@ -26,6 +22,9 @@ class GroupRunRoomListFragment : Fragment() {
         Room(2, "도란도란 밤산책", 1, 3),
         Room(3, "작심하루 다이어트", 2, 2)
     )
+
+    // 세션 list 불러온 다음
+    // 해당 세션 id를 백으로 보내서 거기에 해당되는 room 정보들을 가져온다
 
     private lateinit var roomListAdapter: RoomListAdapter
 
@@ -39,7 +38,6 @@ class GroupRunRoomListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val mainActivity = activity as MainActivity
 
         var list: ArrayList<Room> = tempRoomList
         var link = roomListAdapterToList()
@@ -49,26 +47,14 @@ class GroupRunRoomListFragment : Fragment() {
         runningListView.adapter = roomListAdapter
     }
 
-    // 얘도 임시로 일단 Room으로 받아줄게요
-//     private fun openRoom(roomId: Int?) {
-//        val mainActivity = activity as MainActivity
-//        val roomFragment = RoomFragment(roomId)
-//
-//        mainActivity.makeCurrentFragment(roomFragment)
-//    }
-
     private fun openRoom(room: Room) {
         val mainActivity = activity as MainActivity
         val roomFragment = RoomFragment(room)
 
-        mainActivity.makeCurrentFragment(roomFragment)
+        mainActivity.makeCurrentFragment(roomFragment, "hide")
     }
 
     inner class roomListAdapterToList {
-//        fun getRoomId(id: Int?) {
-//            Log.i("roomId", "$id")
-//            openRoom(id)
-//        }
 
         fun getRoomId(room: Room) {
             openRoom(room)
