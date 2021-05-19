@@ -23,7 +23,8 @@
     <!-- 카카오 KEY-->
     <string name="kakao_api_key">8bedaa715b7d7d885ebb5ebd5a3b5f84</string>
     <!-- 구글 KEY -->
-    <!--    <string name="google_api_key">AIzaSyCK1_vzYxWaqElwc9HhAMCJPIwzkI0fVrA</string>-->
+    <string name="google_map_api_key">AIzaSyCK1_vzYxWaqElwc9HhAMCJPIwzkI0fVrA</string>
+<!--    <string name="google_api_key">AIzaSyCBL30thrnS75lJPQ10sonVUTvgBhDVcVg</string>-->
     <string name="title_notifications">Notifications</string>
     <!-- Preference Titles -->
     <string name="messages_header">Messages</string>
