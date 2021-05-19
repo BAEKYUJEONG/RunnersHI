@@ -14,4 +14,6 @@ public interface FriendService {
 
   public FriendListResult friendList(String userId);
 
+  public String addFriendTest(String userId1, String userId2);
+
 }
