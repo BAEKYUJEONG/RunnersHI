@@ -82,7 +82,7 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
                         if(user["total_distance"].toString().equals("null")){
                             distance.text = "달려주세요!"
                         } else {
-                            distance.text = user["total_distance"].toString()
+                            distance.text = user["total_distance"].toString()+"K"
                         }
                         if(user["best_pace"].toString().equals("null")){
                             pace.text = ""

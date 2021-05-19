@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -43,6 +44,15 @@ class AlarmActivity : AppCompatActivity() {
         private val viewModel: UserViewModel by viewModels()
         private lateinit var alarmAdapter: AlarmAdapter
 
+        var link = acceptFriendAdapterToList()
+
+        inner class acceptFriendAdapterToList {
+            fun getFriendId(friend: Alarm) {
+                //고유 값이라서 let이 들어감
+                friend.userId?.let { friend.alarmId?.let { it1 -> acceptFriend(it, it1) } }
+            }
+        }
+
         override fun onCreate(savedInstanceState: Bundle?) {
             super.onCreate(savedInstanceState)
         }
@@ -75,11 +85,15 @@ class AlarmActivity : AppCompatActivity() {
                             val userList = Gson().fromJson<List<Map<String, Any>>>(response.body()?.string(), itemType)
                             val userAlarmList = ArrayList<Alarm>()
                             for(user in userList){
+                                val friendUserId = user["friendUserId"].toString()
+                                val alarmId = user["alarmId"].toString().toLong()
                                 val friendName = user["fromUserName"].toString()
                                 val content = user["content"].toString()
-                                val userItem = Alarm(friendName, content)
+                                val userItem = Alarm(alarmId, friendUserId, friendName, content)
                                 userAlarmList.add(userItem)
                             }
+
+                            // 리사이클러뷰 셋업
                             setupRecyclerView(userAlarmList.toTypedArray())
                         }
 
@@ -88,8 +102,37 @@ class AlarmActivity : AppCompatActivity() {
             })
         }
 
+        // 친구 수락
+        private fun acceptFriend(friendUserId: String, alarmId: Long){
+            Timber.e("친구 ACCEPT 통신")
+
+            viewModel.userInfo.observe(viewLifecycleOwner, Observer {
+                Timber.e(it.token)
+                if (it?.token != null){
+                    val token:String = it.token!!
+                    val body = mapOf("friendUserId" to friendUserId, "alarmId" to alarmId)
+
+                    // alertDialog 선택
+                    
+
+                    RetrofitClient.getInstance().acceptFriend(token, body as Map<String, String>).enqueue(afterAccpetFriend)
+                }
+            })
+        }
+
+        private var afterAccpetFriend = object: Callback<ResponseBody> {
+            override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+                Toast.makeText(context, "친구를 수락을 실패했습니다", Toast.LENGTH_LONG).show()
+            }
+
+            override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                Toast.makeText(context, "친구를 수락했습니다", Toast.LENGTH_LONG).show()
+            }
+
+        }
+
         private fun setupRecyclerView(alarmList:Array<Alarm>) = alarmRecyclerView.apply {
-            alarmAdapter = AlarmAdapter(alarmList, this@AlarmFragment)
+            alarmAdapter = AlarmAdapter(alarmList, link, this@AlarmFragment)
             adapter = alarmAdapter
             layoutManager = LinearLayoutManager(requireContext())
         }
