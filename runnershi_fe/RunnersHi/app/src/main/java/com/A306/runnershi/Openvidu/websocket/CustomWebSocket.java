@@ -8,6 +8,7 @@ import android.widget.Toast;
 
 import com.A306.runnershi.Activity.MainActivity;
 import com.A306.runnershi.Fragment.GroupRun.RoomFragment;
+import com.A306.runnershi.Model.User;
 import com.A306.runnershi.Openvidu.constant.JsonConstants;
 import com.A306.runnershi.Openvidu.model.LocalParticipant;
 import com.A306.runnershi.Openvidu.model.Participant;
@@ -38,6 +39,7 @@ import java.security.KeyManagementException;
 import java.security.NoSuchAlgorithmException;
 import java.security.cert.CertificateException;
 import java.security.cert.X509Certificate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
@@ -112,6 +114,8 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
             JSONException {
         final int rpcId = json.getInt(JsonConstants.ID);
         JSONObject result = new JSONObject(json.getString(JsonConstants.RESULT));
+        Log.e("RPCID", String.valueOf(rpcId));
+        Log.e("RESULT!!!!", result.toString());
 
         if (result.has("value") && result.getString("value").equals("pong")) {
             // Response to ping
@@ -120,8 +124,11 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
         } else if (rpcId == this.ID_JOINROOM.get()) {
             // Response to joinRoom
 //            activity.viewToConnectedState();
-
             final LocalParticipant localParticipant = this.session.getLocalParticipant();
+            this.roomFragment.addParticipant(localParticipant);
+            Handler mainHandler = new Handler(activity.getMainLooper());
+            Runnable myRunnable = () -> roomFragment.updateParticipantsList();
+            mainHandler.post(myRunnable);
             final String localConnectionId = result.getString(JsonConstants.ID);
             localParticipant.setConnectionId(localConnectionId);
 
@@ -141,22 +148,31 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
             sdpConstraints.mandatory.add(new MediaConstraints.KeyValuePair("offerToReceiveVideo", "true"));
             session.createOfferForPublishing(sdpConstraints);
 
+
+
             if (result.getJSONArray(JsonConstants.VALUE).length() > 0) {
                 // There were users already connected to the session
                 addRemoteParticipantsAlreadyInRoom(result);
             }
 
+
+
+//            this.session.getActivity().setParticipantsList();
+
         } else if (rpcId == this.ID_LEAVEROOM.get()) {
+            Log.e("ID_LEAVEROOM", String.valueOf(rpcId));
             // Response to leaveRoom
             if (websocket.isOpen()) {
                 websocket.disconnect();
             }
         } else if (rpcId == this.ID_PUBLISHVIDEO.get()) {
+            Log.e("ID_PUBLISHVIDEO", String.valueOf(rpcId));
             // Response to publishVideo
             LocalParticipant localParticipant = this.session.getLocalParticipant();
             SessionDescription remoteSdpAnswer = new SessionDescription(SessionDescription.Type.ANSWER, result.getString("sdpAnswer"));
             localParticipant.getPeerConnection().setRemoteDescription(new CustomSdpObserver("publishVideo_setRemoteDescription"), remoteSdpAnswer);
         } else if (this.IDS_PREPARERECEIVEVIDEO.containsKey(rpcId)) {
+            Log.e("IDS_PREPARERECEIVEVIDEO", String.valueOf(rpcId));
             // Response to prepareReceiveVideoFrom
             Pair<String, String> participantAndStream = IDS_PREPARERECEIVEVIDEO.remove(rpcId);
             RemoteParticipant remoteParticipant = session.getRemoteParticipant(participantAndStream.first);
@@ -173,9 +189,11 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
                 }
             }, remoteSdpOffer);
         } else if (this.IDS_RECEIVEVIDEO.containsKey(rpcId)) {
+            Log.e("IDS_RECEIVEVIDEO", String.valueOf(rpcId));
             // Response to receiveVideoFrom
             IDS_RECEIVEVIDEO.remove(rpcId);
         } else if (this.IDS_ONICECANDIDATE.contains(rpcId)) {
+            Log.e("IDS_ONICECANDIDATE", String.valueOf(rpcId));
             // Response to onIceCandidate
             IDS_ONICECANDIDATE.remove(rpcId);
         } else {
@@ -185,9 +203,7 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
 
     public void joinRoom() {
         Map<String, String> joinRoomParams = new HashMap<>();
-        Log.e("PLZ", "방 참가");
         joinRoomParams.put(JsonConstants.METADATA, "{\"clientData\":\"" + this.session.getLocalParticipant().getParticipantName() + "\",\"roomId\":\"" +this.session.getRoomId()+"\",\"roomTitle\":\""+this.session.getRoomTitle()+"\"}");
-        Log.e("PLZ", "방 참갓!");
         joinRoomParams.put("secret", "");
         joinRoomParams.put("session", this.session.getId());
         joinRoomParams.put("platform", "Android " + android.os.Build.VERSION.SDK_INT);
@@ -240,6 +256,7 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
     }
 
     private void handleServerEvent(JSONObject json) throws JSONException {
+        Timber.e("HANDLE SERVER Event");
         if (!json.has(JsonConstants.PARAMS)) {
             Log.e(TAG, "No params " + json.toString());
         } else {
@@ -247,15 +264,19 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
             String method = json.getString(JsonConstants.METHOD);
             switch (method) {
                 case JsonConstants.ICE_CANDIDATE:
+                    Timber.e("ICE_CANDIDATE");
                     iceCandidateEvent(params);
                     break;
                 case JsonConstants.PARTICIPANT_JOINED:
+                    Timber.e("PARTICIPANT_JOINED");
                     participantJoinedEvent(params);
                     break;
                 case JsonConstants.PARTICIPANT_PUBLISHED:
+                    Timber.e("PARTICIPANT_PUBLISHED");
                     participantPublishedEvent(params);
                     break;
                 case JsonConstants.PARTICIPANT_LEFT:
+                    Timber.e("PARTICIPANT_LEFT");
                     participantLeftEvent(params);
                     break;
                 default:
@@ -294,6 +315,10 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
         for (int i = 0; i < result.getJSONArray(JsonConstants.VALUE).length(); i++) {
             JSONObject participantJson = result.getJSONArray(JsonConstants.VALUE).getJSONObject(i);
             RemoteParticipant remoteParticipant = this.newRemoteParticipantAux(participantJson);
+            this.roomFragment.addParticipant(remoteParticipant);
+            Handler mainHandler = new Handler(activity.getMainLooper());
+            Runnable myRunnable = () -> roomFragment.updateParticipantsList();
+            mainHandler.post(myRunnable);
             try {
                 JSONArray streams = participantJson.getJSONArray("streams");
                 for (int j = 0; j < streams.length(); j++) {
@@ -346,10 +371,14 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
 
     private void participantLeftEvent(JSONObject params) throws JSONException {
         final RemoteParticipant remoteParticipant = this.session.removeRemoteParticipant(params.getString("connectionId"));
+        this.roomFragment.removeParticipant(remoteParticipant);
         remoteParticipant.dispose();
         Handler mainHandler = new Handler(activity.getMainLooper());
-        Runnable myRunnable = () -> session.removeView(remoteParticipant.getView());
+        Runnable myRunnable = () -> roomFragment.updateParticipantsList();
         mainHandler.post(myRunnable);
+//        Handler mainHandler = new Handler(activity.getMainLooper());
+//        Runnable myRunnable = () -> session.removeView(remoteParticipant.getView());
+//        mainHandler.post(myRunnable);
     }
 
     private RemoteParticipant newRemoteParticipantAux(JSONObject participantJson) throws JSONException {
@@ -369,6 +398,10 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
         }
         final RemoteParticipant remoteParticipant = new RemoteParticipant(connectionId, participantName, this.session);
         this.roomFragment.createRemoteParticipantVideo(remoteParticipant);
+        this.roomFragment.addParticipant(remoteParticipant);
+        Handler mainHandler = new Handler(activity.getMainLooper());
+        Runnable myRunnable = () -> roomFragment.updateParticipantsList();
+        mainHandler.post(myRunnable);
         this.session.createRemotePeerConnection(remoteParticipant.getConnectionId());
         return remoteParticipant;
     }

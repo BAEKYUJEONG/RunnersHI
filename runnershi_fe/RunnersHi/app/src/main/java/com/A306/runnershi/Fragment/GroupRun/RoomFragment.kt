@@ -12,14 +12,18 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.Model.Room
 import com.A306.runnershi.Model.User
+import com.A306.runnershi.Openvidu.OpenviduSessionRetrofitClient
 import com.A306.runnershi.Openvidu.constant.JsonConstants.OPENVIDU_SECRET
 import com.A306.runnershi.Openvidu.constant.JsonConstants.OPENVIDU_URL
 import com.A306.runnershi.Openvidu.fragment.PermissionsDialogFragment
 import com.A306.runnershi.Openvidu.model.LocalParticipant
+import com.A306.runnershi.Openvidu.model.Participant
 import com.A306.runnershi.Openvidu.model.RemoteParticipant
 import com.A306.runnershi.Openvidu.model.Session
 import com.A306.runnershi.Openvidu.utils.CustomHttpClient
@@ -28,10 +32,17 @@ import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import com.A306.runnershi.ViewModel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.fragment_group_run_room_list.*
 import kotlinx.android.synthetic.main.fragment_room.*
 import kotlinx.android.synthetic.main.grouprun_mate.*
+import okhttp3.ResponseBody
+import org.json.JSONArray
+import org.json.JSONObject
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -42,6 +53,7 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
     var httpClient:CustomHttpClient? = null
     var currentUser: User? = null
     lateinit var session: Session
+    var participantList = ArrayList<Participant>()
     private lateinit var mateListAdapter: MateListAdapter
 
 
@@ -98,9 +110,9 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
         // 함께 뛰는 메이트들 불러오기
 //        var list: ArrayList<User> = tempUserList
 //
-//        mateListAdapter = MateListAdapter(list)
-//        mateListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-//        mateListView.adapter = mateListAdapter
+        mateListAdapter = MateListAdapter(participantList)
+        mateListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        mateListView.adapter = mateListAdapter
     }
 
     private fun getTokenSuccess(token: String, sessionId: String){
@@ -129,6 +141,24 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
     fun leaveSession() {
         session.leaveSession()
         httpClient!!.dispose()
+    }
+
+    fun addParticipant(participant: Participant){
+        participantList.add(participant)
+    }
+
+    fun removeParticipant(participant: Participant){
+        participantList.remove(participant)
+
+    }
+
+    fun updateParticipantsList(){
+        mateListAdapter.notifyDataSetChanged()
+    }
+
+    fun setParticipantsList(receivedInfo:String){
+        Timber.e("함수 소환!!")
+        Timber.e(receivedInfo)
     }
 
     private fun subscribeToObservers(){

@@ -213,6 +213,12 @@ public class Session {
         this.localParticipant = localParticipant;
     }
 
+    public MainActivity getActivity() {return this.activity;}
+
+    public int getRemoteParticipantSize(){
+        return this.remoteParticipants.size();
+    }
+
     public RemoteParticipant getRemoteParticipant(String id) {
         return this.remoteParticipants.get(id);
     }

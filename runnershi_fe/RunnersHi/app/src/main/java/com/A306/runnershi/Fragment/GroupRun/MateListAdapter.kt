@@ -7,10 +7,11 @@ import android.widget.TextView
 import androidx.compose.ui.layout.Layout
 import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Model.User
+import com.A306.runnershi.Openvidu.model.Participant
 import com.A306.runnershi.R
 
 
-class MateListAdapter(private var list:  MutableList<User>): RecyclerView.Adapter<MateListAdapter.ListItemViewHolder> () {
+class MateListAdapter(private var list:  MutableList<Participant>): RecyclerView.Adapter<MateListAdapter.ListItemViewHolder> () {
 
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
         var mateName: TextView = itemView!!.findViewById(R.id.mateName)
@@ -19,8 +20,8 @@ class MateListAdapter(private var list:  MutableList<User>): RecyclerView.Adapte
         var matePace: TextView = itemView!!.findViewById(R.id.matePace)
 
 
-        fun bind(data: User, position: Int) {
-            mateName.text = data.userName
+        fun bind(data: Participant, position: Int) {
+            mateName.text = data.participantName
 
             // 나중에는 기록들도 연결해줄 것
         }
