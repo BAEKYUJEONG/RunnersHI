@@ -4,9 +4,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
-import androidx.compose.ui.layout.Layout
 import androidx.recyclerview.widget.RecyclerView
-import com.A306.runnershi.Model.User
 import com.A306.runnershi.Openvidu.model.Participant
 import com.A306.runnershi.R
 

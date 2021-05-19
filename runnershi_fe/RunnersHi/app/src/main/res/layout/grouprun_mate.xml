@@ -24,8 +24,8 @@
             android:layout_gravity="center_vertical"
             android:orientation="horizontal">
 
-            <de.hdodenhof.circleimageview.CircleImageView
-                android:id="@+id/matePhoto"
+            <org.webrtc.SurfaceViewRenderer
+                android:id="@+id/mateVideo"
                 android:layout_width="48dp"
                 android:layout_height="48dp"
                 android:scaleType="centerCrop"

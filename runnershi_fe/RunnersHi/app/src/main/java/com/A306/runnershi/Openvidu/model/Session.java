@@ -4,8 +4,10 @@ import android.os.AsyncTask;
 import android.util.Log;
 import android.view.View;
 import android.widget.LinearLayout;
+import android.widget.ScrollView;
 
 import com.A306.runnershi.Activity.MainActivity;
+import com.A306.runnershi.Fragment.GroupRun.RoomFragment;
 import com.A306.runnershi.Openvidu.observers.CustomPeerConnectionObserver;
 import com.A306.runnershi.Openvidu.observers.CustomSdpObserver;
 import com.A306.runnershi.Openvidu.websocket.CustomWebSocket;
@@ -37,18 +39,20 @@ public class Session {
     private Map<String, RemoteParticipant> remoteParticipants = new HashMap<>();
     private String id;
     private String token;
-    private LinearLayout views_container;
+    private ScrollView mateListView;
     private PeerConnectionFactory peerConnectionFactory;
     private CustomWebSocket websocket;
     private MainActivity activity;
+    private RoomFragment roomFragment;
 
-    public Session(int roomId, String roomTitle, String id, String token, LinearLayout views_container, MainActivity activity) {
+    public Session(int roomId, String roomTitle, String id, String token, ScrollView views_container, MainActivity activity, RoomFragment roomFragment) {
         this.roomId = roomId;
         this.roomTitle = roomTitle;
         this.id = id;
         this.token = token;
-        this.views_container = views_container;
+        this.mateListView = views_container;
         this.activity = activity;
+        this.roomFragment = roomFragment;
 
         PeerConnectionFactory.InitializationOptions.Builder optionsBuilder = PeerConnectionFactory.InitializationOptions.builder(activity.getApplicationContext());
         optionsBuilder.setEnableInternalTracer(true);
@@ -121,7 +125,7 @@ public class Session {
             @Override
             public void onAddTrack(RtpReceiver rtpReceiver, MediaStream[] mediaStreams) {
                 super.onAddTrack(rtpReceiver, mediaStreams);
-                activity.setRemoteMediaStream(mediaStreams[0], remoteParticipants.get(connectionId));
+                roomFragment.setRemoteMediaStream(mediaStreams[0], remoteParticipants.get(connectionId));
             }
 
             @Override
@@ -249,7 +253,7 @@ public class Session {
                 if (remoteParticipant.getPeerConnection() != null) {
                     remoteParticipant.getPeerConnection().close();
                 }
-                views_container.removeView(remoteParticipant.getView());
+                mateListView.removeView(remoteParticipant.getView());
             }
         });
         AsyncTask.execute(() -> {
@@ -261,7 +265,7 @@ public class Session {
     }
 
     public void removeView(View view) {
-        this.views_container.removeView(view);
+        this.mateListView.removeView(view);
     }
 
 }

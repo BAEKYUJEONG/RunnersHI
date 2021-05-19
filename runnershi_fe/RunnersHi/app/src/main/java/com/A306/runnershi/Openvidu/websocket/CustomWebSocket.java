@@ -125,10 +125,10 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
             // Response to joinRoom
 //            activity.viewToConnectedState();
             final LocalParticipant localParticipant = this.session.getLocalParticipant();
-            this.roomFragment.addParticipant(localParticipant);
-            Handler mainHandler = new Handler(activity.getMainLooper());
-            Runnable myRunnable = () -> roomFragment.updateParticipantsList();
-            mainHandler.post(myRunnable);
+//            this.roomFragment.addParticipant(localParticipant);
+//            Handler mainHandler = new Handler(activity.getMainLooper());
+//            Runnable myRunnable = () -> roomFragment.updateParticipantsList();
+//            mainHandler.post(myRunnable);
             final String localConnectionId = result.getString(JsonConstants.ID);
             localParticipant.setConnectionId(localConnectionId);
 
@@ -315,10 +315,10 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
         for (int i = 0; i < result.getJSONArray(JsonConstants.VALUE).length(); i++) {
             JSONObject participantJson = result.getJSONArray(JsonConstants.VALUE).getJSONObject(i);
             RemoteParticipant remoteParticipant = this.newRemoteParticipantAux(participantJson);
-            this.roomFragment.addParticipant(remoteParticipant);
-            Handler mainHandler = new Handler(activity.getMainLooper());
-            Runnable myRunnable = () -> roomFragment.updateParticipantsList();
-            mainHandler.post(myRunnable);
+//            this.roomFragment.addParticipant(remoteParticipant);
+//            Handler mainHandler = new Handler(activity.getMainLooper());
+//            Runnable myRunnable = () -> roomFragment.updateParticipantsList();
+//            mainHandler.post(myRunnable);
             try {
                 JSONArray streams = participantJson.getJSONArray("streams");
                 for (int j = 0; j < streams.length(); j++) {
@@ -371,11 +371,15 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
 
     private void participantLeftEvent(JSONObject params) throws JSONException {
         final RemoteParticipant remoteParticipant = this.session.removeRemoteParticipant(params.getString("connectionId"));
-        this.roomFragment.removeParticipant(remoteParticipant);
         remoteParticipant.dispose();
         Handler mainHandler = new Handler(activity.getMainLooper());
-        Runnable myRunnable = () -> roomFragment.updateParticipantsList();
+        Runnable myRunnable = () -> session.removeView(remoteParticipant.getView());
         mainHandler.post(myRunnable);
+//        this.roomFragment.removeParticipant(remoteParticipant);
+//
+//        Handler mainHandler = new Handler(activity.getMainLooper());
+//        Runnable myRunnable = () -> roomFragment.updateParticipantsList();
+//        mainHandler.post(myRunnable);
 //        Handler mainHandler = new Handler(activity.getMainLooper());
 //        Runnable myRunnable = () -> session.removeView(remoteParticipant.getView());
 //        mainHandler.post(myRunnable);
@@ -398,11 +402,11 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
         }
         final RemoteParticipant remoteParticipant = new RemoteParticipant(connectionId, participantName, this.session);
         this.roomFragment.createRemoteParticipantVideo(remoteParticipant);
-        this.roomFragment.addParticipant(remoteParticipant);
-        Handler mainHandler = new Handler(activity.getMainLooper());
-        Runnable myRunnable = () -> roomFragment.updateParticipantsList();
-        mainHandler.post(myRunnable);
         this.session.createRemotePeerConnection(remoteParticipant.getConnectionId());
+//        this.roomFragment.addParticipant(remoteParticipant);
+//        Handler mainHandler = new Handler(activity.getMainLooper());
+//        Runnable myRunnable = () -> roomFragment.updateParticipantsList();
+//        mainHandler.post(myRunnable);
         return remoteParticipant;
     }
 

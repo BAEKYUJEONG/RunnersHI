@@ -3,6 +3,7 @@ package com.A306.runnershi.Fragment.GroupRun
 import android.Manifest
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.util.Base64
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,13 +13,10 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.Model.Room
 import com.A306.runnershi.Model.User
-import com.A306.runnershi.Openvidu.OpenviduSessionRetrofitClient
 import com.A306.runnershi.Openvidu.constant.JsonConstants.OPENVIDU_SECRET
 import com.A306.runnershi.Openvidu.constant.JsonConstants.OPENVIDU_URL
 import com.A306.runnershi.Openvidu.fragment.PermissionsDialogFragment
@@ -32,17 +30,12 @@ import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import com.A306.runnershi.ViewModel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_group_run_room_list.*
 import kotlinx.android.synthetic.main.fragment_room.*
 import kotlinx.android.synthetic.main.grouprun_mate.*
-import okhttp3.ResponseBody
-import org.json.JSONArray
-import org.json.JSONObject
+import org.webrtc.EglBase
+import org.webrtc.MediaStream
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -61,9 +54,9 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
     private var curTimeMillis = 0L
 
     override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater,
+            container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View? {
 
         val mainActivity = activity as MainActivity
@@ -91,18 +84,18 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
                 if (mainActivity!!.arePermissionGranted()) {
                     Timber.e("HTTP CLIENT 실행")
                     httpClient = CustomHttpClient(
-                        OPENVIDU_URL,
-                        "Basic " + Base64.encodeToString(
-                            "OPENVIDUAPP:${OPENVIDU_SECRET}".toByteArray(), Base64.DEFAULT
-                        ).trim()
+                            OPENVIDU_URL,
+                            "Basic " + Base64.encodeToString(
+                                    "OPENVIDUAPP:${OPENVIDU_SECRET}".toByteArray(), Base64.DEFAULT
+                            ).trim()
                     )
                     Timber.e("ROOM SESSION : ${room.roomSession}, ROOM TOKEN : ${room.roomToken}")
                     getTokenSuccess(room.roomToken, room.roomSession)
                 } else {
                     val permissionsFragment: DialogFragment = PermissionsDialogFragment()
                     permissionsFragment.show(
-                        mainActivity!!.supportFragmentManager,
-                        "Permissions Fragment"
+                            mainActivity!!.supportFragmentManager,
+                            "Permissions Fragment"
                     )
                 }
             }
@@ -110,22 +103,31 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
         // 함께 뛰는 메이트들 불러오기
 //        var list: ArrayList<User> = tempUserList
 //
-        mateListAdapter = MateListAdapter(participantList)
-        mateListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        mateListView.adapter = mateListAdapter
+//        mateListAdapter = MateListAdapter(participantList)
+//        mateListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+//        mateListView.adapter = mateListAdapter
     }
 
     private fun getTokenSuccess(token: String, sessionId: String){
         // Initialize our session
         if (room.room_id > 0){
-            session = Session(room.room_id, room.title, sessionId, token, grouprun_item, mainActivity)
-            val localParticipant = LocalParticipant(currentUser?.userName, session, requireContext())
-            localParticipant.startAudio()
+            session = Session(room.room_id, room.title, sessionId, token, mateListView, mainActivity, this)
+            val localParticipant = LocalParticipant(currentUser?.userName, session, requireContext(), localVideo)
+            localName.text = localParticipant.participantName
+            localParticipant.startCamera()
             // Initialize and connect the websocket to OpenVidu Server
             startWebSocket()
         } else {
             mainActivity?.makeCurrentFragment(GroupRunRoomListFragment())
         }
+    }
+
+    private fun initViews() {
+        val rootEglBase = EglBase.create()
+        localVideo.init(rootEglBase.eglBaseContext, null)
+        localVideo.setMirror(true)
+        localVideo.setEnableHardwareScaler(true)
+        localVideo.setZOrderMediaOverlay(true)
     }
 
     private fun startWebSocket(){
@@ -134,31 +136,35 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
         session.setWebSocket(webSocket)
     }
 
-    fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipant){
+    fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipant) {
+        val mainHandler: Handler = Handler(mainActivity!!.mainLooper)
+        val myRunnable = Runnable {
+            val rowView: View = this.layoutInflater.inflate(R.layout.grouprun_mate, null)
+            val rowId = View.generateViewId()
+            rowView.id = rowId
+            mateListView.addView(rowView)
+            val videoView = mateVideo
+            remoteParticipant.videoView = videoView
+            videoView.setMirror(false)
+            val rootEglBase = EglBase.create()
+            videoView.init(rootEglBase.eglBaseContext, null)
+            videoView.setZOrderMediaOverlay(true)
+            remoteParticipant.participantNameText = mateName
+            remoteParticipant.view = rowView
+            remoteParticipant.participantNameText.text = remoteParticipant.participantName
+        }
+        mainHandler.post(myRunnable)
+    }
 
+    fun setRemoteMediaStream(stream: MediaStream, remoteParticipant: RemoteParticipant) {
+        val videoTrack = stream.videoTracks[0]
+        videoTrack.addSink(remoteParticipant.videoView)
+        Runnable { remoteParticipant.videoView.visibility = View.VISIBLE }
     }
 
     fun leaveSession() {
         session.leaveSession()
         httpClient!!.dispose()
-    }
-
-    fun addParticipant(participant: Participant){
-        participantList.add(participant)
-    }
-
-    fun removeParticipant(participant: Participant){
-        participantList.remove(participant)
-
-    }
-
-    fun updateParticipantsList(){
-        mateListAdapter.notifyDataSetChanged()
-    }
-
-    fun setParticipantsList(receivedInfo:String){
-        Timber.e("함수 소환!!")
-        Timber.e(receivedInfo)
     }
 
     private fun subscribeToObservers(){
@@ -184,30 +190,30 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
 
     private fun requestPermissions(){
         if(TrackingUtility.hasLocationPermissions(requireContext()) && TrackingUtility.hasLocationPermissions(
-                requireContext()
-            )){
+                        requireContext()
+                )){
             return
         }
         if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
             EasyPermissions.requestPermissions(
-                this,
-                "앱 사용을 위해 위치 권한 항상 허용이 필요합니다.",
-                0,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.MODIFY_AUDIO_SETTINGS
+                    this,
+                    "앱 사용을 위해 위치 권한 항상 허용이 필요합니다.",
+                    0,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.MODIFY_AUDIO_SETTINGS
             )
         } else{
             EasyPermissions.requestPermissions(
-                this,
-                "앱 사용을 위해 위치 권한 항상 허용이 필요합니다.",
-                0,
-                Manifest.permission.ACCESS_COARSE_LOCATION,
-                Manifest.permission.ACCESS_FINE_LOCATION,
-                Manifest.permission.ACCESS_BACKGROUND_LOCATION,
-                Manifest.permission.RECORD_AUDIO,
-                Manifest.permission.MODIFY_AUDIO_SETTINGS
+                    this,
+                    "앱 사용을 위해 위치 권한 항상 허용이 필요합니다.",
+                    0,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                    Manifest.permission.RECORD_AUDIO,
+                    Manifest.permission.MODIFY_AUDIO_SETTINGS
             )
         }
     }
@@ -223,13 +229,23 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
     }
 
     override fun onRequestPermissionsResult(
-        requestCode: Int,
-        permissions: Array<out String>,
-        grantResults: IntArray
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
     ) {
         Log.e("PERMISSION RESULT", requestCode.toString())
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
+    }
+
+    override fun onDestroy() {
+        leaveSession()
+        super.onDestroy()
+    }
+
+    override fun onStop() {
+        leaveSession()
+        super.onStop()
     }
 
 }
