@@ -159,10 +159,10 @@ class UserSearchFragment : Fragment() {
             val result = response.body()?.string().toString()
             Log.i("리스폰스", "$result")
             if (result == "SUCCESS") {
-                Toast.makeText(context, "친구요청을 보냈습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "친구요청을 보냈습니다", Toast.LENGTH_LONG).show()
                 Log.i("친구요청", "성공")
             } else {
-                Toast.makeText(context, "친구요청을 보내지 못했습니다", Toast.LENGTH_SHORT).show()
+                Toast.makeText(context, "친구요청을 보내지 못했습니다", Toast.LENGTH_LONG).show()
                 Log.i("친구요청", "실패")
             }
         }

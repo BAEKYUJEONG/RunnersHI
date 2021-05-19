@@ -6,6 +6,8 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "running_table")
 data class Run(
+    // 제목
+    var title: String? = null,
     // 이미지
     var img: Bitmap? = null,
     // 달리기 날짜
@@ -18,7 +20,6 @@ data class Run(
     var time: String? = null,
     // 페이스
     var pace: String? = null
-    // 칼로리 필요없음
 ){
     @PrimaryKey(autoGenerate = true)
     var id: Int? = null
