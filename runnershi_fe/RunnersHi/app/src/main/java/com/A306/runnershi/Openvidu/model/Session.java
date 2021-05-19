@@ -31,6 +31,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 
+import timber.log.Timber;
+
 public class Session {
 
     private int roomId;
@@ -102,6 +104,7 @@ public class Session {
     }
 
     public void createRemotePeerConnection(final String connectionId) {
+        Timber.e("createRemotePeerConnection");
         final List<PeerConnection.IceServer> iceServers = new ArrayList<>();
         PeerConnection.IceServer iceServer = PeerConnection.IceServer.builder("stun:stun.l.google.com:19302").createIceServer();
         iceServers.add(iceServer);
@@ -125,6 +128,7 @@ public class Session {
             @Override
             public void onAddTrack(RtpReceiver rtpReceiver, MediaStream[] mediaStreams) {
                 super.onAddTrack(rtpReceiver, mediaStreams);
+                Timber.e("ADD FUCKING VIDEO!!!!!!!!!");
                 roomFragment.setRemoteMediaStream(mediaStreams[0], remoteParticipants.get(connectionId));
             }
 
@@ -142,8 +146,11 @@ public class Session {
             }
         });
 
-        peerConnection.addTrack(localParticipant.getAudioTrack());//Add audio track to create transReceiver
-        peerConnection.addTrack(localParticipant.getVideoTrack());//Add video track to create transReceiver
+//        peerConnection.addTrack(localParticipant.getAudioTrack());//Add audio track to create transReceiver
+//        peerConnection.addTrack(localParticipant.getVideoTrack());//Add video track to create transReceiver
+
+        peerConnection.addTrack(remoteParticipants.get(connectionId).getAudioTrack());//Add audio track to create transReceiver
+        peerConnection.addTrack(remoteParticipants.get(connectionId).getVideoTrack());//Add video track to create transReceiver
 
         for (RtpTransceiver transceiver : peerConnection.getTransceivers()) {
             //We set both audio and video in receive only mode

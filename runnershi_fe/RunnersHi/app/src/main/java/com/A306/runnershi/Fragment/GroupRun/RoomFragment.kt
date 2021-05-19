@@ -46,8 +46,6 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
     var httpClient:CustomHttpClient? = null
     var currentUser: User? = null
     lateinit var session: Session
-    var participantList = ArrayList<Participant>()
-    private lateinit var mateListAdapter: MateListAdapter
 
 
 
@@ -82,6 +80,7 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
             if (mainActivity != null) {
                 Timber.e("MAIN NULL 아님")
                 if (mainActivity!!.arePermissionGranted()) {
+                    initViews()
                     Timber.e("HTTP CLIENT 실행")
                     httpClient = CustomHttpClient(
                             OPENVIDU_URL,
@@ -137,18 +136,19 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
     }
 
     fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipant) {
-        val mainHandler: Handler = Handler(mainActivity!!.mainLooper)
+        val mainHandler = Handler(mainActivity!!.mainLooper)
         val myRunnable = Runnable {
             val rowView: View = this.layoutInflater.inflate(R.layout.grouprun_mate, null)
             val rowId = View.generateViewId()
             rowView.id = rowId
             mateListView.addView(rowView)
-            val videoView = mateVideo
-            remoteParticipant.videoView = videoView
-            videoView.setMirror(false)
+            remoteParticipant.videoView = mateVideo
+
             val rootEglBase = EglBase.create()
-            videoView.init(rootEglBase.eglBaseContext, null)
-            videoView.setZOrderMediaOverlay(true)
+            remoteParticipant.videoView.init(rootEglBase.eglBaseContext, null)
+            remoteParticipant.videoView.setMirror(false)
+            remoteParticipant.videoView.setEnableHardwareScaler(true)
+            remoteParticipant.videoView.setZOrderMediaOverlay(true)
             remoteParticipant.participantNameText = mateName
             remoteParticipant.view = rowView
             remoteParticipant.participantNameText.text = remoteParticipant.participantName
@@ -159,7 +159,8 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
     fun setRemoteMediaStream(stream: MediaStream, remoteParticipant: RemoteParticipant) {
         val videoTrack = stream.videoTracks[0]
         videoTrack.addSink(remoteParticipant.videoView)
-        Runnable { remoteParticipant.videoView.visibility = View.VISIBLE }
+//        Runnable { remoteParticipant.videoView.visibility = View.VISIBLE }
+        remoteParticipant.videoView.visibility = View.VISIBLE
     }
 
     fun leaveSession() {
