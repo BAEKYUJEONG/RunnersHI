@@ -57,8 +57,14 @@ public class FriendServiceImpl implements FriendService {
 
     String content = "'" + fromUser.getUserName().getUserName() + "'님의 친구신청입니다.";
 
+    Alarm alarm = alarmRepo.findByUser_UserId_UserIdAndFromUser_UserId_UserIdAndType(
+        toUser.getUserId().getUserId(), fromUser.getUserId().getUserId(), 1);
+
+    if (alarm != null)
+      return "SUCCESS";
+
     // 알람 DB에 추가
-    Alarm alarm = new Alarm();
+    alarm = new Alarm();
     alarm.setContent(content);
     alarm.setType(1);
     alarm.setUser(toUser);
