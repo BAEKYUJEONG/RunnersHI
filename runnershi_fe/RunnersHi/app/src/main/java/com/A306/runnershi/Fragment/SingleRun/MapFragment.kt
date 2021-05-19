@@ -4,6 +4,7 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
@@ -29,7 +30,8 @@ import java.util.*
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
-class MapFragment(var link: SingleRunFragment.mapFragmentToSingleRunFragment) : Fragment(R.layout.fragment_map) {
+//class MapFragment(var link: SingleRunFragment.mapFragmentToSingleRunFragment) : Fragment(R.layout.fragment_map) {
+class MapFragment() : Fragment(R.layout.fragment_map) {
     private val viewModel : SingleRunViewModel by viewModels()
 
     private var curTimeMillis = 0L
@@ -56,6 +58,14 @@ class MapFragment(var link: SingleRunFragment.mapFragmentToSingleRunFragment) : 
 
 //        subscribeToObservers(mainActivity, homeFragment, runResultFragment)
         subscribeToObservers(mainActivity)
+
+        // 리팩토링 :
+//        val here = "MapFrag"
+//        val distanceView = null
+//        val timeView = timeText
+//        val paceView = paceText
+//
+//        singleRunFragment.globalSubscribeToObservers(here, mainActivity, distanceView, timeView, paceView)
 
         toMeterButton.setOnClickListener {
             mainActivity.makeCurrentFragment(singleRunFragment, "hide")
@@ -93,7 +103,7 @@ class MapFragment(var link: SingleRunFragment.mapFragmentToSingleRunFragment) : 
                     Timber.e("서비스를 종료합니다.")
                     zoomToSeeWholeTrack()
 //                    endRunAndSaveToDb(activity, homeFragment, runResultFragment)
-                    endRunAndSaveToDb(activity)
+                    endRunAndPostToResult(activity)
                 }else{
                     TrackingService.totallyFinished.postValue(it+1)
                 }
@@ -102,7 +112,7 @@ class MapFragment(var link: SingleRunFragment.mapFragmentToSingleRunFragment) : 
     }
 
 //    private fun endRunAndSaveToDb(activity: MainActivity, homeFragment: HomeFragment, runResultFragment: RunResultFragment) {
-    private fun endRunAndSaveToDb(activity: MainActivity) {
+    fun endRunAndPostToResult(activity: MainActivity): Run {
         // TODO "사실 이 기능을 RunResult에 넣어야한다!"
 
         map?.snapshot { bmp ->
@@ -122,7 +132,7 @@ class MapFragment(var link: SingleRunFragment.mapFragmentToSingleRunFragment) : 
             run = Run(title, bmp, dateTimestamp, avgSpeed, distanceInMeters, dateTimeSpent, finalPace)
 
             // 이 run을 다시 SingleRunFragment로 보내줄거야!
-            link.getRunData(run)
+//            link.getRunData(run)
             Log.i("찍히나?", "제발")
 
 //            val runResultFragment = RunResultFragment(run)
@@ -133,6 +143,7 @@ class MapFragment(var link: SingleRunFragment.mapFragmentToSingleRunFragment) : 
             activity.sendCommandToService("ACTION_STOP_SERVICE")
 //            activity.makeCurrentFragment(homeFragment)
         }
+        return run
     }
 
     private fun zoomToSeeWholeTrack(){

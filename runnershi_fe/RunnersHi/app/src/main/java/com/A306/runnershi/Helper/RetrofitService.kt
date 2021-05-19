@@ -184,7 +184,7 @@ interface RetrofitService {
     @POST("/record/create")
     fun recordCreate(
         @Header("token") token:String,
-        @Body body:Map<String, Any>
+        @Body body: Map<String, Any?>
     ): Call<ResponseBody>
 
     // 친구 기록 조회

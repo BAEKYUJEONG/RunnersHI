@@ -10,12 +10,14 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.RadioButton
+import android.widget.TextView
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.Dao.RunDAO
 import com.A306.runnershi.Dao.UserDAO
 import com.A306.runnershi.Fragment.GroupRun.CreateRoomFragment
@@ -26,17 +28,25 @@ import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Fragment.Ranking.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearch.UserSearchFragment
+import com.A306.runnershi.Model.Run
 import com.A306.runnershi.Openvidu.OpenviduModel.RemoteParticipant
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.PolylineOptions
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.leinardi.android.speeddial.SpeedDialView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_ranking.*
+import kotlinx.android.synthetic.main.fragment_run_result.*
+import kotlinx.android.synthetic.main.fragment_single_run.*
 import org.webrtc.MediaStream
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 open class MainActivity : AppCompatActivity() {
@@ -375,5 +385,7 @@ open class MainActivity : AppCompatActivity() {
 
     fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipant?){}
     fun leaveSession(){}
+
+
 
 }
