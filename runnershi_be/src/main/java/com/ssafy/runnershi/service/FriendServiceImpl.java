@@ -47,23 +47,33 @@ public class FriendServiceImpl implements FriendService {
     UserInfo toUser = userInfoRepo.findByUserName_UserName(friendName);
     System.out.println(fromUser);
     System.out.println(toUser);
-    if (fromUser == null || toUser == null || userId.equals(toUser.getUserId().getUserId()))
+    if (fromUser == null || toUser == null || userId.equals(toUser.getUserId().getUserId())) // ||
+                                                                                             // toUser.getMsgToken()
+                                                                                             // ==
+                                                                                             // null
+                                                                                             // ||
+                                                                                             // "".equals(toUser.getMsgToken()))
       return "FAIL";
 
     String content = "'" + fromUser.getUserName().getUserName() + "'님의 친구신청입니다.";
 
+    Alarm alarm = alarmRepo.findByUser_UserId_UserIdAndFromUser_UserId_UserIdAndType(
+        toUser.getUserId().getUserId(), fromUser.getUserId().getUserId(), 1);
+
+    if (alarm != null)
+      return "SUCCESS";
+
     // 알람 DB에 추가
-    Alarm alarm = new Alarm();
+    alarm = new Alarm();
     alarm.setContent(content);
     alarm.setType(1);
     alarm.setUser(toUser);
     alarm.setFromUser(fromUser);
     alarmRepo.save(alarm);
 
-
     // 알람 보내기
     // CompletableFuture<String> pushNotification =
-    // androidPushNotificationService.send("토큰", "친구 신청", content);
+    // androidPushNotificationService.send(toUser.getMsgToken(), "친구 신청", content);
     // CompletableFuture.allOf(pushNotification).join();
     // try {
     // String firebaseResponse = pushNotification.get();

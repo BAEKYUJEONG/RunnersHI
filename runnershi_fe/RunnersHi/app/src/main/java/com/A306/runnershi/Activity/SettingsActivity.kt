@@ -1,18 +1,24 @@
 package com.A306.runnershi.Activity
 
 import android.app.AlertDialog
+import android.app.Dialog
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
+import android.view.View
+import android.view.WindowManager
+import android.widget.Button
 import android.widget.Toast
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.ui.window.Dialog
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.preference.Preference
 import androidx.preference.PreferenceFragmentCompat
 import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.UserViewModel
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.android.synthetic.main.privacy_dialog.*
 
 @AndroidEntryPoint
 class SettingsActivity : AppCompatActivity() {
@@ -80,9 +86,32 @@ class SettingsActivity : AppCompatActivity() {
             startActivity(splashIntent)
         }
 
+
+        // privacy Policy 띄워주는 부분
         private fun showPrivacyDialog(): Boolean {
-            Toast.makeText(context, "개인정보를보여줄게요", Toast.LENGTH_LONG).show()
+            PrivacyCustomDialog(requireContext()).privacyDialog()
             return true
+        }
+
+        class PrivacyCustomDialog(context: Context) {
+            private val dialog = Dialog(context)
+
+            fun privacyDialog() {
+                dialog.setContentView(R.layout.privacy_dialog)
+
+                dialog.window!!.setLayout(
+                        WindowManager.LayoutParams.MATCH_PARENT,
+                        WindowManager.LayoutParams.WRAP_CONTENT
+                )
+                dialog.setCancelable(true)
+                dialog.setCanceledOnTouchOutside(true)
+                dialog.show()
+
+                val btn = dialog.findViewById<Button>(R.id.confirmBtn)
+                btn.setOnClickListener {
+                    dialog.dismiss()
+                }
+            }
         }
     }
 
