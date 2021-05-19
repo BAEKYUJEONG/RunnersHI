@@ -31,6 +31,8 @@ import java.util.Map;
 
 public class Session {
 
+    private int roomId;
+    private String roomTitle;
     private LocalParticipant localParticipant;
     private Map<String, RemoteParticipant> remoteParticipants = new HashMap<>();
     private String id;
@@ -40,7 +42,9 @@ public class Session {
     private CustomWebSocket websocket;
     private MainActivity activity;
 
-    public Session(String id, String token, LinearLayout views_container, MainActivity activity) {
+    public Session(int roomId, String roomTitle, String id, String token, LinearLayout views_container, MainActivity activity) {
+        this.roomId = roomId;
+        this.roomTitle = roomTitle;
         this.id = id;
         this.token = token;
         this.views_container = views_container;
@@ -188,6 +192,10 @@ public class Session {
 
         }, constraints);
     }
+
+    public int getRoomId() {return this.roomId;}
+
+    public String getRoomTitle() {return this.roomTitle;}
 
     public String getId() {
         return this.id;

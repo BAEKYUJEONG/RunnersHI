@@ -50,27 +50,14 @@ class GroupRunRoomListFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-        var list: ArrayList<Room> = tempRoomList
-        var link = roomListAdapterToList()
-
-
-
-        roomListAdapter = RoomListAdapter(list, link)
-        runningListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        runningListView.adapter = roomListAdapter
-    }
-
-    override fun onAttach(context: Context) {
-        super.onAttach(context)
-        Timber.e("Attach")
         getRoomList()
+
     }
 
     override fun onResume() {
         super.onResume()
         Timber.e("RESUME")
-        getRoomList()
+//        getRoomList()
     }
 
     private fun getRoomList(){
@@ -89,14 +76,32 @@ class GroupRunRoomListFragment : Fragment() {
                     Timber.e(sessionList.length().toString())
                     if (sessionList.length() > 0){
                         for (index in 0 until sessionList.length()){
-                            val session = sessionList[index]
-                            Timber.e(session.toString())
+                            val session = JSONObject(sessionList[index].toString())
+                            Timber.e(sessionList[index].toString())
+                            val roomSession = session["sessionId"].toString()
+                            Timber.e(session["id"].toString())
+                            Timber.e(session["sessionId"].toString())
+                            val connectionInfo = JSONObject(session["connections"].toString())
+                            val count = connectionInfo["numberOfElements"].toString().toInt()
+                            val connectionContent = JSONArray(connectionInfo["content"].toString())
+                            val type = 0
+                            if (connectionContent.length() > 0){
+                                val firstConnectionInfo = JSONObject(connectionContent[0].toString())
+                                val roomToken = firstConnectionInfo["token"].toString()
+                                val clientData = JSONObject(firstConnectionInfo["clientData"].toString())
+                                Timber.e(clientData.toString())
+                                val roomId = clientData["roomId"].toString().toInt()
+                                val title = clientData["roomTitle"].toString()
+                                val roomItem = Room(roomId, title, type, count, roomToken, roomSession)
+                                roomList.add(roomItem)
+                            }
                         }
                     }
+                    var link = roomListAdapterToList()
+                    roomListAdapter = RoomListAdapter(roomList, link)
+                    runningListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+                    runningListView.adapter = roomListAdapter
                 }
-
-
-//                Timber.e(response.body()?.string())
             }
 
             override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -114,7 +119,6 @@ class GroupRunRoomListFragment : Fragment() {
     }
 
     inner class roomListAdapterToList {
-
         fun getRoomId(room: Room) {
             openRoom(room)
         }

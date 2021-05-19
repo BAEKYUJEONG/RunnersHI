@@ -186,7 +186,7 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
     public void joinRoom() {
         Map<String, String> joinRoomParams = new HashMap<>();
         Log.e("PLZ", "방 참가");
-        joinRoomParams.put(JsonConstants.METADATA, "{\"clientData\": \"" + this.session.getLocalParticipant().getParticipantName() + "\", \"serverData\": \"서버데이터\"}");
+        joinRoomParams.put(JsonConstants.METADATA, "{\"clientData\":\"" + this.session.getLocalParticipant().getParticipantName() + "\",\"roomId\":\"" +this.session.getRoomId()+"\",\"roomTitle\":\""+this.session.getRoomTitle()+"\"}");
         Log.e("PLZ", "방 참갓!");
         joinRoomParams.put("secret", "");
         joinRoomParams.put("session", this.session.getId());

@@ -35,7 +35,7 @@ import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 
 @AndroidEntryPoint
-class RoomFragment(private val room: Room?) : Fragment(R.layout.fragment_room), EasyPermissions.PermissionCallbacks {
+class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), EasyPermissions.PermissionCallbacks {
     val userViewModel:UserViewModel by viewModels()
 
     var mainActivity:MainActivity? = null
@@ -85,7 +85,7 @@ class RoomFragment(private val room: Room?) : Fragment(R.layout.fragment_room), 
                         ).trim()
                     )
 
-                    getTokenSuccess(mainActivity!!.roomToken, mainActivity!!.roomSession)
+                    getTokenSuccess(room.roomToken, room.roomSession)
                 } else {
                     val permissionsFragment: DialogFragment = PermissionsDialogFragment()
                     permissionsFragment.show(
@@ -108,14 +108,15 @@ class RoomFragment(private val room: Room?) : Fragment(R.layout.fragment_room), 
 
     private fun getTokenSuccess(token: String, sessionId: String){
         // Initialize our session
-        session = Session(sessionId, token, grouprun_item, mainActivity)
-
-        val localParticipant = LocalParticipant(currentUser?.userName, session, requireContext())
-        localParticipant.startAudio()
-
-
-        // Initialize and connect the websocket to OpenVidu Server
-        startWebSocket()
+        if (room.room_id > 0){
+            session = Session(room.room_id, room.title, sessionId, token, grouprun_item, mainActivity)
+            val localParticipant = LocalParticipant(currentUser?.userName, session, requireContext())
+            localParticipant.startAudio()
+            // Initialize and connect the websocket to OpenVidu Server
+            startWebSocket()
+        } else {
+            mainActivity?.makeCurrentFragment(GroupRunRoomListFragment())
+        }
     }
 
     private fun startWebSocket(){
