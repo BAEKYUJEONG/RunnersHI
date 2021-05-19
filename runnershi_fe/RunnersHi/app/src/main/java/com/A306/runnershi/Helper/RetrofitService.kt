@@ -187,6 +187,12 @@ interface RetrofitService {
         @Body body:Map<String, Any>
     ): Call<ResponseBody>
 
+    // 친구 기록 조회
+    @GET("/record/list")
+    fun recordList(
+        @Header("token") token:String
+    ) : Call<ResponseBody>
+
     //------나머지 부분은 SWAGGER가 되는대로 추가하겠습니다.------//
 
     //-------------------------------------------------//

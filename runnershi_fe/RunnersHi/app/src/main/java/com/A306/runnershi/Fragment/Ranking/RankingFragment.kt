@@ -1,19 +1,15 @@
 package com.A306.runnershi.Fragment.Ranking
 
 import android.os.Bundle
-import android.view.MotionEvent
 import android.view.View
 import android.widget.AdapterView
 import android.widget.AdapterView.OnItemSelectedListener
 import android.widget.ArrayAdapter
 import android.widget.Spinner
-import androidx.core.view.get
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.RecyclerView
-import com.A306.runnershi.Fragment.Profile.RunAdapter
 import com.A306.runnershi.Helper.RetrofitClient
 import com.A306.runnershi.Model.Ranking
 import com.A306.runnershi.R
@@ -21,7 +17,6 @@ import com.A306.runnershi.ViewModel.UserViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_ranking.*
 import okhttp3.ResponseBody
 import retrofit2.Call

@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
     android:orientation="vertical"
-    android:padding="10dp">
+    android:padding="5dp">
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
@@ -13,11 +13,12 @@
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
         android:layout_marginEnd="8dp"
         android:layout_marginBottom="8dp"
         android:padding="10dp"
         app:cardCornerRadius="10dp"
-        app:cardElevation="10dp"
+        app:cardElevation="5dp"
         app:contentPadding="10dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
@@ -33,11 +34,14 @@
                 android:layout_height="match_parent">
 
                 <TextView
-                    android:id="@+id/nickname"
+                    android:id="@+id/fNickname"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="start"
-                    android:padding="8dp"
+                    android:layout_gravity="left"
+                    android:paddingLeft="10dp"
+                    android:paddingTop="10dp"
+                    android:paddingRight="8dp"
+                    android:paddingBottom="15dp"
                     android:text="닉네임"
                     android:textSize="18sp"
                     android:textStyle="bold" />
@@ -48,12 +52,12 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|start"
                     android:layout_marginLeft="65dp"
-                    android:paddingBottom="8dp"
+                    android:paddingBottom="15dp"
                     android:text="님"
                     android:textSize="15sp" />
 
                 <TextView
-                    android:id="@+id/timestamp"
+                    android:id="@+id/fTimestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
@@ -63,63 +67,56 @@
             </FrameLayout>
 
             <TextView
-                android:id="@+id/friendTitle"
+                android:id="@+id/fTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:layout_weight="1"
-                android:padding="8dp"
-                android:text="중랑천 산책 코스"
-                android:textSize="24sp" />
+                android:paddingLeft="10dp"
+                android:text="00:42:13"
+                android:textSize="18dp"
+                app:layout_constraintEnd_toStartOf="@+id/fDistance"
+                app:layout_constraintStart_toEndOf="@+id/tvDate"
+                app:layout_constraintTop_toBottomOf="@+id/ivRunImage" />
 
-            <LinearLayout
+            <FrameLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:divider="@drawable/small_divider"
-                android:gravity="center"
-                android:padding="8dp"
-                android:showDividers="middle">
+                android:padding="5dp">
 
+
+                <TextView
+                    android:id="@+id/fTitle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_horizontal|left"
+                    android:paddingLeft="5dp"
+                    android:text="중랑천 산책 코스"
+                    android:textSize="24sp"
+                    android:textStyle="bold" />
 
                 <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
+                    android:layout_height="match_parent"
+                    android:layout_gravity="center_vertical|end">
 
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvDistance"
+                    <TextView
+                        android:id="@+id/fDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:layout_gravity="center"
                         android:text="27.3"
-                        android:textSize="18dp"
+                        android:textSize="24sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/KMtextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_gravity="bottom"
                         android:padding="5dp"
                         android:text="KM" />
 
                 </LinearLayout>
 
-                <LinearLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent">
-
-                    <com.google.android.material.textview.MaterialTextView
-                        android:id="@+id/tvTime"
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        android:text="00:42:13"
-                        android:textSize="18dp"
-                        android:textStyle="bold"
-                        app:layout_constraintEnd_toStartOf="@+id/tvDistance"
-                        app:layout_constraintStart_toEndOf="@+id/tvDate"
-                        app:layout_constraintTop_toBottomOf="@+id/ivRunImage" />
-
-                </LinearLayout>
-            </LinearLayout>
+            </FrameLayout>
         </LinearLayout>
 
     </androidx.cardview.widget.CardView>

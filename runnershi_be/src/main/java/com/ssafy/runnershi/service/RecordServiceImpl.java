@@ -15,6 +15,7 @@ import com.ssafy.runnershi.entity.Record;
 import com.ssafy.runnershi.entity.RecordDetail;
 import com.ssafy.runnershi.entity.RecordResult;
 import com.ssafy.runnershi.entity.UserInfo;
+import com.ssafy.runnershi.repository.FriendRepository;
 import com.ssafy.runnershi.repository.RecordRepository;
 import com.ssafy.runnershi.repository.UserInfoRepository;
 
@@ -26,6 +27,9 @@ public class RecordServiceImpl implements RecordService {
 
   @Autowired
   private UserInfoRepository userInfoRepo;
+
+  @Autowired
+  private FriendRepository friendRepo;
 
   @Autowired
   private ZSetOperations<String, String> zset;
@@ -53,7 +57,7 @@ public class RecordServiceImpl implements RecordService {
     String date = format.format(new Date());
     // Date today = format.parse(date);
     // System.out.println(today);
-    if (recordRepo.searchTodayRecord(userId, date) == null) {
+    if (recordRepo.searchTodayRecord(userId, date) == 0) {
       userInfo.setTotalDay(userInfo.getTotalDay() + 1);
     }
 
@@ -146,7 +150,7 @@ public class RecordServiceImpl implements RecordService {
     }
 
 
-    if (recordRepo.searchTodayRecord(userId, date) == null) {
+    if (recordRepo.searchTodayRecord(userId, date) == 0) {
       userInfo.setTotalDay(userInfo.getTotalDay() - 1);
     }
 
@@ -158,7 +162,7 @@ public class RecordServiceImpl implements RecordService {
     zset.add("totalTimeRank", value, userInfo.getTotalTime());
     zset.add("totalPaceRank", value, userInfo.getBestPace());
 
-    return null;
+    return "SUCCESS";
   }
 
   @Override
@@ -177,7 +181,17 @@ public class RecordServiceImpl implements RecordService {
     if (userInfo == null)
       return null;
 
-    ArrayList<Record> recordList = (ArrayList<Record>) recordRepo.findAll();
+    // ArrayList<Record> recordList = (ArrayList<Record>) recordRepo.findAll();
+    // ArrayList<AllRecord> result = new ArrayList<AllRecord>();
+    // for (Record record : recordList) {
+    // result.add(new AllRecord(record.getRecordId(), record.getUser().getUserName().getUserName(),
+    // record.getDistance(), record.getEndTime(), record.getRunningTime(), record.getTitle()));
+    // }
+    //
+    // return result;
+
+    ArrayList<Record> recordList =
+        recordRepo.getFriendRecordList(friendRepo.getFriendsUserId(userId));
     ArrayList<AllRecord> result = new ArrayList<AllRecord>();
     for (Record record : recordList) {
       result.add(new AllRecord(record.getRecordId(), record.getUser().getUserName().getUserName(),
