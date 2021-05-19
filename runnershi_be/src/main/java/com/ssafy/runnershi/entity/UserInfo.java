@@ -44,4 +44,6 @@ public class UserInfo implements Serializable {
   private int thisWeekTime;
   private double thisWeekPace;
 
+  private String msgToken;
+
 }
