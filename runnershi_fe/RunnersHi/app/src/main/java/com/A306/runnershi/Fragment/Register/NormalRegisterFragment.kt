@@ -38,7 +38,7 @@ class NormalRegisterFragment : Fragment() {
 
     private var emailCheck = false
     private var nicknameCheck = false
-//    private var code = ""
+    private var code = ""
 
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -67,8 +67,8 @@ class NormalRegisterFragment : Fragment() {
                                 Toast.makeText(requireContext(), "메일을 확인해주세요.", Toast.LENGTH_LONG).show()
                             } else {
                                 Toast.makeText(requireContext(), "메일을 확인 후 코드를 입력하세요", Toast.LENGTH_LONG).show()
-//                                codeInput.visibility = View.VISIBLE
-//                                code = result["code"].toString()
+                                codeInput.visibility = View.VISIBLE
+                                code = result["code"].toString()
                             }
                         }
 
@@ -119,9 +119,9 @@ class NormalRegisterFragment : Fragment() {
                     nickname == "" -> {
                         Toast.makeText(activity, "닉네임을 입력해주세요.", Toast.LENGTH_SHORT).show()
                     }
-//                    inputCode != code -> {
-//                        Toast.makeText(activity, "코드를 확인해주세요.", Toast.LENGTH_SHORT).show()
-//                    }
+                    inputCode != code -> {
+                        Toast.makeText(activity, "코드를 확인해주세요.", Toast.LENGTH_SHORT).show()
+                    }
                     pwd == "" -> {
                         Toast.makeText(activity, "비밀번호를 입력해주세요.", Toast.LENGTH_SHORT).show()
                     }
@@ -154,9 +154,6 @@ class NormalRegisterFragment : Fragment() {
                                         val permissionInfo = PermissionInfo(requireContext())
                                         permissionInfo.showLocationPermissionInfo(Intent(activity, MainActivity::class.java))
 
-//                                        val intent = Intent(activity, MainActivity::class.java)
-//                                        startActivity(intent)
-//                                        activity?.overridePendingTransition(0, 0)
                                     }
                                 }
                             }
