@@ -19,10 +19,26 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent">
 
+        <androidx.cardview.widget.CardView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+            android:layout_marginLeft="15dp"
+            app:cardCornerRadius="50dp">
+
+            <ImageView
+                android:id="@+id/friendProfileImg"
+                android:layout_width="40dp"
+                android:layout_height="40dp"
+                android:scaleType="centerCrop"
+                android:src="@drawable/runners_profile" />
+        </androidx.cardview.widget.CardView>
+
         <TextView
             android:id="@+id/friend_nick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="55dp"
             android:fontFamily="@font/nanumsquare_regular"
             android:padding="20dp"
             android:text="닉네임"

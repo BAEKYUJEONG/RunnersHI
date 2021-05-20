@@ -14,6 +14,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
+import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Helper.RetrofitClient
 import com.A306.runnershi.Model.Alarm
 import com.A306.runnershi.R
@@ -23,6 +24,7 @@ import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_alarm.*
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.item_alarm.*
 import okhttp3.ResponseBody
 import retrofit2.Call
@@ -72,6 +74,7 @@ class AlarmActivity : AppCompatActivity() {
 
         override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
             super.onViewCreated(view, savedInstanceState)
+
             getAlarmFriendInfo()
         }
 

@@ -1,11 +1,13 @@
 package com.A306.runnershi.Fragment.Profile
 
+import android.graphics.Bitmap
 import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -25,32 +27,45 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import kotlin.random.Random
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() { //, View.OnClickListener
 
+    companion object {
+        var profileImgList = intArrayOf(
+            R.drawable.profile_1, R.drawable.profile_2, R.drawable.profile_3, R.drawable.profile_4, R.drawable.profile_5,
+            R.drawable.profile_6, R.drawable.profile_7, R.drawable.profile_8, R.drawable.profile_9, R.drawable.profile_10,
+            R.drawable.profile_11, R.drawable.profile_12, R.drawable.profile_13, R.drawable.profile_14, R.drawable.profile_17,
+            R.drawable.profile_18, R.drawable.profile_19
+        )
+    }
+
     private val userViewModel: UserViewModel by viewModels()
     private val singleRunViewModel : SingleRunViewModel by viewModels()
     private lateinit var runAdapter: RunAdapter
+
     var place = arrayOf(
-            "노원구" , "군포", "대야동", "송파구", "강남구"
+            "노원구" , "강동구", "송파구", "강남구"
     )
     var time = arrayOf(
-            "55", "48", "23", "12", "37"
+            "55", "48", "12", "37"
     )
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        // Inflate the layout for this fragment
 
-        //achievement_layout.setOnClickListener(this)
         return inflater.inflate(R.layout.fragment_profile, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        // 랜덤 프로필 처리
+        var num = Math.random() * profileImgList.size
+        profileImg.setImageResource(profileImgList[num.toInt()])
 
         rankingClick()
         freindClick()
