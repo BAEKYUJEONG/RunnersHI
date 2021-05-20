@@ -27,7 +27,7 @@ class RankingAdapter(private val rankingList: Array<Ranking>, private val rankin
     override fun onBindViewHolder(holder: RankingViewHolder, position: Int) {
         holder.rankingNumber.text = (position+1).toString()
         holder.rankingName.text = rankingList[position].userName
-        holder.rankingData.text = rankingList[position].userData.toString()
+        holder.rankingData.text = String.format("%.2f", rankingList[position].userData) + "K"
         holder.rankingName.setOnClickListener {
             Timber.e(rankingList[position].userId)
             rankingFragment.itemClick(rankingList[position].userId.toString())
