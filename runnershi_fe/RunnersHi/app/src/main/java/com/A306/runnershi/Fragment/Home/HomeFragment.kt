@@ -1,10 +1,12 @@
 package com.A306.runnershi.Fragment.Home
 
+import android.os.Build
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -22,6 +24,12 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 import timber.log.Timber
+import java.time.LocalDate
+import java.time.LocalDateTime
+import java.time.LocalTime
+import java.time.format.DateTimeFormatter
+import java.util.*
+import kotlin.collections.ArrayList
 
 @AndroidEntryPoint
 class HomeFragment : Fragment() {
@@ -74,17 +82,30 @@ class HomeFragment : Fragment() {
                         TODO("Not yet implemented")
                     }
 
+                    @RequiresApi(Build.VERSION_CODES.O)
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                         val itemType = object : TypeToken<List<Map<String, Any>>>() {}.type
                         val timelineList = Gson().fromJson<List<Map<String, Any>>>(response.body()?.string(), itemType)
                         val oneTimelineList = ArrayList<Detail>()
                         for(user in timelineList){
                             val userName = user["userName"].toString()
-                            val endTime = user["endTime"].toString().toLong()
-                            val runningTime = Integer.parseInt(user["runningTime"].toString())
+
+                            // endTime 변환하기
+//                            val endTime = user["endTime"].toString().toLong()
+                            val timeDate = user["endTime"].toString()
+                            val formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd'T'HH:mm:ss.SSSz")
+                            val formattedDate = LocalDate.parse(timeDate, formatter).toString()
+                            val formattedTime = LocalTime.parse(timeDate, formatter).toString()
+
+//                            val endTime = LocalDateTime.parse(timeDate, formatter)
+
+                            val formattedRunningTime = user["runningTime"].toString().substring(0, 4)
+                            Timber.e("러닝타임은 왜 이렇게 찍힐까 $formattedRunningTime")
+                            val runningTime = Integer.parseInt(formattedRunningTime)
+
                             val title = user["title"].toString()
                             val distance = user["distance"].toString().toDouble()
-                            val timeline = Detail(userName, endTime, runningTime, title, distance)
+                            val timeline = Detail(userName, formattedDate, formattedTime, runningTime, title, distance)
                             oneTimelineList.add(timeline)
                         }
                         setupRecyclerView(oneTimelineList.toTypedArray())

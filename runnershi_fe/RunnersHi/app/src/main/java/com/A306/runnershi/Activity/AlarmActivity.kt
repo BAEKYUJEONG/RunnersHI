@@ -1,11 +1,15 @@
 package com.A306.runnershi.Activity
 
+import android.content.Context
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.ContextThemeWrapper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
@@ -14,10 +18,12 @@ import com.A306.runnershi.Helper.RetrofitClient
 import com.A306.runnershi.Model.Alarm
 import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.UserViewModel
+import com.google.android.play.core.splitinstall.p.d
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_alarm.*
+import kotlinx.android.synthetic.main.item_alarm.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -86,7 +92,7 @@ class AlarmActivity : AppCompatActivity() {
                             val userAlarmList = ArrayList<Alarm>()
                             for(user in userList){
                                 val friendUserId = user["friendUserId"].toString()
-                                val alarmId = user["alarmId"].toString().toLong()
+                                val alarmId = user["alarmId"].toString().replace(".0","").toLong()
                                 val friendName = user["fromUserName"].toString()
                                 val content = user["content"].toString()
                                 val userItem = Alarm(alarmId, friendUserId, friendName, content)
@@ -113,9 +119,23 @@ class AlarmActivity : AppCompatActivity() {
                     val body = mapOf("friendUserId" to friendUserId, "alarmId" to alarmId)
 
                     // alertDialog 선택
-                    
+                    acceptButton.setOnClickListener {
+                        // Dialog
+                        val builder = AlertDialog.Builder(ContextThemeWrapper(requireContext(), R.style.Theme_AppCompat_Light_Dialog))
+                        builder.setTitle("친구 수락")
+                        builder.setMessage("친구를 수락하시겠습니까?")
+                        builder.setPositiveButton("확인") { _, _ ->
+                            d("alert ok")
+                            // 여기서 레트로핏 통신
+                            RetrofitClient.getInstance().acceptFriend(token, body as Map<String, String>).enqueue(afterAccpetFriend)
+                        }
+                        builder.setNegativeButton("취소") { _, _ ->
+                            d("alert cancel")
+                        }
 
-                    RetrofitClient.getInstance().acceptFriend(token, body as Map<String, String>).enqueue(afterAccpetFriend)
+                        builder.show()
+                    }
+
                 }
             })
         }
