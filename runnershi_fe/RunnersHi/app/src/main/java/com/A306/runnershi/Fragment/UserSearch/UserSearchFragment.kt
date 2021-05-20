@@ -134,7 +134,7 @@ class UserSearchFragment : Fragment() {
             if (searchedUserList != null) {
 
                 //매번 클리어해줘야하므로
-//                userList = ArrayList()
+                userList = ArrayList()
                 for (user in searchedUserList) {
                     val userId = user["userId"].toString()
                     val userName = user["userName"].toString()
