@@ -30,20 +30,22 @@ class TimelineAdapter(private val timelineList:Array<Detail>, private val homeFr
     }
 
     override fun onBindViewHolder(holder: TimelineViewHolder, position: Int) {
-        var runningTimeSec = timelineList[position].runningTime
-        var runningTimeMin = runningTimeSec / 60
-        var runningTimeHour = runningTimeMin / 60
+        var runningTimeSec = ((timelineList[position].runningTime % 60) + 100).toString().substring(1)
+        var runningTimeMin = (((runningTimeSec.toInt() / 60) % 60) + 100).toString().substring(1)
+        var runningTimeHour = (((runningTimeMin.toInt() / 60) % 60) + 100).toString().substring(1)
 
-        runningTimeSec %= 60
-        runningTimeMin %= 60
-        runningTimeHour %= 60
+        val formattedRunningTime = "$runningTimeHour:$runningTimeMin:$runningTimeSec"
+//        val formattedTime = "${String.format("00", runningTimeHour)}:${String.format("00", runningTimeMin)}:${String.format("00", runningTimeSec)}"
 
-        val formattedTime = "$runningTimeHour:$runningTimeMin:$runningTimeSec"
+        val dateTimeHour = timelineList[position].endTime.toString().substring(0, 2).toInt().toString()
+        val dateTimeMin = timelineList[position].endTime.toString().substring(3, 5).toInt().toString()
+
+        val formattedDateTime = "${dateTimeHour}시 ${dateTimeMin}분에"
 
         holder.itemView.apply {
             fNickname.text = timelineList[position].userName
-            fTimestamp.text = timelineList[position].endTime.toString()
-            fTime.text = formattedTime
+            fTimestamp.text = formattedDateTime
+            fTime.text = formattedRunningTime
             fTitle.text = timelineList[position].title
             fDistance.text = timelineList[position].distance.toString()
         }
