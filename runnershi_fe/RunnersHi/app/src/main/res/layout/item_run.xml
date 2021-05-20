@@ -41,13 +41,33 @@
                     android:layout_marginEnd="8dp"
                     android:layout_marginBottom="16dp"></ImageView>
 
-                <com.google.android.material.textview.MaterialTextView
-                    android:id="@+id/tvDate"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:padding="15dp"
-                    android:text="DATE"
-                    android:textSize="18sp" />
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:padding="5dp">
+
+                    <com.google.android.material.textview.MaterialTextView
+                        android:id="@+id/tvDate"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:fontFamily="@font/nanumsquare_regular"
+                        android:padding="12dp"
+                        android:text="DATE"
+                        android:textColor="@color/black"
+                        android:textSize="18sp" />
+
+                    <TextView
+                        android:id="@+id/tvTitle"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_weight="1"
+                        android:fontFamily="@font/nanumsquare_regular"
+                        android:gravity="center"
+                        android:paddingLeft="12dp"
+                        android:text="4월 25일의 달리기"
+                        android:textColor="@color/black" />
+                </LinearLayout>
 
             </LinearLayout>
 
@@ -68,15 +88,20 @@
                         android:id="@+id/fDistance"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:paddingBottom="5dp"
                         android:text="DISTANCE"
+                        android:textColor="@color/black"
                         android:textSize="15dp"
-                        android:textStyle="bold" />
+                        android:textStyle="bold"
+                        app:fontFamily="@font/nanumsquare_regular" />
 
                     <TextView
                         android:id="@+id/KMtextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="KM" />
+                        android:fontFamily="@font/nanumsquare_regular"
+                        android:text="KM"
+                        android:textColor="@color/black" />
 
                 </LinearLayout>
 
@@ -89,7 +114,10 @@
                         android:id="@+id/tvAvgSpeed"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/nanumsquare_regular"
+                        android:paddingBottom="5dp"
                         android:text="AVGSPEED"
+                        android:textColor="@color/black"
                         android:textSize="15dp"
                         android:textStyle="bold" />
 
@@ -97,7 +125,9 @@
                         android:id="@+id/paceTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="페이스" />
+                        android:fontFamily="@font/nanumsquare_regular"
+                        android:text="페이스"
+                        android:textColor="@color/black" />
                 </LinearLayout>
 
                 <LinearLayout
@@ -109,7 +139,10 @@
                         android:id="@+id/fTime"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/nanumsquare_regular"
+                        android:paddingBottom="5dp"
                         android:text="TIME"
+                        android:textColor="@color/black"
                         android:textSize="15dp"
                         android:textStyle="bold"
                         app:layout_constraintEnd_toStartOf="@+id/fDistance"
@@ -120,7 +153,9 @@
                         android:id="@+id/listTimeTextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="시간" />
+                        android:fontFamily="@font/nanumsquare_regular"
+                        android:text="시간"
+                        android:textColor="@color/black" />
                 </LinearLayout>
             </LinearLayout>
         </LinearLayout>

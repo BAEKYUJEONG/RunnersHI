@@ -6,10 +6,14 @@ import android.view.ViewGroup
 import androidx.recyclerview.widget.AsyncListDiffer
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView
+import com.A306.runnershi.Fragment.SingleRun.RunResultFragment.Companion.TITLE
 import com.A306.runnershi.Model.Run
 import com.A306.runnershi.R
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_run.view.*
+import kotlinx.android.synthetic.main.item_run.view.fDistance
+import kotlinx.android.synthetic.main.item_run.view.fTime
+import kotlinx.android.synthetic.main.item_timeline.view.*
 import java.text.SimpleDateFormat
 import java.util.*
 
