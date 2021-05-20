@@ -22,6 +22,7 @@ import com.A306.runnershi.Dao.RunDAO
 import com.A306.runnershi.Dao.UserDAO
 import com.A306.runnershi.Fragment.GroupRun.CreateRoomFragment
 import com.A306.runnershi.Fragment.GroupRun.GroupRunRoomListFragment
+import com.A306.runnershi.Fragment.GroupRun.RoomFragment
 import com.A306.runnershi.Fragment.Home.HomeFragment
 import com.A306.runnershi.Fragment.Profile.AchievementFragment
 import com.A306.runnershi.Fragment.Profile.ProfileFragment
@@ -330,14 +331,6 @@ open class MainActivity : AppCompatActivity() {
     }
 
     // RTC 관련 함수
-    open fun setRemoteMediaStream(stream: MediaStream, remoteParticipant: RemoteParticipant) {
-        val videoTrack = stream.videoTracks[0]
-        videoTrack.addSink(remoteParticipant.getVideoView())
-        runOnUiThread {
-            remoteParticipant.getVideoView()?.setVisibility(View.VISIBLE)
-        }
-    }
-
     fun setTokenAndSession(token: String, sessionId: String){
         roomToken = token
         roomSession = sessionId
@@ -383,10 +376,4 @@ open class MainActivity : AppCompatActivity() {
             )
         }
     }
-
-    fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipant?){}
-    fun leaveSession(){}
-
-
-
 }
