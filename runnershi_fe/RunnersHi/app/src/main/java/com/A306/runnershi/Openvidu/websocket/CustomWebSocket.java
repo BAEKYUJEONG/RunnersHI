@@ -631,7 +631,7 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
             Runnable myRunnable = () -> {
                 Toast toast = Toast.makeText(activity, e.getMessage(), Toast.LENGTH_LONG);
                 toast.show();
-                roomFragment.leaveSession();
+//                roomFragment.leaveSession();
             };
             mainHandler.post(myRunnable);
             websocketCancelled = true;

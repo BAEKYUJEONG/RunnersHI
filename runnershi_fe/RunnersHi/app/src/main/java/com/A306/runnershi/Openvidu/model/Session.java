@@ -129,7 +129,7 @@ public class Session {
             public void onAddTrack(RtpReceiver rtpReceiver, MediaStream[] mediaStreams) {
                 super.onAddTrack(rtpReceiver, mediaStreams);
                 Timber.e("ADD FUCKING VIDEO!!!!!!!!!");
-                roomFragment.setRemoteMediaStream(mediaStreams[0], remoteParticipants.get(connectionId));
+//                roomFragment.setRemoteMediaStream(mediaStreams[0], remoteParticipants.get(connectionId));
             }
 
             @Override

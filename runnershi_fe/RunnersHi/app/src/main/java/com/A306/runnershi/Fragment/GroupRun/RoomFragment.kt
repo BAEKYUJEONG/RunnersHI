@@ -2,6 +2,7 @@ package com.A306.runnershi.Fragment.GroupRun
 
 import android.Manifest
 import android.annotation.SuppressLint
+import android.content.Context
 import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Build
@@ -18,8 +19,11 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
+import com.A306.runnershi.Fragment.Home.HomeFragment
 import com.A306.runnershi.Helper.JavaScriptHelper
 import com.A306.runnershi.Helper.WebViewConstant
 import com.A306.runnershi.Model.Room
@@ -55,6 +59,8 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
     var mainActivity:MainActivity? = null
     var httpClient:CustomHttpClient? = null
     var currentUser: User? = null
+    var userList: ArrayList<User> = ArrayList<User>()
+    lateinit var mateListAdapter:MateListAdapter
     lateinit var session: Session
 
     private var curTimeMillis = 0L
@@ -133,13 +139,12 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
 //                }
 //            }
         })
-
-
-
-
-
         // 방 이름 설정해주기
         roomTitle.text = room?.title
+        leaveSessionButton.setOnClickListener {
+            sessionWebView.loadUrl("javascript:leaveSession()")
+            mainActivity!!.makeCurrentFragment(HomeFragment())
+        }
 
         requestPermissions()
         Timber.e(room?.title)
@@ -147,72 +152,32 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
 
 
         // 함께 뛰는 메이트들 불러오기
-//        var list: ArrayList<User> = tempUserList
-//
-//        mateListAdapter = MateListAdapter(participantList)
-//        mateListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-//        mateListView.adapter = mateListAdapter
+
+        mateListAdapter = MateListAdapter(userList)
+        mateListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+        mateListView.adapter = mateListAdapter
     }
+    inner class JavaScriptHelper(private val context: Context) {
+        @JavascriptInterface
+        fun addParticipant(userName:String){
+            userList.add(User(null, null, userName, null))
 
-//    private fun getTokenSuccess(token: String, sessionId: String){
-//        // Initialize our session
-//        if (room.room_id > 0){
-//            session = Session(room.room_id, room.title, sessionId, token, mateListView, mainActivity, this)
-//            val localParticipant = LocalParticipant(currentUser?.userName, session, requireContext(), localVideo)
-//            localName.text = localParticipant.participantName
-//            localParticipant.startCamera()
-//            // Initialize and connect the websocket to OpenVidu Server
-//            startWebSocket()
-//        } else {
-//            mainActivity?.makeCurrentFragment(GroupRunRoomListFragment())
-//        }
-//    }
-//
-//    private fun initViews() {
-//        val rootEglBase = EglBase.create()
-//        localVideo.init(rootEglBase.eglBaseContext, null)
-//        localVideo.setMirror(true)
-//        localVideo.setEnableHardwareScaler(true)
-//        localVideo.setZOrderMediaOverlay(true)
-//    }
+            val mainHandler = Handler(mainActivity!!.mainLooper)
+            val myRunnable = Runnable {
+                mateListAdapter.notifyDataSetChanged()
+            }
+            mainHandler.post(myRunnable)
+        }
 
-    private fun startWebSocket(){
-        val webSocket = CustomWebSocket(session, OPENVIDU_URL, mainActivity, this)
-        webSocket.execute()
-        session.setWebSocket(webSocket)
-    }
-//
-//    fun createRemoteParticipantVideo(remoteParticipant: RemoteParticipant) {
-//        val mainHandler = Handler(mainActivity!!.mainLooper)
-//        val myRunnable = Runnable {
-//            val rowView: View = this.layoutInflater.inflate(R.layout.grouprun_mate, null)
-//            val rowId = View.generateViewId()
-//            rowView.id = rowId
-//            mateListView.addView(rowView)
-//            remoteParticipant.videoView = mateVideo
-//
-//            val rootEglBase = EglBase.create()
-//            remoteParticipant.videoView.init(rootEglBase.eglBaseContext, null)
-//            remoteParticipant.videoView.setMirror(false)
-//            remoteParticipant.videoView.setEnableHardwareScaler(true)
-//            remoteParticipant.videoView.setZOrderMediaOverlay(true)
-//            remoteParticipant.participantNameText = mateName
-//            remoteParticipant.view = rowView
-//            remoteParticipant.participantNameText.text = remoteParticipant.participantName
-//        }
-//        mainHandler.post(myRunnable)
-//    }
-
-    fun setRemoteMediaStream(stream: MediaStream, remoteParticipant: RemoteParticipant) {
-        val videoTrack = stream.videoTracks[0]
-        videoTrack.addSink(remoteParticipant.videoView)
-//        Runnable { remoteParticipant.videoView.visibility = View.VISIBLE }
-        remoteParticipant.videoView.visibility = View.VISIBLE
-    }
-
-    fun leaveSession() {
-        session.leaveSession()
-        httpClient!!.dispose()
+        @JavascriptInterface
+        fun removeParticipant(userName:String){
+            userList.remove(User(null, null, userName, null))
+            val mainHandler = Handler(mainActivity!!.mainLooper)
+            val myRunnable = Runnable {
+                mateListAdapter.notifyDataSetChanged()
+            }
+            mainHandler.post(myRunnable)
+        }
     }
 
     private fun subscribeToObservers(){
@@ -284,16 +249,6 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
         Log.e("PERMISSION RESULT", requestCode.toString())
         super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
-    }
-
-    override fun onDestroy() {
-        leaveSession()
-        super.onDestroy()
-    }
-
-    override fun onStop() {
-        leaveSession()
-        super.onStop()
     }
 
 }

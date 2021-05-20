@@ -131,6 +131,7 @@ function appendUserData(videoElement, connection) {
 		userData = JSON.parse(connection.data).clientData;
 		nodeId = connection.connectionId;
 	}
+	Android.addParticipant(userData)
 	var dataNode = document.createElement('div');
 	dataNode.className = "data-node";
 	dataNode.id = "data-" + nodeId;
@@ -141,6 +142,7 @@ function appendUserData(videoElement, connection) {
 
 function removeUserData(connection) {
 	var dataNode = document.getElementById("data-" + connection.connectionId);
+	Android.removeParticipant(dataNode.firstChild.textContent)
 	dataNode.parentNode.removeChild(dataNode);
 }
 
