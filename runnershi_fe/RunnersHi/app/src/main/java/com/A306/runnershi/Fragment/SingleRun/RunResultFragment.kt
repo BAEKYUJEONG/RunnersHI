@@ -50,7 +50,7 @@ class RunResultFragment(var runResult: Run, val runningDate: Calendar, val timeS
 
     private var curTimeMillis = 0L
 
-    private val resultDistance = runResult.distance.toString()
+    private val resultDistance = runResult.distance
     private val resultTime = runResult.time.toString()
     private val resultPace = runResult.pace.toString()
     private var resultRoute = runResult.img
@@ -75,7 +75,8 @@ class RunResultFragment(var runResult: Run, val runningDate: Calendar, val timeS
 
         subscribeToObservers(mainActivity)
 
-        distanceDataView.text = "${resultDistance} K"
+        dateTextView.text = runResult.title
+        distanceDataView.text = "$resultDistance K"
         timeDataView.text = resultTime
         paceDataView.text = resultPace
 
