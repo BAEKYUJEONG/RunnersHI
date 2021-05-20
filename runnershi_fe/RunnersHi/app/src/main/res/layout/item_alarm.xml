@@ -3,7 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:orientation="vertical">
 
     <androidx.cardview.widget.CardView
@@ -56,7 +56,10 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="right"
                 android:backgroundTint="@color/purple_200"
+                android:elevation="10dp"
+                android:fontFamily="@font/spoqahansansneo_regular"
                 android:text="친구 수락"
+                android:textColor="@color/white"
                 android:textSize="15sp"
                 android:textStyle="bold" />
 
