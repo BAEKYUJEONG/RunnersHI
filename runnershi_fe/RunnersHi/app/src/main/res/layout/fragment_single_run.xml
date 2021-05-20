@@ -79,8 +79,8 @@
 
     <ImageView
         android:id="@+id/imageView33"
-        android:layout_width="250dp"
-        android:layout_height="250dp"
+        android:layout_width="400dp"
+        android:layout_height="400dp"
         android:background="#FFFFFF"
         android:scaleType="centerInside"
         android:src="@mipmap/running_background"
@@ -112,6 +112,7 @@
         android:fontFamily="@font/nanumsquare_regular"
         android:text="KM"
         android:textColor="#FFFFFF"
+        android:textSize="18sp"
         app:layout_constraintEnd_toEndOf="@+id/imageView33"
         app:layout_constraintStart_toStartOf="@+id/imageView33"
         app:layout_constraintTop_toBottomOf="@+id/distanceText" />
