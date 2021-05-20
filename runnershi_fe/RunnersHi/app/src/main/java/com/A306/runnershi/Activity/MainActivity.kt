@@ -30,7 +30,7 @@ import com.A306.runnershi.Fragment.Ranking.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearch.UserSearchFragment
 import com.A306.runnershi.Model.Run
-import com.A306.runnershi.Openvidu.OpenviduModel.RemoteParticipant
+import com.A306.runnershi.Openvidu.model.RemoteParticipant
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
 import com.google.android.gms.maps.CameraUpdateFactory
