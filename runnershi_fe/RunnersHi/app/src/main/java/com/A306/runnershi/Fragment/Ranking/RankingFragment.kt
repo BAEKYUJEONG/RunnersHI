@@ -141,7 +141,7 @@ class RankingFragment : Fragment(R.layout.fragment_ranking) {
     }
 
     private fun setupRecyclerView(rankingList:Array<Ranking>) = rankingListView.apply {
-        rankingAdapter = RankingAdapter(rankingList, this@RankingFragment)
+        rankingAdapter = RankingAdapter(rankingList, selectedCategory, this@RankingFragment)
         adapter = rankingAdapter
         layoutManager = LinearLayoutManager(requireContext())
     }

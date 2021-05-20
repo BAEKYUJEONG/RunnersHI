@@ -30,11 +30,14 @@ class TimelineAdapter(private val timelineList:Array<Detail>, private val homeFr
     }
 
     override fun onBindViewHolder(holder: TimelineViewHolder, position: Int) {
-        var runningTimeSec = ((timelineList[position].runningTime % 60) + 100).toString().substring(1)
-        var runningTimeMin = (((runningTimeSec.toInt() / 60) % 60) + 100).toString().substring(1)
-        var runningTimeHour = (((runningTimeMin.toInt() / 60) % 60) + 100).toString().substring(1)
+        var runningTimeSec = timelineList[position].runningTime
+        var formattedSec = ((runningTimeSec % 60) + 100).toString().substring(1)
+        var runningTimeMin = runningTimeSec / 60
+        var formattedMin = ((runningTimeMin % 60) + 100).toString().substring(1)
+        var runningTimeHour = runningTimeMin / 60
+        var formattedHour = ((runningTimeHour % 60) + 100).toString().substring(1)
 
-        val formattedRunningTime = "$runningTimeHour:$runningTimeMin:$runningTimeSec"
+        val formattedRunningTime = "$formattedHour:$formattedMin:$formattedSec"
 //        val formattedTime = "${String.format("00", runningTimeHour)}:${String.format("00", runningTimeMin)}:${String.format("00", runningTimeSec)}"
 
         val dateTimeHour = timelineList[position].endTime.toString().substring(0, 2).toInt().toString()
