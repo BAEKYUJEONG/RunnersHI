@@ -66,6 +66,8 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
     private fun setupProfile(){
         userViewModel.userInfo.observe(viewLifecycleOwner, Observer {
             val token = it.token
+            val userName = it.userName
+            profileTab.text = userName
 
             if (token != null) {
                 RetrofitClient.getInstance().userProfile(token).enqueue(object:Callback<ResponseBody>{
@@ -74,20 +76,28 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
                     }
 
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+
+
                         val user = Gson().fromJson(response.body()?.string(), Map::class.java)
-                        //val userId = user["userId"].toString()
-                        //Timber.e(user["userName"].toString())
-                        profileTab.text = user["userName"].toString()
+                        Timber.e("프로필 데이터 받아오기는 하나?, ${user["totalDistance"].toString()}")
                         ranking_num.text = user["totalRank"].toString().replace(".0","")
-                        if(user["total_distance"].toString().equals("null")){
-                            distance.text = "달려주세요!"
+
+
+                        if(user["totalDistance"].toString().equals("null")){
+                            distance.text = "달리기를"
                         } else {
-                            distance.text = user["total_distance"].toString()+"K"
+                            val distanceData = user["totalDistance"]
+                            distance.text = String.format("%.2f", distanceData)+"K"
                         }
-                        if(user["best_pace"].toString().equals("null")){
-                            pace.text = ""
+                        if(user["bestPace"].toString().equals("null")){
+                            pace.text = "시작하세요"
                         } else {
-                            pace.text = user["best_pace"].toString()
+                            // 페이스 텍스트
+//                            val paceData: List<String> = user["bestPace"].toString().split("\\.")
+                            val paceData = user["bestPace"].toString().replace(".", "' ") + "''"
+                            Timber.e("페이스 텍스트 어떻게 나오나요? $paceData")
+//                            val paceText = "${paceData[0]}' ${paceData[1]}''"
+                            pace.text = paceData
                         }
                     }
                 })
@@ -99,7 +109,9 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
 
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                         val friend = Gson().fromJson(response.body()?.string(), Map::class.java)
-                        friend_num.text = friend["friendNum"].toString().replace(".0","")
+                        if (friend != null) {
+                            friend_num.text = friend["friendNum"].toString().replace(".0","")
+                        }
                     }
 
                 })

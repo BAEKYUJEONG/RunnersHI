@@ -95,7 +95,7 @@ class AlarmActivity : AppCompatActivity() {
                             val userAlarmList = ArrayList<Alarm>()
                             for(user in userList){
                                 val friendUserId = user["friendUserId"].toString()
-                                val alarmId = user["alarmId"].toString().toLong()
+                                val alarmId = user["alarmId"].toString().replace(".0", "").toLong()
                                 val friendName = user["fromUserName"].toString()
                                 val content = user["content"].toString()
                                 val userItem = Alarm(alarmId, friendUserId, friendName, content)
