@@ -52,6 +52,7 @@ class RunAdapter(var link: ProfileFragment.runAdapterToList) : RecyclerView.Adap
             Glide.with(this).load(run.img).into(ivRunImage)
 
             val calender = Calendar.getInstance().apply {
+//                timeInMillis = run.timestamp.timeInMillis
                 timeInMillis = run.timestamp
             }
 

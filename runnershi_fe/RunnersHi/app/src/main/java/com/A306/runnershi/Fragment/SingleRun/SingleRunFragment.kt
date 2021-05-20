@@ -2,38 +2,27 @@ package com.A306.runnershi.Fragment.SingleRun
 
 
 import android.Manifest
-import android.graphics.Color
 import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.A306.runnershi.Activity.MainActivity
-import com.A306.runnershi.DI.AppModule
 import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.Fragment.Home.HomeFragment
-import com.A306.runnershi.Fragment.SingleRun.RunResultFragment
 import com.A306.runnershi.Model.Run
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.Polyline
 import com.A306.runnershi.Services.TrackingService
-import com.A306.runnershi.ViewModel.SingleRunViewModel
 import com.A306.runnershi.ViewModel.UserViewModel
-import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
-import com.google.android.gms.maps.model.LatLngBounds
-import com.google.android.gms.maps.model.PolylineOptions
 import com.google.android.material.dialog.MaterialAlertDialogBuilder
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_run_result.*
 import kotlinx.android.synthetic.main.fragment_single_run.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
-import timber.log.Timber
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -44,6 +33,8 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
     private var curTimeMillis = 0L
 
     var runResult = Run()
+    var timeSpentInSeconds = 0L
+    val runningDate = Calendar.getInstance()
 
     inner class mapFragmentToSingleRunFragment {
         fun getRunData(runData: Run) {
@@ -66,7 +57,7 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
         val link = mapFragmentToSingleRunFragment()
         val mapFragment = MapFragment()
         val run = Run()
-        val runResultFragment = RunResultFragment(runResult)
+        val runResultFragment = RunResultFragment(runResult, runningDate, timeSpentInSeconds)
 
         // 임시로 뜯어보는 리팩토링 :
         subscribeToObservers(mainActivity)
@@ -105,7 +96,7 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
                     activity.sendCommandToService("ACTION_PAUSE_SERVICE")
 
                     // 이 때 runResult를 받아오고, 이를 RunResult로 넘겨줍시다.
-                    val runResultFragment = RunResultFragment(setRunResult())
+                    val runResultFragment = RunResultFragment(setRunResult(), runningDate, timeSpentInSeconds)
                     activity.makeCurrentFragment(runResultFragment)
                 }
                 .setNegativeButton("다시 뛰기"){ dialogInteface, _ ->
@@ -119,16 +110,23 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
     private fun setRunResult(): Run {
 //        Log.i("임시로", "${runResult.title}")
 //        var runResult = Run()
-        val dateTimestamp = Calendar.getInstance().timeInMillis
-        Log.i("셋런리져트에서1", "${dateTimestamp.toString()}")
+//        val dateTimestamp = Calendar.getInstance().timeInMillis
+//        val dateTimestamp = Calendar.getInstance().getTime().toString()
+        val dateTimestamp = runningDate.timeInMillis
+        Log.i("셋런리져트에서1", "${dateTimestamp}")
         val distanceInMeters = TrackingService.totalDistance.value!!.toInt()
         val avgSpeed = ((distanceInMeters / 1000f) / (curTimeMillis / 1000f / 60 / 60) * 10).roundToInt() / 10f
         //총 걸린 시간
         val dateTimeSpent = TrackingUtility.getFormattedStopWatchTime(TrackingService.timeRunInMillis.value!!)
         val finalPace = TrackingUtility.getPaceWithMilliAndDistance(TrackingService.totalPace.value!!)
+        timeSpentInSeconds = TrackingUtility.getTimeSpentInSeconds(TrackingService.timeRunInMillis.value!!)
 
-        // 임시로 저장해서 넘길 데이터
-        val title = "${dateTimestamp}의 달리기"
+
+        // 임시로 저장해서 넘기 데이터
+        val runningYear = runningDate.get(Calendar.YEAR).toString()
+        val runningMonth = runningDate.get(Calendar.MONTH).toString()
+        val runningDay = runningDate.get(Calendar.DATE).toString()
+        val title = "${runningYear}년 ${runningMonth}월 ${runningDay}일의 달리기"
         val bmp = null
 
         runResult = Run(title, bmp, dateTimestamp, avgSpeed, distanceInMeters, dateTimeSpent, finalPace)

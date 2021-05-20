@@ -4,14 +4,11 @@ import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.TextView
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
-import com.A306.runnershi.Fragment.Home.HomeFragment
 import com.A306.runnershi.Model.Run
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.Polyline
@@ -120,6 +117,7 @@ class MapFragment() : Fragment(R.layout.fragment_map) {
             Timber.e(map?.toString())
             // 지금 시간 ( 저장 시에는 끝났을 때 시간 )
             val dateTimestamp = Calendar.getInstance().timeInMillis
+//            val dateTimestamp = Calendar.getInstance().getTime().toString()
             val distanceInMeters = TrackingService.totalDistance.value!!.toInt()
             val avgSpeed = ((distanceInMeters / 1000f) / (curTimeMillis / 1000f / 60 / 60) * 10).roundToInt() / 10f
             //총 걸린 시간
