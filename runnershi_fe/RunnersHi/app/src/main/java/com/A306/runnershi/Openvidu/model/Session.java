@@ -146,11 +146,11 @@ public class Session {
             }
         });
 
-//        peerConnection.addTrack(localParticipant.getAudioTrack());//Add audio track to create transReceiver
-//        peerConnection.addTrack(localParticipant.getVideoTrack());//Add video track to create transReceiver
+        peerConnection.addTrack(localParticipant.getAudioTrack());//Add audio track to create transReceiver
+        peerConnection.addTrack(localParticipant.getVideoTrack());//Add video track to create transReceiver
 
-        peerConnection.addTrack(remoteParticipants.get(connectionId).getAudioTrack());//Add audio track to create transReceiver
-        peerConnection.addTrack(remoteParticipants.get(connectionId).getVideoTrack());//Add video track to create transReceiver
+//        peerConnection.addTrack(remoteParticipants.get(connectionId).getAudioTrack());//Add audio track to create transReceiver
+//        peerConnection.addTrack(remoteParticipants.get(connectionId).getVideoTrack());//Add video track to create transReceiver
 
         for (RtpTransceiver transceiver : peerConnection.getTransceivers()) {
             //We set both audio and video in receive only mode
