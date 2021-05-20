@@ -53,7 +53,7 @@
             <Button
                 android:id="@+id/acceptButton"
                 android:layout_width="wrap_content"
-                android:layout_height="37dp"
+                android:layout_height="match_parent"
                 android:layout_gravity="right"
                 android:backgroundTint="@color/purple_200"
                 android:elevation="10dp"

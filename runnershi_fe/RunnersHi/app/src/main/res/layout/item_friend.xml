@@ -23,8 +23,10 @@
             android:id="@+id/friend_nick"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:padding="15dp"
+            android:fontFamily="@font/nanumsquare_regular"
+            android:padding="20dp"
             android:text="닉네임"
+            android:textColor="@color/brand"
             android:textSize="18sp" />
 
         <ImageView
@@ -41,7 +43,9 @@
             android:layout_height="wrap_content"
             android:layout_gravity="right|center_vertical"
             android:layout_marginRight="30dp"
+            android:fontFamily="@font/nanumsquare_regular"
             android:text="15"
+            android:textColor="@color/brand"
             android:textSize="20sp" />
     </androidx.cardview.widget.CardView>
 
