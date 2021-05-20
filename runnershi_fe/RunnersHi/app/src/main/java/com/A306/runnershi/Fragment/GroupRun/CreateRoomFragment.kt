@@ -3,12 +3,12 @@ package com.A306.runnershi.Fragment.GroupRun
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.Model.Room
-import com.A306.runnershi.Openvidu.OpenviduModel.RoomInfo
 import com.A306.runnershi.Openvidu.OpenviduRetrofitClient
 import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.UserViewModel
@@ -72,16 +72,20 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
     // 레트로핏 통신 이후: 방 만들어졌으므로 방 화면으로 연결해주자
     private var afterRetrofitConnection = object:Callback<ResponseBody>{
         override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
-//            roomId = Gson().fromJson(response.body()?.string(), String::class.java).toInt()
-            roomId = 93
-            Timber.e(roomId.toString())
-            val room = Room(roomId, title, type, 1)
+            val receivedText = response.body()?.string()
+            Timber.e("RECEIVED NUMBER ${receivedText}")
+            if (receivedText != null){
+                roomId = receivedText.toInt()
+//            roomId = 93
+                Timber.e(roomId.toString())
+                Timber.e("JOIN 시작 $members")
+                OpenviduRetrofitClient.getInstance().joinRoom(token, roomId).enqueue(
+                        afterRoomNumberReceived
+                )
+            }else{
+                Toast.makeText(requireContext(), "다시 시도해주세요.", Toast.LENGTH_LONG).show()
+            }
 
-            val roomJoinBody = mapOf("roomId" to roomId)
-            Timber.e("JOIN 시작 $members")
-            OpenviduRetrofitClient.getInstance().joinRoom(userId, roomId).enqueue(
-                afterRoomNumberReceived
-            )
         }
 
         override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
@@ -100,12 +104,12 @@ class CreateRoomFragment : Fragment(R.layout.fragment_create_room) {
             } else{
                 Timber.e("드디어 방에 들어간다.")
                 val receivedURL = response.body()?.string()
+                Timber.e("소켓 URL : ${receivedURL}")
                 val sessionMap = getSessionIdAndToken(receivedURL)
 
                 Timber.e(sessionMap["sessionId"])
-                Timber.e(sessionMap["token"])
-                mainActivity?.setTokenAndSession(sessionMap["token"].toString(), sessionMap["sessionId"].toString())
-                val room = Room(roomId, title, type, 1)
+                mainActivity?.setTokenAndSession(receivedURL.toString(), sessionMap["sessionId"].toString())
+                val room = Room(roomId, title, type, 1, receivedURL.toString(), sessionMap["sessionId"].toString())
                 val roomFragment = RoomFragment(room)
                 mainActivity?.makeCurrentFragment(roomFragment)
             }

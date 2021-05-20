@@ -124,7 +124,7 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
 
         // 임시로 저장해서 넘기 데이터
         val runningYear = runningDate.get(Calendar.YEAR).toString()
-        val runningMonth = runningDate.get(Calendar.MONTH).toString()
+        val runningMonth = (runningDate.get(Calendar.MONTH) + 1).toString()
         val runningDay = runningDate.get(Calendar.DATE).toString()
         val title = "${runningYear}년 ${runningMonth}월 ${runningDay}일의 달리기"
         val bmp = null

@@ -9,7 +9,7 @@
     <androidx.cardview.widget.CardView
         android:id="@+id/runningRoom"
         android:layout_width="match_parent"
-        android:layout_height="81dp"
+        android:layout_height="wrap_content"
         android:layout_gravity="center"
         app:cardCornerRadius="16dp"
         app:cardElevation="10dp"
@@ -26,6 +26,9 @@
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:text="도란도란 뛰기"
+                android:scrollHorizontally="true"
+                android:ellipsize="end"
+                android:maxLines="1"
                 android:textSize="18sp" />
 
             <LinearLayout

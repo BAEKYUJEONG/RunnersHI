@@ -7,6 +7,16 @@
     android:orientation="vertical"
     android:padding="5dp">
 
+    <TextView
+        android:id="@+id/fDate"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:paddingLeft="15dp"
+        android:paddingTop="10dp"
+        android:text="2021-04-20"
+        android:textColor="@color/black"
+        android:textSize="16sp" />
+
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"
         android:layout_width="match_parent"
@@ -38,12 +48,14 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="left"
+                    android:fontFamily="@font/nanumsquare_regular"
                     android:paddingLeft="10dp"
                     android:paddingTop="10dp"
-                    android:paddingRight="8dp"
-                    android:paddingBottom="15dp"
+                    android:paddingRight="3dp"
+                    android:paddingBottom="10dp"
                     android:text="닉네임"
-                    android:textSize="18sp"
+                    android:textColor="@color/brand"
+                    android:textSize="16sp"
                     android:textStyle="bold" />
 
                 <TextView
@@ -51,18 +63,23 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom|start"
-                    android:layout_marginLeft="65dp"
-                    android:paddingBottom="15dp"
+                    android:layout_marginLeft="60dp"
+                    android:fontFamily="@font/nanumsquare_regular"
+                    android:paddingBottom="10dp"
                     android:text="님"
-                    android:textSize="15sp" />
+                    android:textColor="@color/black"
+                    android:textSize="13sp" />
 
                 <TextView
                     android:id="@+id/fTimestamp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="right"
+                    android:fontFamily="@font/nanumsquare_regular"
                     android:padding="10dp"
-                    android:text="7:20 PM" />
+                    android:text="7:20 PM"
+                    android:textColor="@color/black"
+                    android:textSize="12sp" />
 
             </FrameLayout>
 
@@ -70,8 +87,10 @@
                 android:id="@+id/fTime"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:fontFamily="sans-serif-light"
                 android:paddingLeft="10dp"
                 android:text="00:42:13"
+                android:textColor="@color/black"
                 android:textSize="18dp"
                 app:layout_constraintEnd_toStartOf="@+id/fDistance"
                 app:layout_constraintStart_toEndOf="@+id/tvDate"
@@ -88,9 +107,11 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_horizontal|left"
+                    android:fontFamily="@font/nanumsquare_regular"
                     android:paddingLeft="5dp"
                     android:text="중랑천 산책 코스"
-                    android:textSize="24sp"
+                    android:textColor="@color/black"
+                    android:textSize="18sp"
                     android:textStyle="bold" />
 
                 <LinearLayout
@@ -103,16 +124,21 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_gravity="center"
+                        android:fontFamily="@font/sebang_gothic_bold"
                         android:text="27.3"
-                        android:textSize="24sp"
+                        android:textColor="@color/black"
+                        android:textSize="18sp"
                         android:textStyle="bold" />
 
                     <TextView
                         android:id="@+id/KMtextView"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
+                        android:fontFamily="@font/sebang_gothic_bold"
                         android:padding="5dp"
-                        android:text="KM" />
+                        android:text="KM"
+                        android:textColor="@color/black"
+                        android:textSize="10sp" />
 
                 </LinearLayout>
 
