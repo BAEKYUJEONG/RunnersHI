@@ -48,7 +48,9 @@ public class RecordServiceImpl implements RecordService {
     record.setEndTime(new Date());
 
     // 유저 정보 업데이트
-    double pace = record.getRunningTime() / record.getDistance();
+    double tmp = (record.getRunningTime() / 60.0) / record.getDistance();
+    double pace = (int) tmp + (tmp - (int) tmp) * 0.6;
+
     userInfo.setBestPace(Math.max(userInfo.getBestPace(), pace));
     userInfo.setTotalDistance(userInfo.getTotalDistance() + record.getDistance());
     userInfo.setTotalTime(userInfo.getTotalTime() + record.getRunningTime());
@@ -96,12 +98,15 @@ public class RecordServiceImpl implements RecordService {
 
     // 유저 정보 업데이트
     // total 기록 수정
-    double pace = record.getRunningTime() / record.getDistance();
+    double tmp = (record.getRunningTime() / 60.0) / record.getDistance();
+    double pace = (int) tmp + (tmp - (int) tmp) * 0.6;
+
     if (pace == userInfo.getBestPace()) {
       ArrayList<RecordResult> list = recordRepo.findByUser_UserId_UserId(userId);
       double bestPace = 0;
       for (RecordResult recordResult : list) {
-        double tmpPace = recordResult.getRunningTime() / recordResult.getDistance();
+        double tmp2 = (recordResult.getRunningTime() / 60.0) / recordResult.getDistance();
+        double tmpPace = (int) tmp2 + (tmp2 - (int) tmp2) * 0.6;
         bestPace = Math.max(bestPace, tmpPace);
       }
       userInfo.setBestPace(bestPace);
@@ -141,7 +146,8 @@ public class RecordServiceImpl implements RecordService {
               recordRepo.findByUser_UserId_UserIdAndEndTimeGreaterThanEqual(userId, cal.getTime());
           double bestPace = 0;
           for (RecordResult recordResult : list) {
-            double tmpPace = recordResult.getRunningTime() / recordResult.getDistance();
+            double tmp2 = (recordResult.getRunningTime() / 60.0) / recordResult.getDistance();
+            double tmpPace = (int) tmp2 + (tmp2 - (int) tmp2) * 0.6;
             bestPace = Math.max(bestPace, tmpPace);
           }
           userInfo.setThisWeekPace(bestPace);
