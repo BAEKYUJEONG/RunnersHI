@@ -3,8 +3,10 @@ package com.A306.runnershi.Fragment.GroupRun
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
+import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Model.User
 import com.A306.runnershi.Openvidu.model.Participant
 import com.A306.runnershi.R
@@ -17,7 +19,7 @@ class MateListAdapter(private var list:  MutableList<User>): RecyclerView.Adapte
 //        var mateDistance: TextView = itemView!!.findViewById(R.id.mateDistance)
 //        var mateTime: TextView = itemView!!.findViewById(R.id.mateTime)
 //        var matePace: TextView = itemView!!.findViewById(R.id.matePace)
-
+        val grouprun_img: ImageView = itemView!!.findViewById(R.id.groupRunProfileImg)
 
         fun bind(data: User, position: Int) {
             mateName.text = data.userName
@@ -37,5 +39,9 @@ class MateListAdapter(private var list:  MutableList<User>): RecyclerView.Adapte
 
     override fun onBindViewHolder(holder: MateListAdapter.ListItemViewHolder, position: Int) {
         holder.bind(list[position], position)
+
+        // 랜덤 프로필 처리
+        var num = Math.random() * ProfileFragment.profileImgList.size
+        holder.grouprun_img.setImageResource(ProfileFragment.profileImgList[num.toInt()])
     }
 }

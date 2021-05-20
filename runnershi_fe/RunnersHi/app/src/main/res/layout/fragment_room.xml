@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/background"
-    android:padding="10dp"
+    android:padding="5dp"
     tools:context=".Fragment.SingleRun.SingleRunFragment">
 
     <LinearLayout
@@ -49,7 +49,7 @@
                 android:paddingLeft="10dp"
                 android:text="K"
                 android:textColor="@color/white"
-                android:textSize="45" />
+                android:textSize="45sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -149,6 +149,7 @@
                 android:id="@+id/roomTitle"
                 android:layout_width="286dp"
                 android:layout_height="match_parent"
+                android:layout_weight="2"
                 android:fontFamily="@font/nanumsquare_regular"
                 android:gravity="center_vertical"
                 android:paddingLeft="20dp"
@@ -157,11 +158,17 @@
                 android:textColor="@color/black"
                 android:textSize="20dp" />
 
-            <Button
+            <ImageButton
                 android:id="@+id/leaveSessionButton"
                 android:layout_width="80dp"
                 android:layout_height="match_parent"
+
                 android:layout_weight="1"
+                android:adjustViewBounds="true"
+                android:background="@color/white"
+                android:cropToPadding="false"
+                android:scaleType="centerInside"
+                android:src="@drawable/exit"
                 android:text="나가기" />
 
         </LinearLayout>
