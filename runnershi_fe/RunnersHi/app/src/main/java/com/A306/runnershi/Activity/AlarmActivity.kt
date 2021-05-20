@@ -45,15 +45,12 @@ class AlarmActivity : AppCompatActivity() {
     }
 
     @AndroidEntryPoint
-    class AlarmFragment : Fragment(), View.OnClickListener {
+    class AlarmFragment : Fragment() {
 
         private val viewModel: UserViewModel by viewModels()
         private lateinit var alarmAdapter: AlarmAdapter
 
         var link = acceptFriendAdapterToList()
-
-        var Token = ""
-        var Body = ""
 
         inner class acceptFriendAdapterToList {
             fun getFriendId(friend: Alarm) {
@@ -95,7 +92,7 @@ class AlarmActivity : AppCompatActivity() {
                             val userAlarmList = ArrayList<Alarm>()
                             for(user in userList){
                                 val friendUserId = user["friendUserId"].toString()
-                                val alarmId = user["alarmId"].toString().toLong()
+                                val alarmId = user["alarmId"].toString().replace(".0","").toLong()
                                 val friendName = user["fromUserName"].toString()
                                 val content = user["content"].toString()
                                 val userItem = Alarm(alarmId, friendUserId, friendName, content)
@@ -122,11 +119,23 @@ class AlarmActivity : AppCompatActivity() {
                     val body = mapOf("friendUserId" to friendUserId, "alarmId" to alarmId)
 
                     // alertDialog 선택
-                    acceptButton.setOnClickListener(this)
+                    acceptButton.setOnClickListener {
+                        // Dialog
+                        val builder = AlertDialog.Builder(ContextThemeWrapper(requireContext(), R.style.Theme_AppCompat_Light_Dialog))
+                        builder.setTitle("친구 수락")
+                        builder.setMessage("친구를 수락하시겠습니까?")
+                        builder.setPositiveButton("확인") { _, _ ->
+                            d("alert ok")
+                            // 여기서 레트로핏 통신
+                            RetrofitClient.getInstance().acceptFriend(token, body as Map<String, String>).enqueue(afterAccpetFriend)
+                        }
+                        builder.setNegativeButton("취소") { _, _ ->
+                            d("alert cancel")
+                        }
 
-                    Token = token
-                    Body = body.toString()
-                    //RetrofitClient.getInstance().acceptFriend(token, body as Map<String, String>).enqueue(afterAccpetFriend)
+                        builder.show()
+                    }
+
                 }
             })
         }
@@ -146,30 +155,6 @@ class AlarmActivity : AppCompatActivity() {
             alarmAdapter = AlarmAdapter(alarmList, link, this@AlarmFragment)
             adapter = alarmAdapter
             layoutManager = LinearLayoutManager(requireContext())
-        }
-
-        override fun onClick(v: View?) {
-            if (v != null) {
-                when(v.id) {
-                    R.id.acceptButton -> {
-                        // Dialog
-                        val builder = AlertDialog.Builder(ContextThemeWrapper(requireContext(), R.style.Theme_AppCompat_Light_Dialog))
-                        builder.setTitle("친구 수락")
-                        builder.setMessage("친구를 수락하시겠습니까?")
-                        builder.setPositiveButton("확인") { _, _ ->
-                            d("alert ok")
-                            // 여기서 레트로핏 통신
-                            RetrofitClient.getInstance().acceptFriend(Token, Body as Map<String, String>).enqueue(afterAccpetFriend)
-                            Toast.makeText(context, "친구를 수락했습니다", Toast.LENGTH_LONG).show()
-                        }
-                        builder.setNegativeButton("취소") { _, _ ->
-                            d("alert cancel")
-                        }
-
-                        builder.show()
-                    }
-                }
-            }
         }
     }
 }
