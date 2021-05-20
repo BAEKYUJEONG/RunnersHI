@@ -127,7 +127,7 @@
 
     <androidx.cardview.widget.CardView
         android:id="@+id/roomNameCard"
-        android:layout_width="401dp"
+        android:layout_width="0dp"
         android:layout_height="75dp"
         android:layout_gravity="center"
         android:layout_margin="20dp"
@@ -157,25 +157,26 @@
                 android:textColor="@color/black"
                 android:textSize="20dp" />
 
-            <ImageButton
-                android:id="@+id/imageButton2"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
+            <Button
+                android:id="@+id/leaveSessionButton"
+                android:layout_width="80dp"
+                android:layout_height="match_parent"
                 android:layout_weight="1"
-                app:srcCompat="@android:drawable/ic_btn_speak_now" />
-
-            <ImageButton
-                android:id="@+id/imageButton3"
-                android:layout_width="48dp"
-                android:layout_height="48dp"
-                android:layout_weight="1"
-                app:srcCompat="@android:drawable/stat_sys_headset" />
+                android:text="나가기" />
 
         </LinearLayout>
     </androidx.cardview.widget.CardView>
 
     <im.delight.android.webview.AdvancedWebView
         android:id="@+id/sessionWebView"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/mateListView"
         android:layout_width="0dp"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
