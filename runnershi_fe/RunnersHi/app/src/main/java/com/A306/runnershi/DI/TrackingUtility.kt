@@ -53,6 +53,11 @@ object TrackingUtility {
                 "${if(milliseconds < 10) "0" else ""}$milliseconds"
     }
 
+    fun getTimeSpentInSeconds(ms: Long):Long{
+        var milliseconds = ms
+        return TimeUnit.MILLISECONDS.toSeconds(milliseconds)
+    }
+
     fun getPaceWithMilliAndDistance(ms:Long): String{
         var paceInMilli = ms
         var paceMin = TimeUnit.MILLISECONDS.toMinutes(paceInMilli)

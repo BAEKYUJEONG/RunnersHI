@@ -189,11 +189,22 @@ interface RetrofitService {
     //    running_time: int,
     //    title: varchar(100)
     //}
+//    @JvmSuppressWildcards
+//    @Headers("Content-Type: application/json")
+//    @POST("/record/create")
+//    fun recordCreate(
+//        @Header("token") token:String,
+//        @Body body: Map<String, Any>
+//    ): Call<ResponseBody>
+    @JvmSuppressWildcards
     @Headers("Content-Type: application/json")
     @POST("/record/create")
     fun recordCreate(
         @Header("token") token:String,
-        @Body body:Map<String, Any>
+        @Query("distance") distance:Double,
+        @Query("endTime") endTime:String,
+        @Query("runningTime") runningTime:Int,
+        @Query("title") runningTitle:String
     ): Call<ResponseBody>
 
     // 친구 기록 조회
