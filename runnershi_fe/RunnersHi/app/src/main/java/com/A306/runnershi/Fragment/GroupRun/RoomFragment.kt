@@ -1,6 +1,8 @@
 package com.A306.runnershi.Fragment.GroupRun
 
 import android.Manifest
+import android.annotation.SuppressLint
+import android.graphics.Bitmap
 import android.net.http.SslError
 import android.os.Build
 import android.os.Bundle
@@ -18,6 +20,8 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
+import com.A306.runnershi.Helper.JavaScriptHelper
+import com.A306.runnershi.Helper.WebViewConstant
 import com.A306.runnershi.Model.Room
 import com.A306.runnershi.Model.User
 import com.A306.runnershi.Openvidu.constant.JsonConstants.OPENVIDU_SECRET
@@ -46,58 +50,7 @@ import timber.log.Timber
 class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), EasyPermissions.PermissionCallbacks {
     val userViewModel:UserViewModel by viewModels()
 
-    val HTML_STRING = "<html>\n" +
-            "\n" +
-            "<head>\n" +
-            "\t<title>openvidu-insecure-js</title>\n" +
-            "\n" +
-            "\t<meta name=\"viewport\" content=\"width=device-width, initial-scale=1\" charset=\"utf-8\">\n" +
-            "\n" +
-            "\t<!-- Bootstrap -->\n" +
-            "\t<script src=\"https://code.jquery.com/jquery-3.3.1.min.js\" integrity=\"sha256-FgpCb/KJQlLNfOu91ta32o/NMZxltwRo8QtmkMRdAu8=\" crossorigin=\"anonymous\"></script>\n" +
-            "\t<link rel=\"stylesheet\" href=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css\" integrity=\"sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u\" crossorigin=\"anonymous\">\n" +
-            "\t<script src=\"https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js\" integrity=\"sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa\" crossorigin=\"anonymous\"></script>\n" +
-            "\t<link rel=\"stylesheet\" href=\"https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css\">\n" +
-            "\t<!-- Bootstrap -->\n" +
-            "\n" +
-            "\t<link rel=\"stylesheet\" href=\"style.css\" type=\"text/css\" media=\"screen\">\n" +
-            "\t<script src=\"openvidu-browser-2.17.0.js\"></script>\n" +
-            "\t<script src=\"app.js\"></script>\n" +
-            "\t<script src=\"jquery.js\"></script>\n" +
-            "</head>\n" +
-            "\n" +
-            "<body>\n" +
-            "\n" +
-            "\t<div id=\"main-container\" class=\"container\">\n" +
-            "\t\t<div id=\"join\">\n" +
-            "\t\t\t<div id=\"join-dialog\" class=\"jumbotron vertical-center\">\n" +
-            "\t\t\t\t<form class=\"form-group\" onsubmit=\"joinSession(); return false\">\n" +
-            "\t\t\t\t\t<p>\n" +
-            "\t\t\t\t\t\t<input class=\"form-control\" type=\"text\" id=\"userName\" required>\n" +
-            "\t\t\t\t\t</p>\n" +
-            "\t\t\t\t\t<p>\n" +
-            "\t\t\t\t\t\t<input class=\"form-control\" type=\"text\" id=\"sessionId\" required>\n" +
-            "\t\t\t\t\t</p>\n" +
-            "\t\t\t\t\t<p class=\"text-center\">\n" +
-            "\t\t\t\t\t\t<input class=\"btn btn-lg btn-success\" type=\"submit\" name=\"commit\" value=\"Join!\">\n" +
-            "\t\t\t\t\t</p>\n" +
-            "\t\t\t\t</form>\n" +
-            "\t\t\t</div>\n" +
-            "\t\t</div>\n" +
-            "\n" +
-            "\t\t<div id=\"session\" style=\"display: none;\">\n" +
-            "\t\t\t<div id=\"session-header\">\n" +
-            "\t\t\t\t<h1 id=\"session-title\"></h1>\n" +
-            "\t\t\t\t<input class=\"btn btn-large btn-danger\" type=\"button\" id=\"buttonLeaveSession\" onmouseup=\"leaveSession()\" value=\"방 나가기\">\n" +
-            "\t\t\t</div>\n" +
-            "\t\t\t<div id=\"main-video\" class=\"col-md-6\"><p></p><video autoplay playsinline=\"true\"></video></div>\n" +
-            "\t\t\t<div id=\"video-container\" class=\"col-md-6\"></div>\n" +
-            "\t\t</div>\n" +
-            "\t</div>\n" +
-            "\n" +
-            "</body>\n" +
-            "\n" +
-            "</html>"
+    val HTML_STRING = WebViewConstant().HTML_TEXT
 
     var mainActivity:MainActivity? = null
     var httpClient:CustomHttpClient? = null
@@ -118,6 +71,7 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
         return super.onCreateView(inflater, container, savedInstanceState)
     }
 
+    @SuppressLint("SetJavaScriptEnabled")
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mainActivity = activity as MainActivity
@@ -131,36 +85,32 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
         sessionWebView.settings.mediaPlaybackRequiresUserGesture = false
         // 캐쉬 사용 방법을 정의
         sessionWebView.settings.cacheMode = WebSettings.LOAD_NO_CACHE;
-        sessionWebView.webViewClient = object: WebViewClient(){
-            override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {
-                // DO NOT CALL SUPER METHOD
-//                super.onReceivedSslError(view, handler, error)
-            }
-        }
-        sessionWebView.webChromeClient = object : WebChromeClient() {
-            // Grant permissions for cam
-            @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-            override fun onPermissionRequest(request: PermissionRequest) {
-                request.grant(request.resources)
-            }
-        }
-
+        sessionWebView.addJavascriptInterface(JavaScriptHelper(requireContext()), "Android")
         sessionWebView.setGeolocationEnabled(true)
         sessionWebView.setMixedContentAllowed(false)
 
-
-        sessionWebView.loadDataWithBaseURL("file:///android_asset/www", HTML_STRING, "text/html", "utf-8", null)
-
-
-        // 방 이름 설정해주기
-        roomTitle.text = room?.title
-
-        requestPermissions()
-        Timber.e(room?.title)
-        subscribeToObservers()
-
         userViewModel.userInfo.observe(viewLifecycleOwner, Observer {
             currentUser = it
+
+
+            sessionWebView.webViewClient = object: WebViewClient(){
+                override fun onReceivedSslError(view: WebView?, handler: SslErrorHandler?, error: SslError?) {}
+
+                override fun onPageFinished(view: WebView?, url: String?) {
+                    if (room.title != null && it.userName != null && room.room_id > 0){
+                        Timber.e("WTF")
+                        view?.loadUrl("javascript:joinSession('${room.room_id}', '${room.title}', '${room.roomSession}', '${it.userName}')")
+                    }
+                }
+            }
+            sessionWebView.webChromeClient = object : WebChromeClient() {
+                // Grant permissions for cam
+                @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+                override fun onPermissionRequest(request: PermissionRequest) {
+                    request.grant(request.resources)
+                }
+            }
+            sessionWebView.loadDataWithBaseURL("file:///android_asset/", HTML_STRING, "text/html", "utf-8", null)
 //            if (mainActivity != null) {
 //                Timber.e("MAIN NULL 아님")
 //                if (mainActivity!!.arePermissionGranted()) {
@@ -183,6 +133,19 @@ class RoomFragment(private val room: Room) : Fragment(R.layout.fragment_room), E
 //                }
 //            }
         })
+
+
+
+
+
+        // 방 이름 설정해주기
+        roomTitle.text = room?.title
+
+        requestPermissions()
+        Timber.e(room?.title)
+        subscribeToObservers()
+
+
         // 함께 뛰는 메이트들 불러오기
 //        var list: ArrayList<User> = tempUserList
 //

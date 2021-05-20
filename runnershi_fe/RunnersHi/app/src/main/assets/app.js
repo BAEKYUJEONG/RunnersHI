@@ -4,10 +4,10 @@ var session;
 
 /* OPENVIDU METHODS */
 
-function joinSession() {
 
-	var mySessionId = document.getElementById("sessionId").value;
-	var myUserName = document.getElementById("userName").value;
+function joinSession(roomId, roomTitle, roomSessionId, myUserName) {
+
+	var mySessionId = roomSessionId
 
 	// --- 1) Get an OpenVidu object ---
 
@@ -49,7 +49,7 @@ function joinSession() {
 
 		// First param is the token got from OpenVidu Server. Second param can be retrieved by every user on event
 		// 'streamCreated' (property Stream.connection.data), and will be appended to DOM as the user's nickname
-		session.connect(token, { clientData: myUserName })
+		session.connect(token, { clientData: myUserName, roomId: roomId, roomTitle:roomTitle })
 			.then(() => {
 
 				// --- 5) Set page layout for active call ---
@@ -225,8 +225,10 @@ function createToken(sessionId) { // See https://docs.openvidu.io/en/stable/refe
             type: 'POST',
             url: OPENVIDU_SERVER_URL + '/openvidu/api/sessions/' + sessionId + '/connection',
             data: JSON.stringify({}),
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader('Authorization', "Basic " + btoa("OPENVIDUAPP:" + OPENVIDU_SERVER_SECRET));
+            },
             headers: {
-                'Authorization': 'Basic ' + btoa('OPENVIDUAPP:' + OPENVIDU_SERVER_SECRET),
                 'Content-Type': 'application/json',
             },
             success: (response) => resolve(response.token),
