@@ -99,9 +99,9 @@ class HomeFragment : Fragment() {
 
 //                            val endTime = LocalDateTime.parse(timeDate, formatter)
 
-                            val formattedRunningTime = user["runningTime"].toString().substring(0, 4)
+                            val formattedRunningTime = user["runningTime"].toString().toDouble().toInt()
                             Timber.e("러닝타임은 왜 이렇게 찍힐까 $formattedRunningTime")
-                            val runningTime = Integer.parseInt(formattedRunningTime)
+                            val runningTime = formattedRunningTime
 
                             val title = user["title"].toString()
                             val distance = user["distance"].toString().toDouble()

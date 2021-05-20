@@ -401,7 +401,7 @@ public class CustomWebSocket extends AsyncTask<MainActivity, Void, Void> impleme
             }
         }
         final RemoteParticipant remoteParticipant = new RemoteParticipant(connectionId, participantName, this.session);
-        this.roomFragment.createRemoteParticipantVideo(remoteParticipant);
+//        this.roomFragment.createRemoteParticipantVideo(remoteParticipant);
         this.session.createRemotePeerConnection(remoteParticipant.getConnectionId());
 //        this.roomFragment.addParticipant(remoteParticipant);
 //        Handler mainHandler = new Handler(activity.getMainLooper());
