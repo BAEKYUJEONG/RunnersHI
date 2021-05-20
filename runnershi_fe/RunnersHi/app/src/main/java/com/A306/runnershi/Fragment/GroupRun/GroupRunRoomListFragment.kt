@@ -100,10 +100,13 @@ class GroupRunRoomListFragment : Fragment() {
                                 val roomToken = firstConnectionInfo["token"].toString()
                                 val clientData = JSONObject(firstConnectionInfo["clientData"].toString())
                                 Timber.e(clientData.toString())
-                                val roomId = clientData["roomId"].toString().toInt()
-                                val title = clientData["roomTitle"].toString()
-                                val roomItem = Room(roomId, title, type, count, roomToken, roomSession)
-                                roomList.add(roomItem)
+                                if (clientData.has("roomId") && clientData.has("roomTitle")){
+                                    val roomId = clientData["roomId"].toString().toInt()
+                                    val title = clientData["roomTitle"].toString()
+                                    val roomItem = Room(roomId, title, type, count, roomToken, roomSession)
+                                    roomList.add(roomItem)
+                                }
+
                             }
                         }
                     }
