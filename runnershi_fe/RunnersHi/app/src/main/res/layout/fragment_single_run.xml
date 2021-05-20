@@ -28,19 +28,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
+                android:fontFamily="@font/nanumsquare_regular"
                 android:text="페이스"
                 android:textAlignment="center"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/paceText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:fontFamily="@font/nanumsquare_regular"
                 android:text="0' 00''"
                 android:textAlignment="center"
                 android:textColor="#000000"
-                android:textSize="24sp" />
+                android:textSize="26sp" />
         </LinearLayout>
 
         <LinearLayout
@@ -55,19 +58,22 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="20dp"
                 android:layout_marginBottom="10dp"
+                android:fontFamily="@font/nanumsquare_regular"
                 android:text="달린 시간"
                 android:textAlignment="center"
-                android:textColor="#000000" />
+                android:textColor="#000000"
+                android:textSize="20sp" />
 
             <TextView
                 android:id="@+id/timeText"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="10dp"
+                android:fontFamily="@font/nanumsquare_regular"
                 android:text="00:00:00"
                 android:textAlignment="center"
                 android:textColor="#000000"
-                android:textSize="24sp" />
+                android:textSize="26sp" />
         </LinearLayout>
     </LinearLayout>
 
@@ -75,6 +81,7 @@
         android:id="@+id/imageView33"
         android:layout_width="250dp"
         android:layout_height="250dp"
+        android:background="#FFFFFF"
         android:scaleType="centerInside"
         android:src="@mipmap/running_background"
         app:layout_constraintBottom_toTopOf="@+id/stopRunButton"
@@ -87,6 +94,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginBottom="20dp"
+        android:fontFamily="@font/sebang_gothic_bold"
         android:text="0.00"
         android:textColor="#FFFFFF"
         android:textSize="45sp"
@@ -101,6 +109,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
+        android:fontFamily="@font/nanumsquare_regular"
         android:text="KM"
         android:textColor="#FFFFFF"
         app:layout_constraintEnd_toEndOf="@+id/imageView33"
@@ -113,7 +122,11 @@
         android:layout_height="150dp"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/brand"
+        android:fontFamily="@font/nanumsquare_regular"
         android:text="종료"
+        android:textSize="18sp"
+        app:cornerRadius="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent" />
 
@@ -123,7 +136,11 @@
         android:layout_height="150dp"
         android:layout_marginStart="32dp"
         android:layout_marginBottom="32dp"
+        android:backgroundTint="@color/brand"
+        android:fontFamily="@font/nanumsquare_regular"
         android:text="일시정지"
+        android:textSize="18sp"
+        app:cornerRadius="150dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/stopRunButton" />
@@ -132,7 +149,10 @@
         android:id="@+id/toMapButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:backgroundTint="@color/brand"
+        android:fontFamily="@font/nanumsquare_regular"
         android:text="지도로 보기"
+        app:cornerRadius="50dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout" />
