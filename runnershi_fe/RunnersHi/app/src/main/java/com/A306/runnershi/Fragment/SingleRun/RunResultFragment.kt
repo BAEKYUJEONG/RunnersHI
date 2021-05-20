@@ -23,6 +23,7 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.model.LatLngBounds
 import com.google.android.gms.maps.model.PolylineOptions
+import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_run_result.*
 import okhttp3.ResponseBody
@@ -95,6 +96,8 @@ class RunResultFragment(var runResult: Run, val runningDate: Calendar, val timeS
         saveRunBtn.setOnClickListener {
             generateRunTitle()
             generateRunImg()
+//            var keyHash = KakaoSdk.keyHash
+//            Timber.e("키해시 $keyHash")
         }
     }
 

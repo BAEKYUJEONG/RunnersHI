@@ -28,6 +28,7 @@ import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import retrofit2.http.Body
 import timber.log.Timber
 
 @AndroidEntryPoint
@@ -54,6 +55,7 @@ class AlarmActivity : AppCompatActivity() {
 
         inner class acceptFriendAdapterToList {
             fun getFriendId(friend: Alarm) {
+                Timber.e("알람의 유저아이디 찍어왔는데요, ${friend.userId}")
                 //고유 값이라서 let이 들어감
                 friend.userId?.let { friend.alarmId?.let { it1 -> acceptFriend(it, it1) } }
             }
@@ -91,7 +93,8 @@ class AlarmActivity : AppCompatActivity() {
                             val userList = Gson().fromJson<List<Map<String, Any>>>(response.body()?.string(), itemType)
                             val userAlarmList = ArrayList<Alarm>()
                             for(user in userList){
-                                val friendUserId = user["friendUserId"].toString()
+                                val friendUserId = user["fromUserId"].toString()
+                                Timber.e("프렌드유저아이디, $friendUserId")
                                 val alarmId = user["alarmId"].toString().replace(".0", "").toLong()
                                 val friendName = user["fromUserName"].toString()
                                 val content = user["content"].toString()
@@ -127,6 +130,7 @@ class AlarmActivity : AppCompatActivity() {
                         builder.setPositiveButton("확인") { _, _ ->
                             d("alert ok")
                             // 여기서 레트로핏 통신
+                            Timber.e("바디가 뭐냐면요, $body")
                             RetrofitClient.getInstance().acceptFriend(token, body as Map<String, String>).enqueue(afterAccpetFriend)
                         }
                         builder.setNegativeButton("취소") { _, _ ->
@@ -146,6 +150,12 @@ class AlarmActivity : AppCompatActivity() {
             }
 
             override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+                Timber.e("리스폰스 이렇게 : ${response.body()!!.string()}")
+                Timber.e("리스폰스 안받아지나요?")
+
+                if (response.body() == null) {
+                    Timber.e("널값입니다")
+                }
                 Toast.makeText(context, "친구를 수락했습니다", Toast.LENGTH_LONG).show()
             }
 

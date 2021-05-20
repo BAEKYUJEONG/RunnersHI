@@ -17,6 +17,7 @@ import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.UserViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.ResponseBody

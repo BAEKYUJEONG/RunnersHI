@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Model.Alarm
 import com.A306.runnershi.R
+import timber.log.Timber
 
 class AlarmAdapter(private val alarmList:Array<Alarm>, var link: AlarmActivity.AlarmFragment.acceptFriendAdapterToList, private val alarmFragment: AlarmActivity.AlarmFragment): RecyclerView.Adapter<AlarmAdapter.AlarmViewHolder>() {
 
@@ -24,10 +25,14 @@ class AlarmAdapter(private val alarmList:Array<Alarm>, var link: AlarmActivity.A
     }
 
     override fun onBindViewHolder(holder: AlarmAdapter.AlarmViewHolder, position: Int) {
+        val user = alarmList[position]
+        Timber.e("user")
+
         holder.alarm_nick.text = alarmList[position].userName.toString()
         holder.alarm_content.text = alarmList[position].content.toString()
+
         holder.acceptButton.setOnClickListener {
-            val user = alarmList[position]
+            Timber.e("여기 뜨나? ${user.userId}")
             link.getFriendId(user)
         }
     }
