@@ -127,7 +127,7 @@ class AlarmActivity : AppCompatActivity() {
                     // alertDialog 선택
                     acceptButton.setOnClickListener {
                         // Dialog
-                        val builder = AlertDialog.Builder(ContextThemeWrapper(requireContext(), R.style.Theme_AppCompat_Light_Dialog))
+                        val builder = AlertDialog.Builder(requireContext())
                         builder.setTitle("친구 수락")
                         builder.setMessage("친구를 수락하시겠습니까?")
                         builder.setPositiveButton("확인") { _, _ ->

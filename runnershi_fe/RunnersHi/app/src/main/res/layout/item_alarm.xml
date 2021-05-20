@@ -54,14 +54,15 @@
                 android:id="@+id/acceptButton"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
-                android:layout_gravity="right"
-                android:backgroundTint="@color/purple_200"
+                android:layout_gravity="right|center_vertical"
+                android:backgroundTint="@color/brand"
                 android:elevation="10dp"
                 android:fontFamily="@font/spoqahansansneo_regular"
                 android:text="친구 수락"
                 android:textColor="@color/white"
                 android:textSize="15sp"
-                android:textStyle="bold" />
+                android:textStyle="bold"
+                app:cornerRadius="50dp" />
 
         </FrameLayout>
 

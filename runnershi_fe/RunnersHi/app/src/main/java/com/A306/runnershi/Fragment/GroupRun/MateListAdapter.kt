@@ -13,9 +13,9 @@ class MateListAdapter(private var list:  MutableList<Participant>): RecyclerView
 
     inner class ListItemViewHolder(itemView: View?): RecyclerView.ViewHolder(itemView!!) {
         var mateName: TextView = itemView!!.findViewById(R.id.mateName)
-        var mateDistance: TextView = itemView!!.findViewById(R.id.mateDistance)
-        var mateTime: TextView = itemView!!.findViewById(R.id.mateTime)
-        var matePace: TextView = itemView!!.findViewById(R.id.matePace)
+//        var mateDistance: TextView = itemView!!.findViewById(R.id.mateDistance)
+//        var mateTime: TextView = itemView!!.findViewById(R.id.mateTime)
+//        var matePace: TextView = itemView!!.findViewById(R.id.matePace)
 
 
         fun bind(data: Participant, position: Int) {
