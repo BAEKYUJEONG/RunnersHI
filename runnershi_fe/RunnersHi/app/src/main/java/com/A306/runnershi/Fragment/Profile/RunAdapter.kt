@@ -52,6 +52,7 @@ class RunAdapter(var link: ProfileFragment.runAdapterToList) : RecyclerView.Adap
             Glide.with(this).load(run.img).into(ivRunImage)
 
             val calender = Calendar.getInstance().apply {
+//                timeInMillis = run.timestamp.timeInMillis
                 timeInMillis = run.timestamp
             }
 
@@ -62,9 +63,9 @@ class RunAdapter(var link: ProfileFragment.runAdapterToList) : RecyclerView.Adap
             tvAvgSpeed.text = avgSpeed
 
             val distance = "${run.distance / 1000f}km"
-            tvDistance.text = distance
+            fDistance.text = distance
 
-            tvTime.text = run.time
+            fTime.text = run.time
         }
 
         holder.itemView.setOnClickListener {

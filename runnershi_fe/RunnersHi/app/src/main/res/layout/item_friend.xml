@@ -3,32 +3,46 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="wrap_content">
+    android:layout_height="wrap_content"
+    android:padding="2dp">
 
-    <TextView
-        android:id="@+id/friend_nick"
-        android:layout_width="wrap_content"
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:padding="20dp"
-        android:text="닉네임"
-        android:textSize="24sp"
-        android:textStyle="bold" />
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginBottom="8dp"
+        app:cardCornerRadius="10dp"
+        app:cardElevation="5dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent">
 
-    <ImageView
-        android:id="@+id/imageView"
-        android:layout_width="50dp"
-        android:layout_height="50dp"
-        android:layout_gravity="right|center_vertical"
-        android:layout_marginRight="70dp"
-        app:srcCompat="@drawable/icon_rank" />
+        <TextView
+            android:id="@+id/friend_nick"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:padding="15dp"
+            android:text="닉네임"
+            android:textSize="18sp" />
 
-    <TextView
-        android:id="@+id/friend_rank"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="right|center_vertical"
-        android:layout_marginRight="30dp"
-        android:text="15"
-        android:textSize="24sp" />
+        <ImageView
+            android:id="@+id/imageView"
+            android:layout_width="40dp"
+            android:layout_height="40dp"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="65dp"
+            app:srcCompat="@drawable/icon_rank" />
+
+        <TextView
+            android:id="@+id/friend_rank"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="right|center_vertical"
+            android:layout_marginRight="30dp"
+            android:text="15"
+            android:textSize="20sp" />
+    </androidx.cardview.widget.CardView>
 
 </FrameLayout>

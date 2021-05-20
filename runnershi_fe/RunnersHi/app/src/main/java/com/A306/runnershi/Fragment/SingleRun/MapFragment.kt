@@ -2,14 +2,13 @@ package com.A306.runnershi.Fragment.SingleRun
 
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
-import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.DI.TrackingUtility
-import com.A306.runnershi.Fragment.Home.HomeFragment
 import com.A306.runnershi.Model.Run
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.Polyline
@@ -28,7 +27,8 @@ import java.util.*
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
-class MapFragment : Fragment(R.layout.fragment_map) {
+//class MapFragment(var link: SingleRunFragment.mapFragmentToSingleRunFragment) : Fragment(R.layout.fragment_map) {
+class MapFragment() : Fragment(R.layout.fragment_map) {
     private val viewModel : SingleRunViewModel by viewModels()
 
     private var curTimeMillis = 0L
@@ -36,12 +36,15 @@ class MapFragment : Fragment(R.layout.fragment_map) {
 
     private var map: GoogleMap? = null
 
+    var run = Run()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         mapView.onCreate(savedInstanceState)
         val mainActivity = activity as MainActivity
         val singleRunFragment = SingleRunFragment()
-        val homeFragment = HomeFragment()
+//        val homeFragment = HomeFragment()
+//        val runResultFragment = RunResultFragment(run)
 
         // 나중에 버튼 관련 넣기 (toggle)
 
@@ -50,14 +53,24 @@ class MapFragment : Fragment(R.layout.fragment_map) {
             addAllPolylines()
         }
 
-        subscribeToObservers(mainActivity, homeFragment)
+//        subscribeToObservers(mainActivity, homeFragment, runResultFragment)
+        subscribeToObservers(mainActivity)
+
+        // 리팩토링 :
+//        val here = "MapFrag"
+//        val distanceView = null
+//        val timeView = timeText
+//        val paceView = paceText
+//
+//        singleRunFragment.globalSubscribeToObservers(here, mainActivity, distanceView, timeView, paceView)
 
         toMeterButton.setOnClickListener {
             mainActivity.makeCurrentFragment(singleRunFragment, "hide")
         }
     }
 
-    private fun subscribeToObservers(activity: MainActivity, homeFragment: HomeFragment){
+//    private fun subscribeToObservers(activity: MainActivity, homeFragment: HomeFragment, runResultFragment: RunResultFragment){
+    private fun subscribeToObservers(activity: MainActivity){
 
         TrackingService.pathPoints.observe(viewLifecycleOwner, Observer{
             pathPoints = it
@@ -81,37 +94,54 @@ class MapFragment : Fragment(R.layout.fragment_map) {
         })
 
         TrackingService.totallyFinished.observe(viewLifecycleOwner, Observer{
+            Log.i("토털리피니시드", "백그라운드에서도 작동하나요?")
             if (it > 0){
                 if (map != null){
                     Timber.e("서비스를 종료합니다.")
                     zoomToSeeWholeTrack()
-                    endRunAndSaveToDb(activity, homeFragment)
+//                    endRunAndSaveToDb(activity, homeFragment, runResultFragment)
+                    endRunAndPostToResult(activity)
                 }else{
                     TrackingService.totallyFinished.postValue(it+1)
                 }
-
             }
         })
     }
 
-    private fun endRunAndSaveToDb(activity: MainActivity, homeFragment: HomeFragment) {
+//    private fun endRunAndSaveToDb(activity: MainActivity, homeFragment: HomeFragment, runResultFragment: RunResultFragment) {
+    fun endRunAndPostToResult(activity: MainActivity): Run {
+        // TODO "사실 이 기능을 RunResult에 넣어야한다!"
+
         map?.snapshot { bmp ->
             Timber.e("사진 저장")
             Timber.e(map?.toString())
             // 지금 시간 ( 저장 시에는 끝났을 때 시간 )
             val dateTimestamp = Calendar.getInstance().timeInMillis
+//            val dateTimestamp = Calendar.getInstance().getTime().toString()
             val distanceInMeters = TrackingService.totalDistance.value!!.toInt()
             val avgSpeed = ((distanceInMeters / 1000f) / (curTimeMillis / 1000f / 60 / 60) * 10).roundToInt() / 10f
             //총 걸린 시간
             val dateTimeSpent = TrackingUtility.getFormattedStopWatchTime(TrackingService.timeRunInMillis.value!!)
             val finalPace = TrackingUtility.getPaceWithMilliAndDistance(TrackingService.totalPace.value!!)
             //val timestamp = Calendar.getInstance().timeInMillis
-            val run = Run(bmp, dateTimestamp, avgSpeed, distanceInMeters, dateTimeSpent, finalPace)
-            viewModel.insertRun(run)
-            Toast.makeText(activity.applicationContext, "달리기가 저장됐습니다.", Toast.LENGTH_LONG).show()
+
+            val title = "${dateTimestamp}의 달리기"
+
+            run = Run(title, bmp, dateTimestamp, avgSpeed, distanceInMeters, dateTimeSpent, finalPace)
+
+            // 이 run을 다시 SingleRunFragment로 보내줄거야!
+//            link.getRunData(run)
+            Log.i("찍히나?", "제발")
+
+//            val runResultFragment = RunResultFragment(run)
+//
+//            activity.makeCurrentFragment(runResultFragment)
+//            viewModel.insertRun(run)
+//            Toast.makeText(activity.applicationContext, "달리기가 저장됐습니다.", Toast.LENGTH_LONG).show()
             activity.sendCommandToService("ACTION_STOP_SERVICE")
-            activity.makeCurrentFragment(homeFragment)
+//            activity.makeCurrentFragment(homeFragment)
         }
+        return run
     }
 
     private fun zoomToSeeWholeTrack(){

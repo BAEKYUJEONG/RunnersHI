@@ -7,6 +7,7 @@ import com.ssafy.runnershi.repository.RoomMemberRepository;
 import com.ssafy.runnershi.repository.RoomRepository;
 import com.ssafy.runnershi.repository.UserRepository;
 import com.ssafy.runnershi.service.JwtService;
+import com.ssafy.runnershi.service.OpenViduCustom;
 import io.openvidu.java.client.OpenVidu;
 import io.openvidu.java.client.OpenViduHttpException;
 import io.openvidu.java.client.OpenViduJavaClientException;
@@ -51,6 +52,8 @@ public class SessionController {
   // OpenVidu object as entrypoint of the SDK
   OpenVidu openVidu;
 
+  OpenViduCustom openViduCustom;
+
 
   private Map<Long, Session> roomIdSession = new ConcurrentHashMap<>();
   private Map<String, Map<String, String>> sessionIdUserIdToken = new ConcurrentHashMap<>();
@@ -64,6 +67,7 @@ public class SessionController {
     this.SECRET = secret;
     this.OPENVIDU_URL = openviduUrl;
     this.openVidu = new OpenVidu(OPENVIDU_URL, SECRET);
+    this.openViduCustom = new OpenViduCustom(OPENVIDU_URL, SECRET);
   }
 
   @PostMapping(value = "/create")
@@ -76,8 +80,7 @@ public class SessionController {
 
     // 토큰 검증
     String jwt = req.getHeader("token");
-    //String userId = jwtService.decode(jwt);
-    String userId = jwt;
+    String userId = jwtService.decode(jwt);
 
     if (userId == null) {
       return new ResponseEntity<>("invalid token", HttpStatus.UNAUTHORIZED);
@@ -89,7 +92,7 @@ public class SessionController {
 
     try {
       Session session = this.openVidu.createSession();
-      Room room = new Room(title, type, 0, 1);
+      Room room = new Room(title, type, 0, session.getSessionId());
 
       room = roomRepository.save(room);
       roomId = room.getRoomId();
@@ -124,8 +127,8 @@ public class SessionController {
 
     // 토큰 검증
     String jwt = req.getHeader("token");
-    //String userId = jwtService.decode(jwt);
-    String userId = jwt;
+    String userId = jwtService.decode(jwt);
+
     if (userId == null) {
       return new ResponseEntity<>("invalid token", HttpStatus.UNAUTHORIZED);
     }
@@ -138,9 +141,12 @@ public class SessionController {
       return new ResponseEntity<>("session does not exist", HttpStatus.BAD_REQUEST);
     }
 
-    // 방에 권한이 있는지
-    if (roomMemberRepository.findByRoom_RoomIdAndUser_UserId(roomId, jwt) == null) {
-      return new ResponseEntity<>("Unauthorization", HttpStatus.BAD_REQUEST);
+    // 권한이 있는 방인지
+    if (r.get().getRoomType() == 1) {
+      // 방에 권한이 있는지
+      if (roomMemberRepository.findByRoom_RoomIdAndUser_UserId(roomId, userId) == null) {
+        return new ResponseEntity<>("Unauthorization", HttpStatus.BAD_REQUEST);
+      }
     }
 
     // 세션이 없는지
@@ -162,7 +168,7 @@ public class SessionController {
     //OpenViduRole role = user.hasRoleTeacher() ? OpenViduRole.PUBLISHER : OpenViduRole.SUBSCRIBER;
 
     TokenOptions tokenOpts = new TokenOptions.Builder()
-        .data("SERVER=" + userId).build();
+        .data("{userID:" + userId + ",title:" + r.get().getTitle() + "}").build();
     try {
       String token = this.roomIdSession.get(roomId).generateToken(tokenOpts);
 
@@ -206,8 +212,8 @@ public class SessionController {
 
     // 토큰 검증
     String jwt = req.getHeader("token");
-    //String userId = jwtService.decode(jwt);
-    String userId = jwt;
+    String userId = jwtService.decode(jwt);
+
     if (userId == null) {
       return new ResponseEntity<>("invalid token", HttpStatus.UNAUTHORIZED);
     }
@@ -241,8 +247,9 @@ public class SessionController {
     return new ResponseEntity<>("success leave-session", HttpStatus.OK);
   }
 
-  @GetMapping(value = "/active-session")
-  public ResponseEntity<JSONObject> getActiveSession(HttpServletRequest req) {
+  @GetMapping(value = "/list")
+  public ResponseEntity<JSONObject> getRoomList(HttpServletRequest req) {
+    this.openViduCustom.getSessionList();
     JSONObject json = new JSONObject();
     json.put(".?", "ssss");
     json.put("list", this.openVidu.getActiveSessions());

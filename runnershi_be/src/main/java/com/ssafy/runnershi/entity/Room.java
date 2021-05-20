@@ -21,7 +21,7 @@ public class Room {
   private String Title;
   private Integer roomType;
   private Integer runningType;
-  private Integer count;
+  private String session;
   @OneToMany(mappedBy = "room")
   private Set<RoomMember> roomMember = new HashSet<>();
 
@@ -34,10 +34,10 @@ public class Room {
     this.count = count;
   }*/
 
-  public Room(String Title, int roomType, int runningType, int count) {
+  public Room(String Title, int roomType, int runningType, String session) {
     this.roomType = roomType;
     this.Title = Title;
     this.runningType = runningType;
-    this.count = count;
+    this.session = session;
   }
 }

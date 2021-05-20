@@ -106,6 +106,15 @@ interface RetrofitService {
 
     //-------------------------------------------------//
 
+    // 알람
+    // 친구 신청 리스트
+    @GET("alarm/addfriendlist")
+    fun getAlarmFriendList(
+        @Header("token") token: String
+    ): Call<ResponseBody>
+
+    //-------------------------------------------------//
+
     // 커스텀 관리
     // 커스텀 수정
     @PUT("/custom")
@@ -180,12 +189,29 @@ interface RetrofitService {
     //    running_time: int,
     //    title: varchar(100)
     //}
+//    @JvmSuppressWildcards
+//    @Headers("Content-Type: application/json")
+//    @POST("/record/create")
+//    fun recordCreate(
+//        @Header("token") token:String,
+//        @Body body: Map<String, Any>
+//    ): Call<ResponseBody>
+    @JvmSuppressWildcards
     @Headers("Content-Type: application/json")
     @POST("/record/create")
     fun recordCreate(
         @Header("token") token:String,
-        @Body body:Map<String, Any>
+        @Query("distance") distance:Double,
+        @Query("endTime") endTime:String,
+        @Query("runningTime") runningTime:Int,
+        @Query("title") runningTitle:String
     ): Call<ResponseBody>
+
+    // 친구 기록 조회
+    @GET("/record/list")
+    fun recordList(
+        @Header("token") token:String
+    ) : Call<ResponseBody>
 
     //------나머지 부분은 SWAGGER가 되는대로 추가하겠습니다.------//
 

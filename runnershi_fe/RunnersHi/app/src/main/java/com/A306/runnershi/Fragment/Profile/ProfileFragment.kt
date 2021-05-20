@@ -1,5 +1,6 @@
 package com.A306.runnershi.Fragment.Profile
 
+import android.graphics.Color
 import android.os.Bundle
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
@@ -18,12 +19,12 @@ import com.A306.runnershi.ViewModel.UserViewModel
 import com.google.gson.Gson
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_profile.*
-import kotlinx.android.synthetic.main.fragment_running_detail.*
 import kotlinx.android.synthetic.main.history.view.*
 import okhttp3.ResponseBody
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
+import timber.log.Timber
 
 @AndroidEntryPoint
 class ProfileFragment : Fragment() { //, View.OnClickListener
@@ -54,6 +55,7 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
         rankingClick()
         freindClick()
         setupProfile()
+        setFontColor()
         setupRecyclerView()
 
         singleRunViewModel.runsSortedByDate.observe(viewLifecycleOwner, Observer {
@@ -74,10 +76,19 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
                     override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
                         val user = Gson().fromJson(response.body()?.string(), Map::class.java)
                         //val userId = user["userId"].toString()
+                        //Timber.e(user["userName"].toString())
                         profileTab.text = user["userName"].toString()
                         ranking_num.text = user["totalRank"].toString().replace(".0","")
-                        distance.text = user["total_distance"].toString()
-                        pace.text = user["best_pace"].toString()
+                        if(user["total_distance"].toString().equals("null")){
+                            distance.text = "달려주세요!"
+                        } else {
+                            distance.text = user["total_distance"].toString()+"K"
+                        }
+                        if(user["best_pace"].toString().equals("null")){
+                            pace.text = ""
+                        } else {
+                            pace.text = user["best_pace"].toString()
+                        }
                     }
                 })
 
@@ -94,6 +105,17 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
                 })
             }
         })
+    }
+
+    fun setFontColor() {
+        profileTab.setTextColor(Color.rgb(82,40,136))
+        ranking_text.setTextColor(Color.rgb(82,40,136))
+        friend_text.setTextColor(Color.rgb(82,40,136))
+        ranking_num.setTextColor(Color.rgb(82,40,136))
+        friend_num.setTextColor(Color.rgb(82,40,136))
+        profiledistance.setTextColor(Color.rgb(82,40,136))
+        profilepace.setTextColor(Color.rgb(82,40,136))
+        recent.setTextColor(Color.rgb(82,40,136))
     }
 
     private fun setupRecyclerView() = historyListView.apply {
@@ -148,11 +170,6 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
     private fun freindClick(){
         val mainActivity = activity as MainActivity
         val friendFragment = FriendFragment()
-
-        friend_layout.setOnClickListener{
-            mainActivity.makeCurrentFragment(friendFragment)
-        }
-
         friend_text.setOnClickListener{
             mainActivity.makeCurrentFragment(friendFragment)
         }
@@ -165,10 +182,6 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
     private fun rankingClick(){
         val mainActivity = activity as MainActivity
         val rankingFragment = RankingFragment()
-
-        ranking_layout.setOnClickListener{
-            mainActivity.makeCurrentFragment(rankingFragment)
-        }
 
         ranking_text.setOnClickListener{
             mainActivity.makeCurrentFragment(rankingFragment)

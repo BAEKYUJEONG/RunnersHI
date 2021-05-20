@@ -2,17 +2,22 @@ package com.A306.runnershi.Activity
 
 
 import android.Manifest
+import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.RadioButton
+import android.widget.TextView
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.content.res.ResourcesCompat
 import androidx.fragment.app.Fragment
+import com.A306.runnershi.DI.TrackingUtility
 import com.A306.runnershi.Dao.RunDAO
 import com.A306.runnershi.Dao.UserDAO
 import com.A306.runnershi.Fragment.GroupRun.CreateRoomFragment
@@ -24,18 +29,25 @@ import com.A306.runnershi.Fragment.Profile.ProfileFragment
 import com.A306.runnershi.Fragment.Ranking.RankingFragment
 import com.A306.runnershi.Fragment.SingleRun.SingleRunFragment
 import com.A306.runnershi.Fragment.UserSearch.UserSearchFragment
-import com.A306.runnershi.Openvidu.model.RemoteParticipant
+import com.A306.runnershi.Model.Run
+import com.A306.runnershi.Openvidu.OpenviduModel.RemoteParticipant
 import com.A306.runnershi.R
 import com.A306.runnershi.Services.TrackingService
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.model.LatLngBounds
+import com.google.android.gms.maps.model.PolylineOptions
 import com.leinardi.android.speeddial.SpeedDialActionItem
 import com.leinardi.android.speeddial.SpeedDialView
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.fragment_ranking.*
-import org.webrtc.AudioTrack
+import kotlinx.android.synthetic.main.fragment_run_result.*
+import kotlinx.android.synthetic.main.fragment_single_run.*
 import org.webrtc.MediaStream
 import timber.log.Timber
+import java.util.*
 import javax.inject.Inject
+import kotlin.math.roundToInt
 
 @AndroidEntryPoint
 open class MainActivity : AppCompatActivity() {
@@ -74,11 +86,11 @@ open class MainActivity : AppCompatActivity() {
         // Fragment 할당
         // 하단 메뉴 Fragments
         val homeFragment = HomeFragment()
-        val userSearchFragment =
-            UserSearchFragment()
+        val userSearchFragment = UserSearchFragment()
         val rankingFragment = RankingFragment()
         val profileFragment = ProfileFragment()
         val achievementFragment = AchievementFragment()
+
         // 혼자 달리기 Fragments
 //        val singleRunFragment = SingleRunFragment()
 //        val mapFragment = MapFragment()
@@ -119,12 +131,13 @@ open class MainActivity : AppCompatActivity() {
 
         // 상단 앱바 관련
         val settingsActivity = Intent(this, SettingsActivity::class.java)
+        val alarmActivity = Intent(this, AlarmActivity::class.java)
 
         topAppBar.setOnMenuItemClickListener { menuItem ->
             val speedDialView = findViewById<SpeedDialView>(R.id.speedDial)
             when(menuItem.itemId) {
                 R.id.navigation_alert -> {
-                    // 여기 alert dialog 띄워주자
+                    startActivity(alarmActivity)
                     speedDialView.close()
                 }
                 R.id.navigation_setting -> {
@@ -169,13 +182,13 @@ open class MainActivity : AppCompatActivity() {
         }
     }
 
-    //AchievementFragment로 이동하는 함수
-    fun showAchievemnt(fragment: Fragment){
-        val transaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.ranking_layout, fragment)
-        transaction.addToBackStack(null)
-        transaction.commit()
-    }
+//    //AchievementFragment로 이동하는 함수
+//    fun showAchievemnt(fragment: Fragment){
+//        val transaction = supportFragmentManager.beginTransaction()
+//        transaction.replace(R.id.ranking_layout, fragment)
+//        transaction.addToBackStack(null)
+//        transaction.commit()
+//    }
 
     // 라디오 클릭
     fun radioButtonClicked(view: View) {

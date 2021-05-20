@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.INTERNET" />
 
     <uses-feature android:name="android.hardware.camera" />
+
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />
@@ -22,7 +23,10 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.RunnersHi"
         android:usesCleartextTraffic="true">
-        <activity android:name=".Activity.SplashActivity" android:screenOrientation="portrait">
+        <activity android:name=".Activity.AlarmActivity"></activity>
+        <activity
+            android:name=".Activity.SplashActivity"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
@@ -32,12 +36,16 @@
         <activity
             android:name=".Activity.SettingsActivity"
             android:label="@string/title_activity_settings"
-            android:screenOrientation="portrait"/>
-        <activity android:name=".Activity.RegisterActivity" android:screenOrientation="portrait"/>
-        <activity android:name=".Activity.LoginActivity" android:screenOrientation="portrait"/>
-        <!-- <activity android:name=".Activity.MainActivity" android:launchMode="singleTask"> -->
-        <activity android:name=".Activity.MainActivity" android:screenOrientation="portrait">
-        </activity>
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.RegisterActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Activity.LoginActivity"
+            android:screenOrientation="portrait" /> <!-- <activity android:name=".Activity.MainActivity" android:launchMode="singleTask"> -->
+        <activity
+            android:name=".Activity.MainActivity"
+            android:screenOrientation="portrait"></activity>
         <activity android:name="com.kakao.sdk.auth.AuthCodeHandlerActivity">
             <intent-filter>
                 <action android:name="android.intent.action.VIEW" />
@@ -61,7 +69,15 @@
             android:value="@integer/google_play_services_version" />
         <meta-data
             android:name="com.google.android.geo.API_KEY"
-            android:value="@string/google_api_key" />
+            android:value="@string/google_map_api_key" />
+
+        <service android:name=".Services.MyFirebaseMessagingService"
+            android:enabled="true"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="com.google.firebase.MESSAGING_EVENT" />
+            </intent-filter>
+        </service>
     </application>
 
 </manifest>

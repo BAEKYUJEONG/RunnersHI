@@ -33,4 +33,6 @@ public interface UserService {
 
   public Profile getUserProfile(String userId);
 
+  public Profile updateUserName(String userId, String userName);
+
 }
