@@ -100,7 +100,7 @@ class MapFragment() : Fragment(R.layout.fragment_map) {
                     Timber.e("서비스를 종료합니다.")
                     zoomToSeeWholeTrack()
 //                    endRunAndSaveToDb(activity, homeFragment, runResultFragment)
-                    endRunAndPostToResult(activity)
+//                    endRunAndPostToResult(activity)
                 }else{
                     TrackingService.totallyFinished.postValue(it+1)
                 }
@@ -109,40 +109,40 @@ class MapFragment() : Fragment(R.layout.fragment_map) {
     }
 
 //    private fun endRunAndSaveToDb(activity: MainActivity, homeFragment: HomeFragment, runResultFragment: RunResultFragment) {
-    fun endRunAndPostToResult(activity: MainActivity): Run {
-        // TODO "사실 이 기능을 RunResult에 넣어야한다!"
-
-        map?.snapshot { bmp ->
-            Timber.e("사진 저장")
-            Timber.e(map?.toString())
-            // 지금 시간 ( 저장 시에는 끝났을 때 시간 )
-            val dateTimestamp = Calendar.getInstance().timeInMillis
-//            val dateTimestamp = Calendar.getInstance().getTime().toString()
-            val distanceInMeters = TrackingService.totalDistance.value!!.toInt()
-            val avgSpeed = ((distanceInMeters / 1000f) / (curTimeMillis / 1000f / 60 / 60) * 10).roundToInt() / 10f
-            //총 걸린 시간
-            val dateTimeSpent = TrackingUtility.getFormattedStopWatchTime(TrackingService.timeRunInMillis.value!!)
-            val finalPace = TrackingUtility.getPaceWithMilliAndDistance(TrackingService.totalPace.value!!)
-            //val timestamp = Calendar.getInstance().timeInMillis
-
-            val title = "${dateTimestamp}의 달리기"
-
-            run = Run(title, bmp, dateTimestamp, avgSpeed, distanceInMeters, dateTimeSpent, finalPace)
-
-            // 이 run을 다시 SingleRunFragment로 보내줄거야!
-//            link.getRunData(run)
-            Log.i("찍히나?", "제발")
-
-//            val runResultFragment = RunResultFragment(run)
+//    fun endRunAndPostToResult(activity: MainActivity): Run {
+//        // TODO "사실 이 기능을 RunResult에 넣어야한다!"
 //
-//            activity.makeCurrentFragment(runResultFragment)
-//            viewModel.insertRun(run)
-//            Toast.makeText(activity.applicationContext, "달리기가 저장됐습니다.", Toast.LENGTH_LONG).show()
-            activity.sendCommandToService("ACTION_STOP_SERVICE")
-//            activity.makeCurrentFragment(homeFragment)
-        }
-        return run
-    }
+//        map?.snapshot { bmp ->
+//            Timber.e("사진 저장")
+//            Timber.e(map?.toString())
+//            // 지금 시간 ( 저장 시에는 끝났을 때 시간 )
+//            val dateTimestamp = Calendar.getInstance().timeInMillis
+////            val dateTimestamp = Calendar.getInstance().getTime().toString()
+//            val distanceInMeters = TrackingService.totalDistance.value!!.toInt()
+//            val avgSpeed = ((distanceInMeters / 1000f) / (curTimeMillis / 1000f / 60 / 60) * 10).roundToInt() / 10f
+//            //총 걸린 시간
+//            val dateTimeSpent = TrackingUtility.getFormattedStopWatchTime(TrackingService.timeRunInMillis.value!!)
+//            val finalPace = TrackingUtility.getPaceWithMilliAndDistance(TrackingService.totalPace.value!!)
+//            //val timestamp = Calendar.getInstance().timeInMillis
+//
+//            val title = "${dateTimestamp}의 달리기"
+//
+//            run = Run(title, bmp, dateTimestamp, avgSpeed, distanceInK, dateTimeSpent, finalPace)
+//
+//            // 이 run을 다시 SingleRunFragment로 보내줄거야!
+////            link.getRunData(run)
+//            Log.i("찍히나?", "제발")
+//
+////            val runResultFragment = RunResultFragment(run)
+////
+////            activity.makeCurrentFragment(runResultFragment)
+////            viewModel.insertRun(run)
+////            Toast.makeText(activity.applicationContext, "달리기가 저장됐습니다.", Toast.LENGTH_LONG).show()
+//            activity.sendCommandToService("ACTION_STOP_SERVICE")
+////            activity.makeCurrentFragment(homeFragment)
+//        }
+//        return run
+//    }
 
     private fun zoomToSeeWholeTrack(){
         val bounds = LatLngBounds.Builder()

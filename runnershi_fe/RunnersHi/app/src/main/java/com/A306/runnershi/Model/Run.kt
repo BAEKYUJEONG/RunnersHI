@@ -17,7 +17,7 @@ data class Run(
     // 평균 속력
     var avgSpeed: Float = 0f,
     // 거리
-    var distance: Int = 0,
+    var distance: Float = 0f,
     // 시간
     var time: String? = null,
     // 페이스

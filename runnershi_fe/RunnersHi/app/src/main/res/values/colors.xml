@@ -9,4 +9,10 @@
     <color name="white">#FFFFFFFF</color>
     <color name="grey">#FFDCDCDC</color>
     <color name="brand">#522888</color>
+
+    <color name="purple_1">#FF520481</color>
+    <color name="purple_2">#FF542F87</color>
+    <color name="purple_3">#FF565A8D</color>
+    <color name="purple_4">#FF588593</color>
+    <color name="purple_5">#FF5AB099</color>
 </resources>
