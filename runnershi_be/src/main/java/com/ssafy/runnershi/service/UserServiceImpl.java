@@ -490,6 +490,24 @@ public class UserServiceImpl implements UserService {
     user.setExpiryDate(cal.getTime());
     userRepo.save(user);
 
+    String oldValue = user.getUserId() + ";" + user.getUserName();
+    zset.remove("totalDistanceRank", oldValue);
+    zset.remove("totalTimeRank", oldValue);
+    zset.remove("totalPaceRank", oldValue);
+
+    zset.remove("weeklyDistanceRank", oldValue);
+    zset.remove("weeklyTimeRank", oldValue);
+    zset.remove("weeklyPaceRank", oldValue);
+
+    redisTemplate.delete(oldValue);
+
+    ArrayList<Friend> friendList = friendRepo.findByUser_UserId_UserId(user.getUserId());
+    for (Friend friend : friendList) {
+      User friendUser = friend.getFriendUser().getUserName();
+      set.remove(friendUser.getUserId() + ";" + friendUser.getUserName(), oldValue);
+    }
+
+
     return "SUCCESS";
   }
 
