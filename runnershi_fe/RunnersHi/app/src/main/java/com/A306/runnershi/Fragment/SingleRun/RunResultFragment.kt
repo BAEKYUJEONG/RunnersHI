@@ -36,6 +36,10 @@ import java.util.*
 //class RunResultFragment(distance:String, time:String, pace:String) : Fragment(R.layout.fragment_run_result) {
 class RunResultFragment(var runResult: Run, val runningDate: Calendar, val timeSpentInSeconds:Long) : Fragment(R.layout.fragment_run_result) {
 
+    companion object{
+        var TITLE = ""
+    }
+
     private val userViewModel: UserViewModel by viewModels()
     var token = ""
 
@@ -135,6 +139,8 @@ class RunResultFragment(var runResult: Run, val runningDate: Calendar, val timeS
         val endTime = runningDate.time.toString()
         val runningTime = timeSpentInSeconds.toInt()
         val runningTitle = runResult.title.toString()
+
+        TITLE = runningTitle
 
         Timber.e("Distance : ${distance}, EndTime: ${endTime}, runningTime : ${runningTime}, runningTitle: $runningTitle")
 
