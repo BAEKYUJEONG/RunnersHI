@@ -49,7 +49,7 @@ public class RecordServiceImpl implements RecordService {
 
     // 유저 정보 업데이트
     double tmp = (record.getRunningTime() / 60.0) / record.getDistance();
-    double pace = (int) tmp + (tmp - (int) tmp) * 0.6;
+    double pace = Math.round(((int) tmp + (tmp - (int) tmp) * 0.6) * 100) / 100.0;
 
     userInfo.setBestPace(Math.max(userInfo.getBestPace(), pace));
     userInfo.setTotalDistance(userInfo.getTotalDistance() + record.getDistance());
@@ -99,14 +99,14 @@ public class RecordServiceImpl implements RecordService {
     // 유저 정보 업데이트
     // total 기록 수정
     double tmp = (record.getRunningTime() / 60.0) / record.getDistance();
-    double pace = (int) tmp + (tmp - (int) tmp) * 0.6;
+    double pace = Math.round(((int) tmp + (tmp - (int) tmp) * 0.6) * 100) / 100.0;
 
     if (pace == userInfo.getBestPace()) {
       ArrayList<RecordResult> list = recordRepo.findByUser_UserId_UserId(userId);
       double bestPace = 0;
       for (RecordResult recordResult : list) {
         double tmp2 = (recordResult.getRunningTime() / 60.0) / recordResult.getDistance();
-        double tmpPace = (int) tmp2 + (tmp2 - (int) tmp2) * 0.6;
+        double tmpPace = Math.round(((int) tmp2 + (tmp2 - (int) tmp2) * 0.6) * 100) / 100.0;
         bestPace = Math.max(bestPace, tmpPace);
       }
       userInfo.setBestPace(bestPace);
@@ -147,7 +147,7 @@ public class RecordServiceImpl implements RecordService {
           double bestPace = 0;
           for (RecordResult recordResult : list) {
             double tmp2 = (recordResult.getRunningTime() / 60.0) / recordResult.getDistance();
-            double tmpPace = (int) tmp2 + (tmp2 - (int) tmp2) * 0.6;
+            double tmpPace = Math.round(((int) tmp2 + (tmp2 - (int) tmp2) * 0.6) * 100) / 100.0;
             bestPace = Math.max(bestPace, tmpPace);
           }
           userInfo.setThisWeekPace(bestPace);
