@@ -10,5 +10,5 @@ import lombok.NoArgsConstructor;
 public class PaceRank {
   private String userId;
   private String userName;
-  private int pace;
+  private double pace;
 }

@@ -148,7 +148,7 @@ public class RankingServiceImpl implements RankingService {
         ZSetOperations.TypedTuple<String> current = iterator.next();
 
         String[] user_info = current.getValue().split(";");
-        pRank = new PaceRank(user_info[0], user_info[1], current.getScore().intValue());
+        pRank = new PaceRank(user_info[0], user_info[1], current.getScore());
         ranks.add(pRank);
       }
       return ranks;
@@ -208,7 +208,7 @@ public class RankingServiceImpl implements RankingService {
         ZSetOperations.TypedTuple<String> current = iterator.next();
 
         String[] user_info = current.getValue().split(";");
-        pRank = new PaceRank(user_info[0], user_info[1], current.getScore().intValue());
+        pRank = new PaceRank(user_info[0], user_info[1], current.getScore());
         ranks.add(pRank);
       }
       return ranks;
@@ -283,7 +283,7 @@ public class RankingServiceImpl implements RankingService {
         ZSetOperations.TypedTuple<String> current = iterator.next();
 
         String[] user_info = current.getValue().split(";");
-        pRank = new PaceRank(user_info[0], user_info[1], current.getScore().intValue());
+        pRank = new PaceRank(user_info[0], user_info[1], current.getScore());
         ranks.add(pRank);
       }
       return ranks;
@@ -358,7 +358,7 @@ public class RankingServiceImpl implements RankingService {
         ZSetOperations.TypedTuple<String> current = iterator.next();
 
         String[] user_info = current.getValue().split(";");
-        pRank = new PaceRank(user_info[0], user_info[1], current.getScore().intValue());
+        pRank = new PaceRank(user_info[0], user_info[1], current.getScore());
         ranks.add(pRank);
       }
       return ranks;
