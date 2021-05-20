@@ -8,9 +8,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Model.User
 import com.A306.runnershi.R
-import kotlinx.android.synthetic.main.user_search_user_preview.view.*
 
-class SearchedUserListAdapter(private val userList: ArrayList<User>, var link: UserSearchFragment.searchedUserAdapterToList): RecyclerView.Adapter<SearchedUserListAdapter.UserViewHolder>() {
+class SearchedUserListAdapter(private val userList: ArrayList<List<Any>>, var link: UserSearchFragment.searchedUserAdapterToList): RecyclerView.Adapter<SearchedUserListAdapter.UserViewHolder>() {
 
     class UserViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
         val userName:TextView = itemView.findViewById(R.id.userName)
@@ -23,10 +22,22 @@ class SearchedUserListAdapter(private val userList: ArrayList<User>, var link: U
     }
 
     override fun onBindViewHolder(holder: UserViewHolder, position: Int) {
-        holder.userName.text = userList[position].userName
-        holder.friendAddBtn.setOnClickListener {
-            val user = userList[position]
-            link.getUserId(user)
+
+        // 해당 유저 정보를 바탕으로,
+        var userData = userList[position]
+        var user = userData[0] as User
+        var isFriend = userData[1] as Boolean
+
+        // 유저 닉네임 출력해주고
+        holder.userName.text = user.userName
+
+        // 친구인 경우에는 버튼 세팅
+        if (isFriend) {
+            holder.friendAddBtn.visibility = View.INVISIBLE
+        } else {
+            holder.friendAddBtn.setOnClickListener {
+                link.getUserId(user)
+            }
         }
     }
 

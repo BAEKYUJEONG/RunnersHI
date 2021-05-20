@@ -8,7 +8,6 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
-import androidx.compose.animation.core.KeyframesSpec
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -29,19 +28,13 @@ import retrofit2.Response
 @AndroidEntryPoint
 class UserSearchFragment : Fragment() {
 
-    // 임시로 넘겨줄 UserList:
-    var tempUserList: ArrayList<User> = arrayListOf(
-        User(null, null, "티캔", null),
-        User(null, null, "디니", null),
-        User(null, null, "바비", null),
-        User(null, null, "에리얼", null),
-        User(null, null, "클로이", null)
-    )
-
     // SearchedUserList 만들어줄 어댑터
     private lateinit var searchedUserListAdapter: SearchedUserListAdapter
 
-    var userList: ArrayList<User> = ArrayList()
+    var userList: ArrayList<List<Any>> = ArrayList()
+
+    // 친구 여부 확인할 때 필요한 것
+    var friendIdList:ArrayList<String> = ArrayList()
 
     // 친구 요청 보내줄 때 필요한 사항들
     private val viewModel: UserViewModel by viewModels()
@@ -79,6 +72,11 @@ class UserSearchFragment : Fragment() {
         })
         viewModel.userInfo.removeObserver(Observer {  })
 
+        // 토큰 이용해서 친구목록도 미리 불러와놓자 :
+
+        RetrofitClient.getInstance().getFriendList(token).enqueue(afterFriendListRequest)
+
+
         // 키업될때마다 유저 서치
         userName.setOnKeyListener(View.OnKeyListener { v, keyCode, event ->
             // TODO("백키 누를때도 마찬가지로 키이벤트 적용하기")
@@ -90,16 +88,31 @@ class UserSearchFragment : Fragment() {
             false
         })
 
-
-        // 서치해서 받은 유저 리스트 보여주기
-//        var userList: ArrayList<User> = userList
-//        var link = searchedUserAdapterToList()
-//
-//        searchedUserListAdapter = SearchedUserListAdapter(userList, link)
-//        searchedUserListView.layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-//        searchedUserListView.adapter = searchedUserListAdapter
     }
 
+
+    // 친구목록 확인하기
+
+    private var afterFriendListRequest = object: Callback<ResponseBody> {
+        override fun onFailure(call: Call<ResponseBody>, t: Throwable) {
+            Log.e("친구목록불러오기에서", "통신이 안됐답니다!")
+        }
+
+        override fun onResponse(call: Call<ResponseBody>, response: Response<ResponseBody>) {
+            val itemType = object : TypeToken<List<Map<String, Any>>>() {}.type
+            val friendList = Gson().fromJson<List<Map<String, Any>>>(response.body()?.string(), itemType)
+
+            // 친구들이 하나도 없을 경우는 null이므로 담아주지 않고요, 있는 경우에만 :
+            if (friendList != null) {
+                for (friend in friendList) {
+                    val friendId = friend["userId"].toString()
+                    Log.i("프렌드아이디 이렇게 받아옵니다", "$friendId")
+                    friendIdList.add(friendId)
+                }
+            }
+        }
+
+    }
 
     // 여기부터는 유저 서치 부분
 
@@ -121,15 +134,33 @@ class UserSearchFragment : Fragment() {
             if (searchedUserList != null) {
 
                 //매번 클리어해줘야하므로
-                userList = ArrayList()
+//                userList = ArrayList()
                 for (user in searchedUserList) {
                     val userId = user["userId"].toString()
                     val userName = user["userName"].toString()
 
+                    val user = User(null, userId, userName, null)
+
                     // TODO("이미 친구인 경우 구분해서 표기해주기")
                     // 이때 userList는 User class의 List가 아니고 User, Boolean(친구여부) 쌍의 리스트여야 한다!
                     if (userId != myId) {
-                        userList.add(User(null, userId, userName, null))
+
+                        // 프렌드아이디리스트가 빈 경우와 아닌 경우를 구분해서 작성 :
+                        if (friendIdList.isEmpty()) {
+                            val userNotFriend = listOf(user, false)
+                            userList.add(userNotFriend)
+                        } else {
+                            for (friendId in friendIdList) {
+                                if (userId != friendId) {
+                                    val userNotFriend: List<Any> = listOf(user, false)
+                                    userList.add(userNotFriend)
+                                } else {
+                                    // 친구인 경우 true
+                                    var userIsFriend = listOf(user, true)
+                                    userList.add(userIsFriend)
+                                }
+                            }
+                        }
                     }
                 }
 
