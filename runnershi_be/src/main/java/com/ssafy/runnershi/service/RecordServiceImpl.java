@@ -52,7 +52,8 @@ public class RecordServiceImpl implements RecordService {
     double pace = Math.round(((int) tmp + (tmp - (int) tmp) * 0.6) * 100) / 100.0;
 
     userInfo.setBestPace(Math.max(userInfo.getBestPace(), pace));
-    userInfo.setTotalDistance(userInfo.getTotalDistance() + record.getDistance());
+    userInfo.setTotalDistance(
+        Math.round((userInfo.getTotalDistance() + record.getDistance()) * 100) / 100.0);
     userInfo.setTotalTime(userInfo.getTotalTime() + record.getRunningTime());
 
     DateFormat format = new SimpleDateFormat("yyyy-MM-dd");
@@ -63,7 +64,8 @@ public class RecordServiceImpl implements RecordService {
       userInfo.setTotalDay(userInfo.getTotalDay() + 1);
     }
 
-    userInfo.setThisWeekDistance(userInfo.getThisWeekDistance() + record.getDistance());
+    userInfo.setThisWeekDistance(
+        Math.round((userInfo.getThisWeekDistance() + record.getDistance()) * 100) / 100.0);
     userInfo.setThisWeekPace(Math.max(userInfo.getThisWeekPace(), pace));
     userInfo.setThisWeekTime(userInfo.getThisWeekTime() + record.getRunningTime());
 
@@ -111,7 +113,8 @@ public class RecordServiceImpl implements RecordService {
       }
       userInfo.setBestPace(bestPace);
     }
-    userInfo.setTotalDistance(userInfo.getTotalDistance() - record.getDistance());
+    userInfo.setTotalDistance(
+        Math.round((userInfo.getTotalDistance() - record.getDistance()) * 100) / 100.0);
     userInfo.setTotalTime(userInfo.getTotalTime() - record.getRunningTime());
 
 
@@ -132,7 +135,8 @@ public class RecordServiceImpl implements RecordService {
 
     if (diffDays < 7) {
       if (dayOfWeek == 1 || (diffDays <= (dayOfWeek - 2))) {
-        userInfo.setThisWeekDistance(userInfo.getThisWeekDistance() - record.getDistance());
+        userInfo.setThisWeekDistance(
+            Math.round((userInfo.getThisWeekDistance() - record.getDistance()) * 100) / 100.0);
         userInfo.setThisWeekTime(userInfo.getThisWeekTime() - record.getRunningTime());
         if (pace == userInfo.getThisWeekPace()) {
           if (dayOfWeek == 1) {
