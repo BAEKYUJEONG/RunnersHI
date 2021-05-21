@@ -23,6 +23,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_single_run.*
 import pub.devrel.easypermissions.AppSettingsDialog
 import pub.devrel.easypermissions.EasyPermissions
+import timber.log.Timber
 import java.util.*
 import kotlin.math.roundToInt
 
@@ -34,6 +35,7 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
 
     var runResult = Run()
     var timeSpentInSeconds = 0L
+//    var distanceInK = 0f
     val runningDate = Calendar.getInstance()
 
     inner class mapFragmentToSingleRunFragment {
@@ -51,7 +53,7 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requestPermissions()
+//        requestPermissions()
         val mainActivity = activity as MainActivity
         val homeFragment = HomeFragment()
         val link = mapFragmentToSingleRunFragment()
@@ -114,7 +116,12 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
 //        val dateTimestamp = Calendar.getInstance().getTime().toString()
         val dateTimestamp = runningDate.timeInMillis
         Log.i("셋런리져트에서1", "${dateTimestamp}")
+
+        // 거리 0.00K로 변환 String.format("%.2f", it/1000f)
         val distanceInMeters = TrackingService.totalDistance.value!!.toInt()
+        val distanceInK = String.format("%.2f", distanceInMeters / 1000f).toFloat()
+        Timber.e("K로 변환값, $distanceInK")
+
         val avgSpeed = ((distanceInMeters / 1000f) / (curTimeMillis / 1000f / 60 / 60) * 10).roundToInt() / 10f
         //총 걸린 시간
         val dateTimeSpent = TrackingUtility.getFormattedStopWatchTime(TrackingService.timeRunInMillis.value!!)
@@ -129,7 +136,7 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
         val title = "${runningYear}년 ${runningMonth}월 ${runningDay}일의 달리기"
         val bmp = null
 
-        runResult = Run(title, bmp, dateTimestamp, avgSpeed, distanceInMeters, dateTimeSpent, finalPace)
+        runResult = Run(title, bmp, dateTimestamp, avgSpeed, distanceInK, dateTimeSpent, finalPace)
         Log.i("셋런리져트에서2", "${runResult.title.toString()}")
 
         // 종료버튼을 누르는 순간의 runData 저장하기
@@ -157,6 +164,8 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
 
         TrackingService.totalDistance.observe(viewLifecycleOwner, Observer {
             distanceText.text = String.format("%.2f", it/1000f)
+//            distanceInK = String.format("%.2f", it/1000f)
+//            distanceText.text = distanceInK
         })
 
         TrackingService.timeRunInMillis.observe(viewLifecycleOwner, Observer{

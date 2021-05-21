@@ -17,6 +17,7 @@ import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.UserViewModel
 import com.google.gson.Gson
 import com.google.gson.reflect.TypeToken
+import com.kakao.sdk.common.KakaoSdk
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.android.synthetic.main.fragment_home.*
 import okhttp3.ResponseBody
@@ -99,9 +100,9 @@ class HomeFragment : Fragment() {
 
 //                            val endTime = LocalDateTime.parse(timeDate, formatter)
 
-                            val formattedRunningTime = user["runningTime"].toString().substring(0, 4)
+                            val formattedRunningTime = user["runningTime"].toString().toDouble().toInt()
                             Timber.e("러닝타임은 왜 이렇게 찍힐까 $formattedRunningTime")
-                            val runningTime = Integer.parseInt(formattedRunningTime)
+                            val runningTime = formattedRunningTime
 
                             val title = user["title"].toString()
                             val distance = user["distance"].toString().toDouble()

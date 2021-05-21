@@ -129,7 +129,7 @@ public class Session {
             public void onAddTrack(RtpReceiver rtpReceiver, MediaStream[] mediaStreams) {
                 super.onAddTrack(rtpReceiver, mediaStreams);
                 Timber.e("ADD FUCKING VIDEO!!!!!!!!!");
-                roomFragment.setRemoteMediaStream(mediaStreams[0], remoteParticipants.get(connectionId));
+//                roomFragment.setRemoteMediaStream(mediaStreams[0], remoteParticipants.get(connectionId));
             }
 
             @Override
@@ -146,11 +146,11 @@ public class Session {
             }
         });
 
-//        peerConnection.addTrack(localParticipant.getAudioTrack());//Add audio track to create transReceiver
-//        peerConnection.addTrack(localParticipant.getVideoTrack());//Add video track to create transReceiver
+        peerConnection.addTrack(localParticipant.getAudioTrack());//Add audio track to create transReceiver
+        peerConnection.addTrack(localParticipant.getVideoTrack());//Add video track to create transReceiver
 
-        peerConnection.addTrack(remoteParticipants.get(connectionId).getAudioTrack());//Add audio track to create transReceiver
-        peerConnection.addTrack(remoteParticipants.get(connectionId).getVideoTrack());//Add video track to create transReceiver
+//        peerConnection.addTrack(remoteParticipants.get(connectionId).getAudioTrack());//Add audio track to create transReceiver
+//        peerConnection.addTrack(remoteParticipants.get(connectionId).getVideoTrack());//Add video track to create transReceiver
 
         for (RtpTransceiver transceiver : peerConnection.getTransceivers()) {
             //We set both audio and video in receive only mode

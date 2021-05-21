@@ -221,8 +221,21 @@ public class UserServiceImpl implements UserService {
     userInfo.setUserName(user);
     userInfoRepo.save(userInfo);
 
-    set.add(idName.getUserId() + ";" + idName.getUserName(),
-        idName.getUserId() + ";" + idName.getUserName());
+    String value = user.getUserId() + ";" + user.getUserName();
+
+    set.add(value, value);
+    zset.add("totalDistanceRank", value, userInfo.getTotalDistance());
+    zset.add("totalTimeRank", value, userInfo.getTotalTime());
+    zset.add("totalPaceRank", value, userInfo.getBestPace());
+
+    zset.add("weeklyDistanceRank", value, userInfo.getWeeklyDistance());
+    zset.add("weeklyTimeRank", value, userInfo.getWeeklyTime());
+    zset.add("weeklyPaceRank", value, userInfo.getWeeklyPace());
+
+    userResult.setResult("SUCCESS");
+    userResult.setToken(jwtService.create(user.getUserId()));
+    userResult.setUserId(user.getUserId());
+    userResult.setUserName(user.getUserName());
 
     userResult.setResult("SUCCESS");
     userResult.setToken(jwtService.create(user.getUserId()));
@@ -354,8 +367,16 @@ public class UserServiceImpl implements UserService {
     userInfo.setUserName(user);
     userInfoRepo.save(userInfo);
 
-    set.add(user.getUserId() + ";" + user.getUserName(),
-        user.getUserId() + ";" + user.getUserName());
+    String value = user.getUserId() + ";" + user.getUserName();
+
+    set.add(value, value);
+    zset.add("totalDistanceRank", value, userInfo.getTotalDistance());
+    zset.add("totalTimeRank", value, userInfo.getTotalTime());
+    zset.add("totalPaceRank", value, userInfo.getBestPace());
+
+    zset.add("weeklyDistanceRank", value, userInfo.getWeeklyDistance());
+    zset.add("weeklyTimeRank", value, userInfo.getWeeklyTime());
+    zset.add("weeklyPaceRank", value, userInfo.getWeeklyPace());
 
     userResult.setResult("SUCCESS");
     userResult.setToken(jwtService.create(user.getUserId()));

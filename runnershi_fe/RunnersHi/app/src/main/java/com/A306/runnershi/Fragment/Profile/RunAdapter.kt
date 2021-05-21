@@ -56,24 +56,29 @@ class RunAdapter(var link: ProfileFragment.runAdapterToList) : RecyclerView.Adap
             Glide.with(this).load(run.img).into(ivRunImage)
 
             val calender = Calendar.getInstance().apply {
-//                timeInMillis = run.timestamp.timeInMillis
                 timeInMillis = run.timestamp
             }
 
-            val dateFormat = SimpleDateFormat("yyyy. MM. dd.",Locale.getDefault())
+            val dateFormat = SimpleDateFormat("yyyy. MM. dd.", Locale.getDefault())
             tvDate.text = dateFormat.format(calender.time)
 
-            val avgSpeed = "${run.avgSpeed}km/h"
-            tvAvgSpeed.text = avgSpeed
+            val title = run.title
+            tvTitle.text = title
 
-            val distance = "${run.distance / 1000f}km"
+            val pace = run.pace
+//            val avgSpeed = "${run.avgSpeed}km/h"
+            tvAvgSpeed.text = pace
+
+//            String.format("%.2f", distanceData)+"K"
+
+            val distance = "${run.distance}K"
             fDistance.text = distance
 
             fTime.text = run.time
         }
 
         holder.itemView.setOnClickListener {
-            link.getRunningDetailId()
+            link.getRunningDetailId(run)
         }
     }
 }

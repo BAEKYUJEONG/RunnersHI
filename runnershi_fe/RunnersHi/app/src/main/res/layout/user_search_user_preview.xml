@@ -19,11 +19,12 @@
         <TextView
             android:id="@+id/userName"
             android:layout_width="0dp"
-            android:layout_weight="7"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
+            android:layout_weight="7"
             android:paddingLeft="20dp"
             android:text="친구"
+            android:textColor="@color/black"
             android:textSize="16sp" />
 
         <FrameLayout
@@ -36,10 +37,12 @@
                 android:layout_width="84dp"
                 android:layout_height="36dp"
                 android:layout_gravity="top|center"
+                android:backgroundTint="@color/brand"
                 android:text="친구추가"
                 android:textAlignment="gravity"
                 android:textColor="@color/white"
-                android:textSize="12sp" />
+                android:textSize="12sp"
+                app:cornerRadius="20dp" />
 
         </FrameLayout>
 

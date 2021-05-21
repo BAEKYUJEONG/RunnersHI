@@ -14,31 +14,37 @@
             android:id="@+id/runningDetailTab"
             android:layout_width="match_parent"
             android:layout_height="60dp"
+            android:fontFamily="@font/nanumsquare_regular"
             android:gravity="center_vertical"
             android:padding="10dp"
             android:paddingStart="15dp"
             android:text="에리얼"
+            android:textColor="@color/brand"
             android:textSize="24sp"
             android:textStyle="bold" />
 
         <TextView
-            android:id="@+id/titleTextView"
+            android:id="@+id/runningDetailTitle"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/nanumsquare_regular"
             android:paddingStart="20dp"
             android:paddingTop="10dp"
             android:paddingBottom="10dp"
             android:text="서울 마라톤 대비 워밍업"
+            android:textColor="@color/black"
             android:textSize="26sp" />
 
         <com.google.android.material.textview.MaterialTextView
             android:id="@+id/detailDistance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:fontFamily="@font/sebang_gothic_bold"
             android:paddingStart="20dp"
-            android:paddingTop="10dp"
+            android:paddingTop="15dp"
             android:paddingBottom="10dp"
             android:text="DISTANCE"
+            android:textColor="@color/brand"
             android:textSize="40dp"
             android:textStyle="bold" />
 
@@ -57,20 +63,25 @@
                     android:id="@+id/detailTimeTextView"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanumsquare_regular"
                     android:paddingLeft="20dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
-                    android:text="시간" />
+                    android:text="시간"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/textView5"
+                    android:id="@+id/runningDetailTime"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanumsquare_regular"
                     android:paddingLeft="20dp"
                     android:paddingTop="5dp"
                     android:paddingBottom="5dp"
                     android:text="TextView"
-                    android:textSize="20sp" />
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -83,16 +94,21 @@
                     android:id="@+id/textView6"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanumsquare_regular"
                     android:padding="5dp"
-                    android:text="페이스" />
+                    android:text="페이스"
+                    android:textColor="@color/black"
+                    android:textSize="18sp" />
 
                 <TextView
-                    android:id="@+id/textView7"
+                    android:id="@+id/runningDetailPace"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
+                    android:fontFamily="@font/nanumsquare_regular"
                     android:padding="5dp"
                     android:text="TextView"
-                    android:textSize="20sp" />
+                    android:textColor="@color/black"
+                    android:textSize="24sp" />
             </LinearLayout>
 
         </LinearLayout>

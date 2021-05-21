@@ -46,7 +46,7 @@
                 android:layout_marginBottom="5dp"
                 android:fontFamily="@font/sebang_gothic"
                 android:gravity="center"
-                android:text="13"
+                android:text="00"
                 android:textSize="26sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -81,7 +81,7 @@
                 android:fontFamily="@font/sebang_gothic"
                 android:gravity="center"
                 android:inputType="number"
-                android:text="4"
+                android:text="0"
                 android:textSize="26sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -96,7 +96,7 @@
                 android:layout_marginStart="100dp"
                 android:layout_marginTop="10dp"
                 android:layout_marginEnd="100dp"
-                android:fontFamily="@font/spoqahansansneo_regular"
+                android:fontFamily="@font/nanumsquare_regular"
                 android:text="닉네임"
                 android:textSize="18sp"
                 android:textStyle="bold"
@@ -120,7 +120,8 @@
                     android:id="@+id/profileImg"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:scaleType="centerCrop"
+                    android:cropToPadding="false"
+                    android:scaleType="fitCenter"
                     android:src="@drawable/runners_profile" />
             </androidx.cardview.widget.CardView>
 
