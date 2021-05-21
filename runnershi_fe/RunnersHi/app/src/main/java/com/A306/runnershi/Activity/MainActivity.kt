@@ -231,7 +231,7 @@ open class MainActivity : AppCompatActivity() {
                     R.id
                         .fab_SingleRun, R.drawable.ic_baseline_directions_run_24
                 )
-                    .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.purple_2, theme))
+                    .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.purple_4, theme))
                     .setFabImageTintColor(
                         ResourcesCompat.getColor(
                             resources,
@@ -243,7 +243,7 @@ open class MainActivity : AppCompatActivity() {
                     .setLabelColor(Color.WHITE)
                     .setLabelBackgroundColor(
                         ResourcesCompat.getColor(
-                            resources, R.color.purple_2,
+                            resources, R.color.purple_4,
                             theme
                         )
                     )
@@ -279,7 +279,7 @@ open class MainActivity : AppCompatActivity() {
                     R.id
                         .fab_CreateRoom, R.drawable.ic_baseline_directions_run_24
                 )
-                    .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.purple_4, theme))
+                    .setFabBackgroundColor(ResourcesCompat.getColor(resources, R.color.purple_2, theme))
                     .setFabImageTintColor(
                         ResourcesCompat.getColor(
                             resources,
@@ -291,7 +291,7 @@ open class MainActivity : AppCompatActivity() {
                     .setLabelColor(Color.WHITE)
                     .setLabelBackgroundColor(
                         ResourcesCompat.getColor(
-                            resources, R.color.purple_4,
+                            resources, R.color.purple_2,
                             theme
                         )
                     )
