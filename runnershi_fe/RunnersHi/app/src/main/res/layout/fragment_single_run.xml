@@ -81,7 +81,6 @@
         android:id="@+id/imageView33"
         android:layout_width="400dp"
         android:layout_height="400dp"
-        android:background="#FFFFFF"
         android:scaleType="centerInside"
         android:src="@mipmap/running_background"
         app:layout_constraintBottom_toTopOf="@+id/stopRunButton"
