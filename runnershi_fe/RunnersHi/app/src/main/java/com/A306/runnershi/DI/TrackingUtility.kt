@@ -1,0 +1,69 @@
+package com.A306.runnershi.DI
+
+import android.Manifest
+import android.content.Context
+import android.os.Build
+import kotlinx.coroutines.delay
+import pub.devrel.easypermissions.EasyPermissions
+import java.util.concurrent.TimeUnit
+import kotlin.math.roundToLong
+
+object TrackingUtility {
+    fun hasLocationPermissions(context: Context) =
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
+            EasyPermissions.hasPermissions(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION
+            )
+        }else{
+            EasyPermissions.hasPermissions(
+                context,
+                Manifest.permission.ACCESS_FINE_LOCATION,
+                Manifest.permission.ACCESS_COARSE_LOCATION,
+                Manifest.permission.ACCESS_BACKGROUND_LOCATION
+            )
+        }
+
+    fun hasVoicePermissions(context: Context) =
+        EasyPermissions.hasPermissions(
+            context,
+            Manifest.permission.RECORD_AUDIO,
+            Manifest.permission.MODIFY_AUDIO_SETTINGS
+        )
+
+    fun getFormattedStopWatchTime(ms: Long, includeMillis:Boolean = false): String{
+        var milliseconds = ms
+        val hours = TimeUnit.MILLISECONDS.toHours(milliseconds)
+        milliseconds -= TimeUnit.HOURS.toMillis(hours)
+        val minutes = TimeUnit.MILLISECONDS.toMinutes(milliseconds)
+        milliseconds -= TimeUnit.MINUTES.toMillis(minutes)
+        val seconds = TimeUnit.MILLISECONDS.toSeconds(milliseconds)
+        if (!includeMillis){
+            return "${if(hours < 10) "0" else ""}$hours:" +
+                    "${if(minutes < 10) "0" else ""}$minutes:" +
+                    "${if(seconds < 10) "0" else ""}$seconds"
+        }
+        milliseconds -= TimeUnit.SECONDS.toMillis(seconds)
+        milliseconds /= 10
+
+        return "${if(hours < 10) "0" else ""}$hours:" +
+                "${if(minutes < 10) "0" else ""}$minutes:" +
+                "${if(seconds < 10) "0" else ""}$seconds:" +
+                "${if(milliseconds < 10) "0" else ""}$milliseconds"
+    }
+
+    fun getTimeSpentInSeconds(ms: Long):Long{
+        var milliseconds = ms
+        return TimeUnit.MILLISECONDS.toSeconds(milliseconds)
+    }
+
+    fun getPaceWithMilliAndDistance(ms:Long): String{
+        var paceInMilli = ms
+        var paceMin = TimeUnit.MILLISECONDS.toMinutes(paceInMilli)
+        paceInMilli -= TimeUnit.MINUTES.toMillis(paceMin)
+        var paceSec = TimeUnit.MILLISECONDS.toSeconds(paceInMilli)
+        return "${if(paceMin < 10) "0" else ""}$paceMin' " +
+                "${if(paceSec < 10) "0" else ""}$paceSec''"
+    }
+}

@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical">
+
+    <androidx.cardview.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:contentPadding="15dp">
+
+        <FrameLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <androidx.cardview.widget.CardView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                app:cardCornerRadius="50dp">
+
+                <ImageView
+                    android:id="@+id/alarmProfileImg"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:scaleType="centerCrop"
+                    android:src="@drawable/runners_profile" />
+            </androidx.cardview.widget.CardView>
+
+            <TextView
+                android:id="@+id/alarm_nick"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:layout_marginTop="3dp"
+                android:fontFamily="sans-serif-medium"
+                android:text="닉네임"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+            <TextView
+                android:id="@+id/alarm_content"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginLeft="65dp"
+                android:layout_marginTop="31dp"
+                android:fontFamily="sans-serif"
+                android:text="'에리얼'님의 친구신청입니다."
+                android:textColor="@color/black"
+                android:textSize="12sp" />
+
+            <Button
+                android:id="@+id/acceptButton"
+                android:layout_width="wrap_content"
+                android:layout_height="match_parent"
+                android:layout_gravity="right|center_vertical"
+                android:backgroundTint="@color/brand"
+                android:elevation="10dp"
+                android:fontFamily="@font/spoqahansansneo_regular"
+                android:text="친구 수락"
+                android:textColor="@color/white"
+                android:textSize="15sp"
+                android:textStyle="bold"
+                app:cornerRadius="50dp" />
+
+        </FrameLayout>
+
+    </androidx.cardview.widget.CardView>
+</LinearLayout>

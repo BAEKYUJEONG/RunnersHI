@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Fragment.UserSearch.UserSearchFragment">
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <com.google.android.material.textfield.TextInputLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <com.google.android.material.textfield.TextInputEditText
+                    android:id="@+id/userName"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:hint="유저 검색" />
+
+            </com.google.android.material.textfield.TextInputLayout>
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/searchedUserListView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent" />
+
+
+        <!--        <EditText-->
+<!--            android:id="@+id/editTextTextPersonName"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:layout_weight="1"-->
+<!--            android:ems="10"-->
+<!--            android:inputType="textPersonName"-->
+<!--            android:text="Name" />-->
+    </LinearLayout>
+</FrameLayout>

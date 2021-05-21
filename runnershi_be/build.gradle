@@ -1,0 +1,72 @@
+plugins {
+	id 'org.springframework.boot' version '2.4.5'
+	id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+	id 'java'
+}
+
+group = 'com.ssafy'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '1.8'
+
+configurations {
+	compileOnly {
+		extendsFrom annotationProcessor
+	}
+}
+
+repositories {
+	mavenCentral()
+}
+
+dependencies {
+	implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+	implementation 'org.springframework.boot:spring-boot-starter-data-redis'
+	implementation 'org.springframework.boot:spring-boot-starter-security'
+	implementation 'org.springframework.boot:spring-boot-starter-web'
+	implementation 'org.springframework.boot:spring-boot-starter-web-services'
+	compileOnly 'org.projectlombok:lombok'
+	developmentOnly 'org.springframework.boot:spring-boot-devtools'
+	runtimeOnly 'mysql:mysql-connector-java'
+	annotationProcessor 'org.projectlombok:lombok'
+	testImplementation 'org.springframework.boot:spring-boot-starter-test'
+	testImplementation 'org.springframework.security:spring-security-test'
+
+	//비밀번호 암호화
+	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-web
+	compile group: 'org.springframework.security', name: 'spring-security-web', version: '5.4.2'
+	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-core
+	compile group: 'org.springframework.security', name: 'spring-security-core', version: '5.4.2'
+	// https://mvnrepository.com/artifact/org.springframework.security/spring-security-config
+	compile group: 'org.springframework.security', name: 'spring-security-config', version: '5.4.2'
+
+	//swagger
+	compile group: 'io.springfox', name: 'springfox-swagger2', version: '2.9.2'
+	compile group: 'io.springfox', name: 'springfox-swagger-ui', version: '2.9.2'
+
+	//jwt
+	// https://mvnrepository.com/artifact/com.auth0/java-jwt
+	compile group: 'com.auth0', name: 'java-jwt', version: '3.12.0'
+
+	// 메일 인증
+	// https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail
+	compile("org.springframework.boot:spring-boot-starter-mail")
+
+	// https://mvnrepository.com/artifact/com.google.firebase/firebase-admin
+	implementation group: 'com.google.firebase', name: 'firebase-admin', version: '6.8.1'
+	// https://mvnrepository.com/artifact/org.json/json
+	implementation group: 'org.json', name: 'json', version: '20201115'
+	// https://mvnrepository.com/artifact/org.slf4j/slf4j-api
+	implementation group: 'org.slf4j', name: 'slf4j-api', version: '1.7.25'
+
+	// OpenVidu
+	// https://mvnrepository.com/artifact/io.openvidu/openvidu-java-client
+	compile group: 'io.openvidu', name: 'openvidu-java-client', version: '2.17.0'
+
+	// https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+	compile group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+}
+
+test {
+	useJUnitPlatform()
+}
