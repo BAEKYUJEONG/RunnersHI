@@ -15,13 +15,23 @@
             android:id="@+id/dateTextView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:fontFamily="@font/nanumsquare_regular"
-            android:gravity="center_vertical"
+            android:fontFamily="sans-serif-light"
             android:padding="20dp"
-            android:text="차라리 날짜를 입력하자"
+            android:text="2021년 5월 21일의 달리기"
             android:textColor="@color/brand"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            android:textSize="20sp" />
+
+<!--        <TextView-->
+<!--            android:id="@+id/dateTextView"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="wrap_content"-->
+<!--            android:fontFamily="@font/nanumsquare_regular"-->
+<!--            android:gravity="center_vertical"-->
+<!--            android:padding="20dp"-->
+<!--            android:text="차라리 날짜를 입력하자"-->
+<!--            android:textColor="@color/brand"-->
+<!--            android:textSize="24sp"-->
+<!--            android:textStyle="bold" />-->
 
         <EditText
             android:id="@+id/generateTitleView"
@@ -29,7 +39,7 @@
             android:layout_height="wrap_content"
             android:layout_marginLeft="15dp"
             android:layout_marginRight="15dp"
-            android:fontFamily="@font/nanumsquare_regular"
+            android:fontFamily="@font/spoqahansansneo_regular"
             android:hint="달리기 제목을 입력하세요"
             android:paddingStart="5dp"
             android:paddingTop="10dp"
@@ -43,7 +53,7 @@
             android:layout_height="wrap_content"
             android:fontFamily="@font/sebang_gothic_bold"
             android:paddingStart="30dp"
-            android:paddingTop="10dp"
+            android:paddingTop="15dp"
             android:paddingBottom="10dp"
             android:text="DISTANCE"
             android:textColor="@color/brand"
@@ -82,7 +92,7 @@
                     android:paddingBottom="5dp"
                     android:text="TextView"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
             </LinearLayout>
 
             <LinearLayout
@@ -108,7 +118,7 @@
                     android:padding="5dp"
                     android:text="TextView"
                     android:textColor="@color/black"
-                    android:textSize="20sp" />
+                    android:textSize="24sp" />
             </LinearLayout>
 
         </LinearLayout>
