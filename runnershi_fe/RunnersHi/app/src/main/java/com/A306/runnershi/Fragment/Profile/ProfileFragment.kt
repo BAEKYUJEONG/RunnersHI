@@ -15,6 +15,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.A306.runnershi.Activity.MainActivity
 import com.A306.runnershi.Fragment.Ranking.RankingFragment
 import com.A306.runnershi.Helper.RetrofitClient
+import com.A306.runnershi.Model.Detail
+import com.A306.runnershi.Model.Run
 import com.A306.runnershi.R
 import com.A306.runnershi.ViewModel.SingleRunViewModel
 import com.A306.runnershi.ViewModel.UserViewModel
@@ -221,14 +223,14 @@ class ProfileFragment : Fragment() { //, View.OnClickListener
 
     inner class runAdapterToList {
 
-        fun getRunningDetailId() {
-            openRunningDetail()
+        fun getRunningDetailId(run:Run) {
+            openRunningDetail(run)
         }
     }
 
-    private fun openRunningDetail() {
+    private fun openRunningDetail(run:Run) {
         val mainActivity = activity as MainActivity
-        val runningDetailFragment = RunningDetailFragment()
+        val runningDetailFragment = RunningDetailFragment(run)
 
         mainActivity.makeCurrentFragment(runningDetailFragment)
     }

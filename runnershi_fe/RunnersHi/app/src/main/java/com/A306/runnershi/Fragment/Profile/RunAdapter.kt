@@ -78,7 +78,7 @@ class RunAdapter(var link: ProfileFragment.runAdapterToList) : RecyclerView.Adap
         }
 
         holder.itemView.setOnClickListener {
-            link.getRunningDetailId()
+            link.getRunningDetailId(run)
         }
     }
 }
