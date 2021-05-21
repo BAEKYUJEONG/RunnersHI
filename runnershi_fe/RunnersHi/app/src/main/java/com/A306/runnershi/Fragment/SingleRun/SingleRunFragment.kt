@@ -53,7 +53,7 @@ class SingleRunFragment : Fragment(R.layout.fragment_single_run), EasyPermission
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        requestPermissions()
+//        requestPermissions()
         val mainActivity = activity as MainActivity
         val homeFragment = HomeFragment()
         val link = mapFragmentToSingleRunFragment()

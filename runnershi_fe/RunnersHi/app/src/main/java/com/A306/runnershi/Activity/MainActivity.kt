@@ -6,6 +6,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.graphics.Color
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -44,13 +45,15 @@ import kotlinx.android.synthetic.main.fragment_ranking.*
 import kotlinx.android.synthetic.main.fragment_run_result.*
 import kotlinx.android.synthetic.main.fragment_single_run.*
 import org.webrtc.MediaStream
+import pub.devrel.easypermissions.AppSettingsDialog
+import pub.devrel.easypermissions.EasyPermissions
 import timber.log.Timber
 import java.util.*
 import javax.inject.Inject
 import kotlin.math.roundToInt
 
 @AndroidEntryPoint
-open class MainActivity : AppCompatActivity() {
+open class MainActivity : AppCompatActivity(), EasyPermissions.PermissionCallbacks {
 
     private val MY_PERMISSIONS_REQUEST_CAMERA = 100
     private val MY_PERMISSIONS_REQUEST_RECORD_AUDIO = 101
@@ -79,7 +82,7 @@ open class MainActivity : AppCompatActivity() {
         initSpeedDial(savedInstanceState == null)
 
         Timber.e("권한이 있나?? ${arePermissionGranted()}")
-        askForPermissions()
+        requestPermissions()
 
 
         // 하단 Navigation Bar 설정
@@ -378,5 +381,54 @@ open class MainActivity : AppCompatActivity() {
                 MY_PERMISSIONS_REQUEST_CAMERA
             )
         }
+
+    }
+
+    private fun requestPermissions(){
+        if(TrackingUtility.hasLocationPermissions(this) && TrackingUtility.hasVoicePermissions(this)){
+            return
+        }
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q){
+            EasyPermissions.requestPermissions(
+                    this,
+                    "앱 사용을 위해 위치 권한 항상 허용이 필요합니다.",
+                    0,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO
+            )
+        } else{
+            EasyPermissions.requestPermissions(
+                    this,
+                    "앱 사용을 위해 위치 권한 항상 허용이 필요합니다.",
+                    0,
+                    Manifest.permission.ACCESS_COARSE_LOCATION,
+                    Manifest.permission.ACCESS_FINE_LOCATION,
+                    Manifest.permission.ACCESS_BACKGROUND_LOCATION,
+                    Manifest.permission.CAMERA,
+                    Manifest.permission.RECORD_AUDIO
+            )
+        }
+    }
+
+    override fun onPermissionsGranted(requestCode: Int, perms: MutableList<String>){}
+
+    override fun onPermissionsDenied(requestCode: Int, perms: MutableList<String>) {
+        if(EasyPermissions.somePermissionPermanentlyDenied(this, perms)){
+            AppSettingsDialog.Builder(this).build().show()
+        }else{
+            requestPermissions()
+        }
+    }
+
+    override fun onRequestPermissionsResult(
+            requestCode: Int,
+            permissions: Array<out String>,
+            grantResults: IntArray
+    ) {
+        Log.e("PERMISSION RESULT", requestCode.toString())
+        super.onRequestPermissionsResult(requestCode, permissions, grantResults)
+        EasyPermissions.onRequestPermissionsResult(requestCode, permissions, grantResults, this)
     }
 }
