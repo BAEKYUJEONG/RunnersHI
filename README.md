@@ -1,6 +1,6 @@
 # [A306] Runners' HI 소셜 러닝 앱
 
-:runner::runner: 따로, 또 같이 달릴 수 있는 소셜 러닝 앱 서비스입니다:runner::runner:
+:runner: :runner: 따로, 또 같이 달릴 수 있는 소셜 러닝 앱 서비스입니다 :runner: :runner:
 
 <br>
 
@@ -23,6 +23,8 @@
 
 
 
+<br>
+
 ## :mag: 페이지 안내
 
 ### Sign up & Sign in
@@ -34,7 +36,7 @@
 
 ### Home
 
-<img src=".\img_resource\1.png" style="zoom:50%" align="left"/>
+<img src="./img_resource/1.png" style="zoom:50%" align="left"/>
 
 
 
@@ -60,7 +62,7 @@
 
 ### User Search
 
-<img src=".\img_resource\3.png" style="zoom:50%" align="left"/>
+<img src="./img_resource/3.png" style="zoom:50%" align="left"/>
 
 
 
@@ -73,7 +75,7 @@
 
 ### Ranking
 
-<img src=".\img_resource\4.png" style="zoom:50%" align="left"/>
+<img src="./img_resource/4.png" style="zoom:50%" align="left"/>
 
 
 
@@ -86,7 +88,7 @@
 
 ### Profile
 
-<img src=".\img_resource\5.png" style="zoom:50%" align="left"/>
+<img src="./img_resource/5.png" style="zoom:50%" align="left"/>
 
 
 
@@ -96,27 +98,11 @@
 
 3. 친구는 내가 친구 맺은 유저 수가 표시되어지고, 친구를 누르면 친구 리스트로 이동되어집니다.
 
-      <img src=".\img_resource\6.png" style="zoom:50%" align="left"/>
-
-   
-
-   
-
-   
-
-   
-
-   
-
-   
-
-   
-
-   
-
-   
-
-   - 친구 리스트에서는 친구의 닉네임과 랭킹을 확인할 수 있습니다.
+      <img src="./img_resource/6.png" style="zoom:50%" align="left"/>
+      
+      
+      
+      - 친구 리스트에서는 친구의 닉네임과 랭킹을 확인할 수 있습니다.
 
 4. 거리는 지금까지 달린 총 거리가 표시되어지고,  페이스는 베스트 페이스가 표시되어집니다.
 
@@ -129,11 +115,11 @@
 
 > 모든 화면에서 접근할 수 있는 달리기 버튼
 
-<img src=".\img_resource\11.png" style="zoom:50%" align="left"/>
+<img src="./img_resource/11.png" style="zoom:50%" align="left"/>
 
-1. [방 만들기](#방 만들기)
-2. [같이 달리기](#같이 달리기)
-3. [혼자 달리기](#혼자 달리기)
+1. [방 만들기](####방 만들기)
+2. [같이 달리기](####같이 달리기)
+3. [혼자 달리기](####혼자 달리기)
 
 
 
@@ -143,7 +129,7 @@
 
 #### 혼자 달리기
 
-<img src=".\img_resource\8.png" style="zoom:50%" align="left"/>
+<img src="./img_resource/8.png" style="zoom:50%" align="left"/>
 
 - 거리, 페이스 시간 그리고 지도 : 딱 필요한 정보만 깔끔하게 기록
 - 실시간으로 내 위치가 지도에 표시 되어집니다.
@@ -156,7 +142,7 @@
 
 #### 방 만들기
 
-<img src=".\img_resource\7.png" style="zoom:50%" align="left"/>
+<img src="./img_resource/7.png" style="zoom:50%" align="left"/>
 
 - 방 이름을 입력하고 방 만들기를 누르면 방이 생성됩니다.
 - 내가 만든 방으로 이동되고, 다른 유저가 들어오면 대화가 가능합니다.
@@ -165,9 +151,9 @@
 
 #### 같이 달리기
 
-<img src=".\img_resource\10.png" style="zoom:55%" align="left"/>
+<img src="./img_resource/10.png" style="zoom:55%" align="left"/>
 
-<img src=".\img_resource\9.png" style="zoom:50%" align="left"/>
+<img src="./img_resource/9.png" style="zoom:50%" align="left"/>
 
 - 유저들이 만든 방 목록이 나옵니다.
 - 방의 제목과 현재 몇 명이 들어가 있는지가 표시되어집니다.
@@ -175,11 +161,15 @@
 
 
 
+<br>
+
 ## :books: Workspace
 
 `Notion` : https://www.notion.so/A306-Runners-HI-24262b8ef8494fdc99bc3f8ff8e6614b
 
 
+
+<br>
 
 ## [🚀 Ground Rule](./Groud Rule.md)
 
