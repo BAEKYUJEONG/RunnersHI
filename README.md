@@ -20,7 +20,7 @@
 
 ### 안드로이드 
 
-[apk파일](./resources/runners'hi-app.apk)을 다운로드 한 후, 폰에서 설치합니다. 
+[apk파일](https://www.notion.so/apk-66f5ef2b9f404d1c9ef2fd990510f749#228005aed125439db579422eed3e27f0)을 다운로드 한 후, 폰에서 설치합니다. 
 
 
 
